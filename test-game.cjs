@@ -1,41 +1,210 @@
-const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const noop=()=>{};
-const ctx=new Proxy({createLinearGradient:()=>({addColorStop:noop}),createRadialGradient:()=>({addColorStop:noop})},{get:(t,k)=>t[k]||noop});
-const elements=new Map();
-function el(){return {children:[],style:{},classList:{add:noop,remove:noop},textContent:'',innerHTML:'',appendChild(e){this.children.push(e);return e;},setAttribute:noop,addEventListener:noop,getContext:()=>ctx,getBoundingClientRect:()=>({left:0,top:0,width:400,height:620}),setPointerCapture:noop};}
-const document={getElementById(id){if(!elements.has(id))elements.set(id,el());return elements.get(id);},createElement:el,documentElement:el(),addEventListener:noop};
-const sandbox={document,navigator:{},window:{addEventListener:noop},Path2D:class {moveTo(){}lineTo(){}closePath(){}},getComputedStyle:()=>({getPropertyValue:()=>''}),MutationObserver:class{observe(){}},performance:{now:()=>0},setTimeout:()=>0,clearTimeout:noop,requestAnimationFrame:noop,console};
-vm.createContext(sandbox);
-let source=fs.readFileSync(__dirname+'/index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
-source=source.replace('window.__BIR = {','window.__BIR = { input:{onDown,onMove,onUp,cancelAim}, render,');
-vm.runInContext(source,sandbox);
-const game=sandbox.window.__BIR;
-function settle(){for(let i=0;i<1800&&['flying','settling'].includes(game.info.state);i++)game.step(1/120);}
-function run(level,hits){game.go(level);for(const [power,angle=0,x=200] of hits){game.fire(power,angle,x);settle();}return JSON.parse(JSON.stringify(game.info));}
-if(process.argv.includes('--explore')){
- for(let l=0;l<5;l++)for(const p of [.25,.4,.55,.75,.95]){const r=run(l,Array.from({length:l===4?1:3},()=>[p,0,l===3?135:200]));console.log(l,p,r.state,r.verdict,r.objs.map(o=>[o.open,o.pieces]),r.rescue);}
-}else if(require.main===module){
- let count=0;
- const check=(name,fn)=>{fn();count++;console.log('PASS '+name);};
- const safe=[[[.55]],[[.4,0,145]],[[.5],[.5]],[[.55,0,135],[.55,0,135]],[[.95],[.4]]];
- for(let i=0;i<5;i++)check('Level '+(i+1)+' has a safe physical rescue',()=>{const r=run(i,safe[i]);assert.equal(r.verdict,'Güvende!');assert.equal(r.rescue.dead,false);assert.equal(r.rescue.free,true);assert.equal(r.rescue.rest,true);assert.ok(r.rescue.y>400);game.render();});
- check('Gentle hit cracks ceramic without releasing key',()=>{const r=run(0,[[.2]]);assert.equal(r.objs[0].open,false);assert.equal(r.rescue.free,false);assert.ok(r.objs[0].weak>0);});
- check('Extreme beginner hit fails with a reason',()=>{const r=run(0,[[1]]);assert.equal(r.rescue.dead,true);assert.ok(r.rescue.reason.length>20);});
- check('Glass center hit is riskier than same power at edge',()=>{assert.equal(run(1,[[.75]]).rescue.dead,true);assert.equal(run(1,[[.75,0,140]]).rescue.dead,false);});
- check('Ice cracks before breaking',()=>{const r=run(2,[[.5]]);assert.equal(r.objs[0].open,false);assert.ok(r.objs[0].weak>0);});
- check('Angled ice release misses safe zone',()=>{const r=run(2,[[.5,20,170],[.5,20,170]]);assert.equal(r.rescue.dead,true);assert.match(r.rescue.reason,/Minder/);});
- check('Wood needs repeated controlled hits',()=>{assert.equal(run(3,[[.55,0,135]]).rescue.free,false);assert.equal(run(3,safe[3]).verdict,'Güvende!');});
- check('Wrong crate side is dangerous',()=>{const r=run(3,[[.55,0,260]]);assert.equal(r.rescue.dead,true);assert.match(r.rescue.reason,/destek/);});
- check('Stone protects capsule until a separate hit',()=>{const r=run(4,[[.95]]);assert.equal(r.layer,2);assert.equal(r.rescue.free,false);assert.equal(r.objs[1].open,false);});
- check('Strong final glass hit fails',()=>{assert.equal(run(4,[[.95],[.95]]).rescue.dead,true);});
- check('Repeated hits reproduce physics exactly',()=>{for(let i=0;i<5;i++){const a=run(i,safe[i]),b=run(i,safe[i]);assert.deepEqual(a.rescue,b.rescue);assert.deepEqual(a.objs,b.objs);}});
- check('Retry clears damage, debris, tool and level state',()=>{run(1,[[1]]);game.go(1);const r=game.info;assert.equal(r.particles,0);assert.equal(r.rescue.damage,0);assert.equal(r.rescue.free,false);assert.equal(r.state,'ready');assert.equal(r.hitsUsed,0);assert.equal(r.maxPower,0);assert.equal(r.tool.power,0);assert.equal(r.tool.y,510);assert.equal(r.resultShown,false);assert.equal(r.objs[0].broken,0);});
- const event=(x,y,id=1)=>({clientX:x,clientY:y,pointerId:id,pointerType:'touch',isPrimary:id===1,preventDefault:noop});
- check('Touch drag controls power and releases exactly once',()=>{game.go(0);game.input.onDown(event(200,510));game.input.onMove(event(200,569.4));assert.ok(Math.abs(game.info.tool.power-.55)<.001);game.input.onUp(event(200,569.4));game.input.onUp(event(200,569.4));assert.equal(game.info.hitsUsed,1);settle();assert.equal(game.info.verdict,'Güvende!');});
- check('Touch cancellation and second finger never strike',()=>{game.go(0);game.input.onDown(event(200,510));game.input.onMove(event(200,560));game.input.onDown(event(200,610,2));game.input.onUp(event(200,610,2));assert.equal(game.info.hitsUsed,0);game.input.cancelAim(event(200,560));game.input.onUp(event(200,560));assert.equal(game.info.hitsUsed,0);assert.equal(game.info.state,'ready');});
- check('Retry during drag discards the old touch',()=>{game.go(0);game.input.onDown(event(200,510));game.input.onMove(event(200,580));game.go(0);game.input.onUp(event(200,580));assert.equal(game.info.hitsUsed,0);assert.equal(game.info.state,'ready');});
- check('Too many weak hits produces a retryable closed-shell failure',()=>{const r=run(0,Array.from({length:5},()=>[.13]));assert.equal(r.state,'result');assert.equal(r.rescue.free,false);assert.notEqual(r.verdict,'Güvende!');});
- console.log(count+' checks passed.');
-}
-module.exports={game,run,assert};
+/* RESCUE WORKSHOP — headless regression suite.
+   Runs the real game script against a mocked canvas/DOM and drives it
+   through __RW (deterministic stepping, no requestAnimationFrame). */
+const fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');
 
+const noop = () => {};
+const ctx = new Proxy({
+  createLinearGradient: () => ({addColorStop: noop}),
+  createRadialGradient: () => ({addColorStop: noop})
+}, {get: (t,k) => t[k] || noop});
+
+function el(){
+  return {
+    children: [], style: {setProperty: noop}, textContent: '', innerHTML: '',
+    classList: {add: noop, remove: noop, contains: () => false},
+    appendChild(e){ this.children.push(e); return e; },
+    setAttribute: noop, addEventListener: noop, getContext: () => ctx,
+    getBoundingClientRect: () => ({left:0, top:0, width:400, height:620}),
+    setPointerCapture: noop
+  };
+}
+const elements = new Map();
+const document = {
+  getElementById(id){ if(!elements.has(id)) elements.set(id, el()); return elements.get(id); },
+  createElement: el, documentElement: el(), addEventListener: noop
+};
+const sandbox = {
+  document, navigator: {}, window: {addEventListener: noop},
+  Path2D: class { moveTo(){} lineTo(){} closePath(){} },
+  getComputedStyle: () => ({getPropertyValue: () => ''}),
+  MutationObserver: class { observe(){} },
+  performance: {now: () => 0},
+  setTimeout: () => 0, clearTimeout: noop, requestAnimationFrame: noop, console
+};
+vm.createContext(sandbox);
+const source = fs.readFileSync(__dirname + '/index.html', 'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+vm.runInContext(source, sandbox);
+const G = sandbox.window.__RW;
+
+/* ---- helpers ---- */
+const st = () => G.info.comps;
+const comp = id => st().find(c => c.id === id);
+const done = id => !!(comp(id) || {}).done;
+const isLocked = id => !!(comp(id) || {}).locked;
+/* join to a string: values cross a vm realm boundary, so deepStrictEqual would
+   fail on prototype identity even for identical content */
+const openIds = () => st().filter(c => !c.locked && !c.hidden && !c.done).map(c => c.id).join(',');
+
+function unscrew(x, y){ G.pick('screwdriver'); G.swipe({x, y}, {x, y: y + 260}, 16); }
+function suck(x, y){ G.pick('suction'); G.swipe({x, y}, {x, y: y - 82}, 10); }
+function cut(x, y){ G.pick('cutter'); G.swipe({x, y: y - 28}, {x, y: y + 28}, 10); }
+function magnet(x, y, frames){ G.pick('magnet'); G.hold({x, y}, frames || 80); }
+function tap(x, y, px){ G.pick('hammer'); G.gesture([{x, y}, {x, y: y + px/2}, {x, y: y + px}]); G.step(1/60, 45); }
+function grab(from, to){ G.pick(null); G.swipe(from, to, 14); G.step(1/60, 30); }
+
+const MAT = [{x:332,y:424},{x:334,y:424},{x:338,y:424},{x:336,y:424},{x:338,y:424}];
+
+function solve(i){
+  G.go(i);
+  if(i === 0){
+    unscrew(252, 314); suck(176, 278); grab({x:176,y:392}, MAT[0]);
+  } else if(i === 1){
+    cut(174, 302); unscrew(106, 334); unscrew(242, 334); suck(174, 286);
+    grab({x:174,y:378}, MAT[1]);
+  } else if(i === 2){
+    magnet(264, 316); G.pick(null); G.swipe({x:220,y:379}, {x:340,y:379}, 14);
+    grab({x:154,y:400}, MAT[2]);
+  } else if(i === 3){
+    tap(222, 332, 34); suck(222, 332); grab({x:150,y:404}, MAT[3]);
+  } else {
+    cut(172, 344); unscrew(100, 306); unscrew(244, 306);
+    magnet(320, 392); suck(172, 372); grab({x:172,y:414}, MAT[4]);
+  }
+  return G.info;
+}
+
+/* ---- run ---- */
+let n = 0;
+const check = (name, fn) => { fn(); n++; console.log('PASS ' + name); };
+
+check('Her bölüm tek bir açık başlangıç adımıyla başlıyor', () => {
+  const first = ['latch','tape','pin','weak','strap'];
+  for(let i=0;i<5;i++){
+    G.go(i);
+    assert.equal(openIds(), first[i], 'bölüm ' + (i+1));
+  }
+});
+
+for(let i=0;i<5;i++)
+  check('Bölüm ' + (i+1) + ' doğru sırayla çözülüyor', () => {
+    const r = solve(i);
+    assert.equal(r.solved, true);
+    assert.equal(r.failed, false);
+    assert.ok(r.comps.every(c => c.done), 'tüm parçalar tamam');
+  });
+
+check('Yanlış alet hiçbir şeyi bozmuyor, sadece uyarıyor', () => {
+  G.go(0);
+  G.pick('hammer'); G.swipe({x:252,y:314}, {x:252,y:340}, 6);
+  assert.equal(done('latch'), false);
+  assert.equal(G.info.say, 'Bu burada işe yaramaz.');
+  G.pick('cutter'); G.swipe({x:252,y:300}, {x:252,y:330}, 8);
+  assert.equal(done('latch'), false);
+  assert.equal(G.info.comps.filter(c => c.done).length, 0, 'hiçbir parça bozulmadı');
+});
+
+check('Bağımlılık kilidi kendi gerekçesini söylüyor', () => {
+  G.go(0);
+  suck(176, 278);
+  assert.equal(done('lid'), false);
+  assert.equal(G.info.say, 'Kapak hâlâ mandala takılı.');
+  G.go(1);
+  unscrew(106, 334);
+  assert.equal(done('s1'), false);
+  assert.equal(G.info.say, 'Bant vidanın üstünde.');
+});
+
+check('Bölüm 1 çekiç olmadan çözülüyor', () => {
+  const r = solve(0);
+  assert.equal(r.solved, true);
+  assert.equal(r.objects.length, 0, 'kırılacak nesne yok');
+});
+
+check('Mıknatıs menzil dışında pimi çekmiyor', () => {
+  G.go(2);
+  magnet(150, 316, 90);
+  assert.equal(done('pin'), false);
+  assert.equal(comp('pin').prog, 0);
+  magnet(264, 316, 90);
+  assert.equal(done('pin'), true);
+});
+
+check('Vantuz yeterince çekilmezse panel yerinde kalıyor', () => {
+  G.go(0);
+  unscrew(252, 314);
+  G.pick('suction'); G.swipe({x:176,y:278}, {x:176,y:258}, 6);   /* 20px < 58px eşiği */
+  assert.equal(done('lid'), false);
+  suck(176, 278);
+  assert.equal(done('lid'), true);
+});
+
+check('Buz: hafif vuruş çatlatır, çok sert vuruş bölümü kaybettirir', () => {
+  G.go(3); tap(222, 332, 10);
+  assert.equal(done('weak'), false);
+  assert.equal(G.info.say, 'Biraz daha güçlü vur.');
+
+  G.go(3); tap(222, 332, 34);
+  assert.equal(done('weak'), true);
+  assert.equal(G.info.failed, false);
+  assert.ok(G.info.objects[0].broken > 0, 'buzda görünür çatlak var');
+
+  G.go(3); tap(222, 332, 92);
+  assert.equal(G.info.failed, true);
+  assert.equal(done('weak'), false);
+});
+
+check('Bölüm 5 sıra dışına çıkmaya izin vermiyor', () => {
+  G.go(4);
+  unscrew(100, 306);
+  assert.equal(done('fs1'), false);
+  assert.equal(G.info.say, 'Kayış vidaları sıkıştırıyor.');
+  magnet(320, 392);
+  assert.equal(done('lockpin'), false);
+  suck(172, 372);
+  assert.equal(done('glasslid'), false);
+  assert.ok(isLocked('prize'));
+});
+
+check('Ahşap çerçeve iki vida çıkınca kendiliğinden açılıyor', () => {
+  G.go(4);
+  cut(172, 344); unscrew(100, 306);
+  assert.equal(done('wood'), false, 'tek vida yetmez');
+  unscrew(244, 306);
+  assert.equal(done('wood'), true);
+  assert.equal(isLocked('lockpin'), false);
+});
+
+check('Kurtarma yalnızca mindere bırakılınca tamamlanıyor', () => {
+  G.go(0);
+  unscrew(252, 314); suck(176, 278);
+  assert.equal(isLocked('key'), false);
+  grab({x:176,y:392}, {x:250,y:300});          /* minder değil */
+  assert.equal(G.info.solved, false);
+  assert.equal(done('key'), false);
+  grab({x:176,y:392}, MAT[0]);
+  assert.equal(G.info.solved, true);
+});
+
+check('Sıfırlama parçaları, aleti ve kırık durumunu temizliyor', () => {
+  G.go(3);
+  tap(222, 332, 34);
+  assert.ok(G.info.objects[0].broken > 0);
+  G.go(3);
+  const r = G.info;
+  assert.equal(r.objects[0].broken, 0);
+  assert.equal(r.tool, null);
+  assert.equal(r.solved, false);
+  assert.equal(r.failed, false);
+  assert.ok(r.comps.every(c => !c.done));
+});
+
+check('Aynı girdi aynı sonucu veriyor', () => {
+  for(let i=0;i<5;i++){
+    const a = JSON.parse(JSON.stringify(solve(i).comps));
+    const b = JSON.parse(JSON.stringify(solve(i).comps));
+    assert.deepEqual(a, b, 'bölüm ' + (i+1));
+  }
+});
+
+console.log(n + ' checks passed.');
