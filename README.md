@@ -69,6 +69,27 @@ Mevcut beş bölümün bağımlılıkları ve çevir–incele–alet seç–kurt
 - Tamamlanan adımlar ve kısa onaylar; kusursuz çözüm için üç, cezasız ama yumuşak hatalı çözüm için iki, cezalı kurtarma için bir yıldız. Hız baskısı yoktur.
 - Hızlı kesme hareketleri, tek hareket başına tek ceza, ek parmakların yok sayılması, güvenli dokunma iptali ve yeniden denemede bekleyen sonuçların temizlenmesi.
 
+## Görsel yön
+
+Sıcak atölye teması, referans görselden esinlenen oyuncak hissi: pegboard duvar, raf, yapışkan notlar, kupa, kesme matı ve tezgâha saçılmış vidalar — hepsi merkezdeki objeyi bastırmayacak kadar sessiz.
+
+Obje ekranın kahramanı: metal köşe pahları, taşıma sapı, perçinler, tabanda tehlike şeridi, döndükçe kayan uyarı etiketleri (DİKKAT CANLI VAR) ve cam pencere. Yaratıklar tek bir  yardımcısını paylaşır — büyük gözler, ışık noktası, allık ve ruh hâlini taşıyan kaşlar: mahsurken endişeli, kurtulunca gülümser.
+
+Alet çubuğu referanstaki gibi dolu renkli, basılabilir tuşlar (mavi çekiç, turuncu tornavida, kırmızı makas, mor mıknatıs, yeşil vantuz). Seçili alet yükselir, beyaz halka ve ok işareti alır. Üst barda yalnızca seviye rozeti, turuncu görev tabelası, can kalpleri ve adım çubuğu kalır.
+
+## Malzeme ve hata tepkileri
+
+Gövde artık düz vektör değil, ışığı sol üstten alan gerçek yüzeyler: damarlı ve budaklı ahşap tahtalar, fırçalanmış metal (dönüşle kayan parlama bandı), perçinler, kalın çerçeveli ve yansımalı cam, yıpranmış tehlike şeridi, kıvrık köşeli kâğıt etiketler. Obje döndükçe yan yüzü açılır — hacmi buradan okunur.
+
+Hatalar artık aynı tepkiyi vermez:
+
+| Hata | Tepki |
+| --- | --- |
+| Elektrik | Sarı ark çizgileri, kıvılcım yağmuru, sert sarsıntı, uzun titreşim |
+| Basınç | Buhar bulutu, en sert sarsıntı, tok gümbürtü + tıslama, kesik kesik titreşim |
+| Devre | Mavi kısa arklar, hafif sarsıntı, çipte kırmızı yanıp sönme, kısa titreşim |
+| Kırılgan | Cam kıymıkları, orta sarsıntı, tok darbe |
+
 ## Doğrulama
 
 `node test-game.cjs` — **30 kontrol.** Gerçek oyun betiğini sahte canvas/DOM üzerinde çalıştırır: beş bölümün tam çözümü, döndürme ve bağımlılıklar, üç hata türü, mıknatıs menzili, basınç, minder, belirlenimcilik; ayrıca ipucu zamanlaması, kısmi ilerleme, hızlı kesme, uzun hareketlerde tek ceza, çoklu dokunma, dokunma iptali, gecikmiş sonuçların sıfırlanması ve yıldızlar.
