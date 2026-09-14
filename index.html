@@ -112,9 +112,14 @@
 
   .goal{
     margin:0;font-size:13.5px;line-height:1.45;color:var(--ink-2);
-    max-width:46ch;
+    max-width:46ch;display:flex;align-items:center;gap:8px;
+    opacity:0;transition:opacity .4s ease;
   }
-  .goal b{color:var(--ink);font-weight:600}
+  .goal.lit{opacity:1}
+  .goal::before{
+    content:'';flex:none;width:7px;height:7px;border-radius:99px;
+    background:linear-gradient(135deg,var(--kiln-a),var(--kiln-b));
+  }
 
   /* ---------- stage ---------- */
   #stage{position:relative;min-height:0;touch-action:none}
@@ -127,6 +132,32 @@
     transition:opacity .35s;white-space:nowrap;
   }
   .hint.gone{opacity:0}
+
+  /* level briefing — shows on entry, then hands off to the .goal label */
+  .brief{
+    position:absolute;left:50%;top:10px;
+    width:min(340px,92%);
+    background:var(--card);border:1px solid var(--card-line);
+    border-radius:18px;padding:13px 16px 14px;
+    box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:5px;
+    pointer-events:none;
+    opacity:0;transform:translate(-50%,-10px) scale(.96);
+    transition:opacity .34s ease,transform .34s cubic-bezier(.2,.9,.3,1);
+  }
+  .brief.show{opacity:1;transform:translate(-50%,0) scale(1)}
+  .brief.gone{opacity:0;transform:translate(-50%,-18px) scale(.94)}
+  .brief-tag{
+    font-family:"DM Mono",ui-monospace,monospace;
+    font-size:10px;letter-spacing:.16em;color:var(--kiln-a);
+  }
+  .brief-obj{
+    margin:0;font-family:"Bricolage Grotesque",Figtree,sans-serif;
+    font-weight:800;font-size:19px;line-height:1.14;letter-spacing:-.02em;
+    text-wrap:balance;
+  }
+  .brief-tip{margin:0;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+  .brief-tip b{color:var(--ink);font-weight:600}
 
   /* ---------- action bar ---------- */
   .bar{
@@ -188,6 +219,11 @@
   }
   .vtag.good{color:var(--jade)}
   .vtag.bad{color:var(--rose)}
+  .vrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .vstate{
+    font-family:"DM Mono",ui-monospace,monospace;
+    font-size:10.5px;letter-spacing:.14em;color:var(--ink-3);
+  }
   .card h2{
     font-family:"Bricolage Grotesque",Figtree,sans-serif;
     font-weight:800;font-size:clamp(24px,7.4vw,32px);line-height:1.02;
@@ -223,14 +259,14 @@
   }
 </style>
 
-<div id="app">
+<div id="app" lang="tr">
   <header class="hud">
     <div class="hud-top">
       <div class="tag">
-        <span class="spec" id="spec">STONEWARE PLATE · Ø 240 MM</span>
-        <h1 id="lvName">First Break</h1>
+        <span class="spec" id="spec">TAŞ SERAMİK TABAK · Ø 240 MM</span>
+        <h1 id="lvName">İlk Kırılma</h1>
       </div>
-      <button class="icon-btn" id="sndBtn" type="button" aria-label="Mute sound" aria-pressed="false">
+      <button class="icon-btn" id="sndBtn" type="button" aria-label="Sesi kapat" aria-pressed="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="sndIcon">
           <path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9a4 4 0 0 1 0 6" id="sndWave"/>
         </svg>
@@ -242,27 +278,35 @@
 
   <div id="stage">
     <canvas id="cv"></canvas>
-    <div class="hint" id="hint">Drag across the plate</div>
+    <div class="brief" id="brief">
+      <span class="brief-tag" id="briefTag">BÖLÜM 1 / 5</span>
+      <p class="brief-obj" id="briefObj">Çizgiyi çiz ve tabağı kır.</p>
+      <p class="brief-tip" id="briefTip"></p>
+    </div>
+    <div class="hint" id="hint">TABAĞIN ÜZERİNDE SÜRÜKLE</div>
   </div>
 
   <div class="bar">
-    <button class="btn ghost" id="resetBtn" type="button" disabled>Clear line</button>
-    <button class="btn smash" id="smashBtn" type="button" disabled>SMASH</button>
+    <button class="btn ghost" id="resetBtn" type="button" disabled>Sıfırla</button>
+    <button class="btn smash" id="smashBtn" type="button" disabled>KIR</button>
   </div>
 </div>
 
-<div class="sheet" id="sheet" aria-live="polite">
+<div class="sheet" id="sheet" lang="tr" aria-live="polite">
   <div class="card">
-    <span class="vtag good" id="vtag">Perfect</span>
-    <h2 id="vtitle">Clean break</h2>
+    <div class="vrow">
+      <span class="vtag good" id="vtag">MÜKEMMEL</span>
+      <span class="vstate" id="vstate"></span>
+    </div>
+    <h2 id="vtitle">Temiz kırılma</h2>
     <p id="vmsg"></p>
     <div class="readout">
       <div class="meter good" id="meter"><i id="meterFill"></i></div>
       <span class="num" id="scoreNum">0<small>/100</small></span>
     </div>
     <div class="acts">
-      <button class="btn ghost" id="retryBtn" type="button">Retry</button>
-      <button class="btn smash" id="nextBtn" type="button">Next level</button>
+      <button class="btn ghost" id="retryBtn" type="button">Tekrar Dene</button>
+      <button class="btn smash" id="nextBtn" type="button">Sonraki Bölüm</button>
     </div>
   </div>
 </div>
@@ -594,10 +638,11 @@ function drawTileBody(c, cx, cy, w, h, rad, tint, deep){
 const LEVELS = [
   /* ---------------- 1 ---------------- */
   {
-    name:'First Break',
-    spec:'STONEWARE PLATE · Ø 240 MM',
-    goal:'Drag a line across the plate to score a hairline, then hit <b>SMASH</b>.',
-    hint:'Drag across the plate',
+    name:'İlk Kırılma',
+    spec:'TAŞ SERAMİK TABAK · Ø 240 MM',
+    objective:'Çizgiyi çiz ve tabağı kır.',
+    tip:'Tabağın üzerinde parmağını sürükle, sonra <b>KIR</b> düğmesine bas.',
+    hint:'TABAĞIN ÜZERİNDE SÜRÜKLE',
     seedNo:11, spacing:30,
     build(){
       this.cx = 200; this.cy = 300; this.r = 120;
@@ -605,16 +650,17 @@ const LEVELS = [
     },
     art(c){ drawPlateBody(c, this.cx, this.cy, this.r, GLAZE.cobalt); },
     judge(R){
-      if(R.majors < 2) return {ok:false, tag:'Try again', title:'Nothing separated', msg:'The hairline has to run right across the plate. Start your drag near one edge and pull through to the other.', score:20};
-      return {ok:true, tag:'Perfect', title:'Clean break', msg:'Two shards from one hairline. That is the whole game — from here on, where you draw it decides everything.', score:100};
+      if(R.majors < 2) return {ok:false, tag:'TEKRAR DENE', title:'Hiçbir şey ayrılmadı', msg:'Çizginin tabağı baştan sona geçmesi gerek. Bir kenardan başla, karşı kenara kadar sürükle.', score:20};
+      return {ok:true, tag:'MÜKEMMEL', title:'Temiz kırılma', msg:'Tek çizgiden iki parça. Oyunun tamamı bu: bundan sonrası çizgiyi nereye çizdiğine bakacak.', score:100};
     }
   },
   /* ---------------- 2 ---------------- */
   {
-    name:'Marked Break',
-    spec:'GLAZED PLATE · COBALT RIM',
-    goal:'Crack through the <b>gold zone</b> and leave the cobalt half in one piece.',
-    hint:'Cut off the gold — spare the blue',
+    name:'İşaretli Kırılma',
+    spec:'SIRLI TABAK · KOBALT KENAR',
+    objective:'İşaretli bölgeden kır.',
+    tip:'<b>Altın bölgeden</b> kır, kobalt tarafı tek parça bırak.',
+    hint:'ALTINI KES, MAVİYİ KORU',
     seedNo:207, spacing:28,
     build(){
       this.cx = 200; this.cy = 300; this.r = 120;
@@ -628,7 +674,7 @@ const LEVELS = [
       c.beginPath(); c.arc(this.cx, this.cy, this.r-2, 0, TAU); c.clip();
       c.fillStyle = 'rgba(47,95,224,.13)';
       c.fillRect(this.cx-this.r-4, this.cy-this.r-4, (this.keepX-this.cx)+this.r+4, this.r*2+8);
-      label(c, 'KEEP', this.cx-62, this.cy+2, 13, 'rgba(28,63,168,.5)');
+      label(c, 'KORU', this.cx-62, this.cy+2, 13, 'rgba(28,63,168,.5)');
       const g = c.createRadialGradient(this.zone.x, this.zone.y, 4, this.zone.x, this.zone.y, this.zone.r);
       g.addColorStop(0, 'rgba(232,168,25,.42)');
       g.addColorStop(1, 'rgba(232,168,25,.14)');
@@ -637,31 +683,32 @@ const LEVELS = [
       c.lineWidth = 2.6; c.strokeStyle = GLAZE.gold; c.setLineDash([7,5]);
       c.beginPath(); c.arc(this.zone.x, this.zone.y, this.zone.r, 0, TAU); c.stroke();
       c.setLineDash([]);
-      label(c, 'BREAK', this.zone.x, this.zone.y, 13, '#a8740a');
+      label(c, 'KIR', this.zone.x, this.zone.y, 13, '#a8740a');
       c.restore();
     },
     judge(R){
-      if(R.majors < 2) return {ok:false, tag:'Try again', title:'Nothing separated', msg:'Run the hairline edge to edge — straight through the gold zone.', score:15};
+      if(R.majors < 2) return {ok:false, tag:'TEKRAR DENE', title:'Hiçbir şey ayrılmadı', msg:'Çizgiyi kenardan kenara, altın bölgenin içinden geçir.', score:15};
       const hit = distPolylinePt(R.crack, {x:this.zone.x, y:this.zone.y}) < this.zone.r;
-      if(!hit) return {ok:false, tag:'Try again', title:'Missed the mark', msg:'The break has to pass through the gold zone. Aim your line across that side of the plate.', score:30};
+      if(!hit) return {ok:false, tag:'TEKRAR DENE', title:'Hedefi ıskaladın', msg:'Kırılma altın bölgeden geçmeli. Çizgini tabağın o tarafına at.', score:30};
       const ratio = R.keepRatio;
-      if(ratio < 0.86) return {ok:false, tag:'Too much damage', title:'The cobalt half shattered', msg:'Only ' + Math.round(ratio*100) + '% of the keep side survived in one piece. Take the gold zone off with a single cut nearer the rim.', score:Math.round(ratio*70)};
+      if(ratio < 0.86) return {ok:false, tag:'FAZLA HASAR', title:'Kobalt taraf paramparça', msg:'Korunacak taraftan tek parça olarak sadece %' + Math.round(ratio*100) + ' kaldı. Altın bölgeyi kenara yakın tek bir kesikle al.', score:Math.round(ratio*70)};
       const score = Math.round(60 + ratio*40);
       return {
         ok:true,
-        tag: ratio > 0.97 ? 'Perfect' : 'Good break',
-        title: ratio > 0.97 ? 'Surgical' : 'Good break',
-        msg:'Gold zone removed, ' + Math.round(ratio*100) + '% of the cobalt half still intact.',
+        tag: ratio > 0.97 ? 'MÜKEMMEL' : 'İYİ',
+        title: ratio > 0.97 ? 'Kusursuz kesik' : 'İyi kırılma',
+        msg:'Altın bölge ayrıldı, kobalt tarafın %' + Math.round(ratio*100) + ' kadarı sağlam.',
         score
       };
     }
   },
   /* ---------------- 3 ---------------- */
   {
-    name:'Hidden Key',
-    spec:'SEALED JAR · CONTENTS: 1 KEY',
-    goal:'Free the key. If the hairline runs too close it snaps — cut where the key is not.',
-    hint:'Give the key a wide berth',
+    name:'Gizli Anahtar',
+    spec:'KAPALI KAVANOZ · İÇİNDE 1 ANAHTAR',
+    objective:'Anahtara zarar vermeden kabı kır.',
+    tip:'Anahtarı kurtar. Çizgi anahtara çok yaklaşırsa anahtar da kırılır.',
+    hint:'ANAHTARDAN UZAK DUR',
     seedNo:733, spacing:26,
     build(){
       this.cx = 200; this.cy = 302; this.w = 172; this.h = 256;
@@ -688,25 +735,26 @@ const LEVELS = [
       pathPoly(c, poly); c.stroke();
     },
     judge(R){
-      if(R.keyDist < this.safeR) return {ok:false, tag:'Too much damage', title:'The key snapped', msg:'The hairline ran ' + Math.round(R.keyDist) + ' mm from the key — anything under ' + this.safeR + ' takes it with the jar. Cut above the shoulder or below the base.', score:Math.round(R.keyDist*1.4), keyDead:true};
-      if(R.parts < 2) return {ok:false, tag:'Try again', title:'The jar held', msg:'You dodged the key but never opened the jar. Run the line clear from one edge to the other.', score:35};
+      if(R.keyDist < this.safeR) return {ok:false, tag:'FAZLA HASAR', title:'Anahtar kırıldı', msg:'Çizgi anahtarın ' + Math.round(R.keyDist) + ' mm yakınından geçti. ' + this.safeR + ' mm altı anahtarı da beraberinde götürüyor. Omuzdan ya da tabandan kes.', score:Math.round(R.keyDist*1.4), keyDead:true};
+      if(R.parts < 2) return {ok:false, tag:'TEKRAR DENE', title:'Kavanoz açılmadı', msg:'Anahtardan kaçtın ama kavanozu açmadın. Çizgiyi bir kenardan diğerine kadar geçir.', score:35};
       const d = R.keyDist;
       const score = Math.round(clamp(55 + (d - this.safeR)*0.9, 55, 100));
       return {
         ok:true,
-        tag: d > 62 ? 'Perfect' : 'Good break',
-        title:'Key freed',
-        msg:'Jar opened with ' + Math.round(d) + ' mm of clearance. The key never felt it.',
+        tag: d > 62 ? 'MÜKEMMEL' : 'İYİ',
+        title:'Anahtar kurtuldu',
+        msg:'Kavanoz ' + Math.round(d) + ' mm boşlukla açıldı. Anahtarın haberi bile olmadı.',
         score
       };
     }
   },
   /* ---------------- 4 ---------------- */
   {
-    name:'Three Pieces',
-    spec:'CELADON TILE · FACTORY SEAM',
-    goal:'The centre seam always splits. Add one hairline that leaves exactly <b>3</b> pieces.',
-    hint:'Keep your line on one side of the seam',
+    name:'Üç Parça',
+    spec:'SELADON KARO · FABRİKA DİKİŞİ',
+    objective:'Objeyi tam 3 parçaya ayır.',
+    tip:'Ortadaki dikiş her zaman ayrılır. Tek çizgiyle geriye tam <b>3</b> parça kalsın.',
+    hint:'ÇİZGİNİ DİKİŞİN TEK TARAFINDA TUT',
     seedNo:404, spacing:29, seamX:200,
     build(){
       this.cx = 200; this.cy = 300; this.w = 234; this.h = 234; this.rad = 22;
@@ -721,7 +769,7 @@ const LEVELS = [
       c.lineWidth = 1.6; c.strokeStyle = 'rgba(63,134,118,.55)'; c.setLineDash([6,6]);
       c.beginPath(); c.moveTo(this.seamX, this.cy-this.h); c.lineTo(this.seamX, this.cy+this.h); c.stroke();
       c.setLineDash([]);
-      label(c, 'SEAM', this.seamX, this.cy-this.h/2+20, 10, 'rgba(63,134,118,.75)');
+      label(c, 'DİKİŞ', this.seamX, this.cy-this.h/2+20, 10, 'rgba(63,134,118,.75)');
       c.restore();
     },
     judge(R){
@@ -729,18 +777,19 @@ const LEVELS = [
         const areas = R.majorAreas.slice().sort((a,b)=>b-a);
         const even = areas[2]/areas[0];
         const score = Math.round(clamp(72 + even*60, 72, 100));
-        return {ok:true, tag: even > 0.45 ? 'Perfect' : 'Good break', title:'Three pieces', msg:'Seam plus one hairline, split ' + R.majorAreas.map(a=>Math.round(a/R.total*100)+'%').join(' / ') + '.', score};
+        return {ok:true, tag: even > 0.45 ? 'MÜKEMMEL' : 'İYİ', title:'Üç parça', msg:'Dikiş artı tek çizgi: ' + R.majorAreas.map(a=>'%'+Math.round(a/R.total*100)).join(' / ') + '.', score};
       }
-      if(R.majors < 3) return {ok:false, tag:'Try again', title:'Only ' + R.majors + ' pieces', msg:'The seam gives you two on its own. Your hairline has to cut all the way across one of those halves.', score:40};
-      return {ok:false, tag:'Too much damage', title:R.majors + ' pieces — one too many', msg:'Your hairline crossed the seam, so both halves split. Keep the whole line on one side of the dashed seam.', score:45};
+      if(R.majors < 3) return {ok:false, tag:'TEKRAR DENE', title:'Sadece ' + R.majors + ' parça', msg:'Dikiş zaten iki parça veriyor. Çizgin bu yarımlardan birini baştan sona kesmeli.', score:40};
+      return {ok:false, tag:'FAZLA HASAR', title:R.majors + ' parça, bir fazla', msg:'Çizgin dikişi geçti ve iki yarım birden ayrıldı. Çizgiyi kesikli dikişin tek tarafında tut.', score:45};
     }
   },
   /* ---------------- 5 ---------------- */
   {
-    name:'Target Drop',
-    spec:'COBALT TILE · 1.4 M ABOVE TRAYS',
-    goal:'Angle the hairline so the left half lands in the left tray and the right half in the right.',
-    hint:'A near-vertical line throws the halves apart',
+    name:'Hedefe Düşür',
+    spec:'KOBALT KARO · HEDEFLERİN 1,4 M ÜSTÜNDE',
+    objective:'Parçaları hedef alanlara düşür.',
+    tip:'Çizgiyi öyle aç ki sol parça sol hedefe, sağ parça sağ hedefe düşsün.',
+    hint:'DİKEYE YAKIN ÇİZGİ PARÇALARI YANA SAVURUR',
     seedNo:515, spacing:26,
     build(){
       this.cx = 200; this.cy = 198; this.w = 192; this.h = 120; this.rad = 16;
@@ -751,14 +800,14 @@ const LEVELS = [
     physics:{sep:105, pop:-60, g:900, ground:true, jitter:0.04},
     art(c){ drawTileBody(c, this.cx, this.cy, this.w, this.h, this.rad, GLAZE.cobalt, GLAZE.cobaltDeep); },
     judge(R){
-      if(R.majors < 2) return {ok:false, tag:'Try again', title:'Nothing separated', msg:'Run the hairline edge to edge so the tile actually parts into two halves.', score:15};
-      if(R.majors > 2) return {ok:false, tag:'Too much damage', title:R.majors + ' pieces', msg:'This one wants two clean halves — one line, one cut, nothing crumbling off the corners.', score:35};
+      if(R.majors < 2) return {ok:false, tag:'TEKRAR DENE', title:'Hiçbir şey ayrılmadı', msg:'Çizgiyi kenardan kenara geçir ki karo gerçekten ikiye ayrılsın.', score:15};
+      if(R.majors > 2) return {ok:false, tag:'FAZLA HASAR', title:R.majors + ' parça', msg:'Burada iki temiz yarım gerekiyor: tek çizgi, tek kesik, köşelerden kırıntı yok.', score:35};
       const L = R.landing;
       if(!L || !L.ok){
-        const where = L ? L.detail : 'The halves never reached the trays.';
-        return {ok:false, tag:'Try again', title:'Missed the trays', msg:where + ' The halves fly apart at right angles to your line, so tilt it back toward vertical.', score: L ? L.score : 25};
+        const where = L ? L.detail : 'Parçalar hedeflere ulaşamadı.';
+        return {ok:false, tag:'TEKRAR DENE', title:'Hedefleri ıskaladın', msg:where + ' Parçalar çizgine dik savruluyor, o yüzden çizgiyi dikeye yaklaştır.', score: L ? L.score : 25};
       }
-      return {ok:true, tag: L.score > 88 ? 'Perfect' : 'Good break', title:'Both landed', msg:'Left half ' + L.dL + ' mm off centre, right half ' + L.dR + ' mm. Gravity did the rest.', score:L.score};
+      return {ok:true, tag: L.score > 88 ? 'MÜKEMMEL' : 'İYİ', title:'İkisi de yerinde', msg:'Sol parça merkezden ' + L.dL + ' mm, sağ parça ' + L.dR + ' mm. Gerisini yer çekimi hallediyor.', score:L.score};
     }
   }
 ];
@@ -840,6 +889,11 @@ const elSpec = document.getElementById('spec');
 const elName = document.getElementById('lvName');
 const elGoal = document.getElementById('goal');
 const elHint = document.getElementById('hint');
+const elBrief = document.getElementById('brief');
+const elBriefTag = document.getElementById('briefTag');
+const elBriefObj = document.getElementById('briefObj');
+const elBriefTip = document.getElementById('briefTip');
+const elVstate = document.getElementById('vstate');
 const elTicks = document.getElementById('ticks');
 const btnReset = document.getElementById('resetBtn');
 const btnSmash = document.getElementById('smashBtn');
@@ -957,12 +1011,30 @@ function paintArt(){
 function paintHud(){
   elSpec.textContent = lv.spec;
   elName.textContent = lv.name;
-  elGoal.innerHTML = lv.goal;
+  elGoal.textContent = lv.objective;
   elHint.textContent = lv.hint;
   elHint.classList.remove('gone');
   ticks.forEach((t,i)=>{
     t.className = 'tick' + (i < lvIndex ? ' done' : i === lvIndex ? ' now' : '');
   });
+  showBrief();
+}
+/* objective card on entry, then it hands off to the small label in the HUD */
+let briefTimer = 0;
+function showBrief(){
+  clearTimeout(briefTimer);
+  elBriefTag.textContent = 'BÖLÜM ' + (lvIndex + 1) + ' / ' + LEVELS.length;
+  elBriefObj.textContent = lv.objective;
+  elBriefTip.innerHTML = lv.tip;
+  elBrief.classList.remove('show', 'gone');
+  elGoal.classList.remove('lit');
+  void elBrief.offsetWidth;
+  elBrief.classList.add('show');
+  briefTimer = setTimeout(()=>{
+    elBrief.classList.remove('show');
+    elBrief.classList.add('gone');
+    elGoal.classList.add('lit');
+  }, 2400);
 }
 
 /* ---------- pieces ---------- */
@@ -1258,9 +1330,9 @@ function gather(){
       const cL = (t0.x0+t0.x1)/2, cR = (t1.x0+t1.x1)/2;
       const dL = Math.round(Math.abs(lx-cL)), dR = Math.round(Math.abs(rx-cR));
       const acc = 1 - clamp((dL+dR)/((t0.x1-t0.x0)), 0, 1);
-      const detail = !inL && !inR ? 'Neither half found a tray.'
-        : !inL ? 'The left half landed short of its tray.'
-        : 'The right half landed short of its tray.';
+      const detail = !inL && !inR ? 'İki parça da hedefe giremedi.'
+        : !inL ? 'Sol parça hedefin dışına düştü.'
+        : 'Sağ parça hedefin dışına düştü.';
       R.landing = {ok: inL && inR, dL, dR, detail, score: Math.round(inL&&inR ? 70 + acc*30 : 30 + acc*20)};
     }
   }
@@ -1281,10 +1353,11 @@ function showSheet(res){
   elScore.innerHTML = res.score + '<small>/100</small>';
   elFill.style.width = '0%';
   const last = lvIndex === LEVELS.length - 1;
-  btnNext.textContent = res.ok ? (last ? 'Start over' : 'Next level') : 'Retry';
+  elVstate.textContent = res.ok ? (last ? 'TÜM BÖLÜMLER TAMAMLANDI' : 'BÖLÜM TAMAMLANDI') : '';
+  btnNext.textContent = res.ok ? (last ? 'Baştan Başla' : 'Sonraki Bölüm') : 'Tekrar Dene';
   btnNext.style.display = res.ok ? '' : 'none';
   btnRetry.style.display = res.ok ? '' : '';
-  btnRetry.textContent = res.ok ? 'Replay' : 'Try again';
+  btnRetry.textContent = res.ok ? 'Tekrar Oyna' : 'Tekrar Dene';
   sheet.classList.add('show');
   requestAnimationFrame(()=>{ elFill.style.width = res.score + '%'; });
   if(res.ok) audio.win(); else audio.lose();
@@ -1549,7 +1622,7 @@ function drawTrays(){
     ctx.font = '700 11px Figtree, system-ui, sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillStyle = 'rgba(47,95,224,.75)';
-    ctx.fillText(i === 0 ? 'LEFT TRAY' : 'RIGHT TRAY', (t.x0+t.x1)/2, lv.ground + 24);
+    ctx.fillText(i === 0 ? 'SOL HEDEF' : 'SAĞ HEDEF', (t.x0+t.x1)/2, lv.ground + 24);
   });
   ctx.restore();
 }
@@ -1609,12 +1682,16 @@ btnNext.addEventListener('click', ()=>{
 btnSnd.addEventListener('click', ()=>{
   const m = audio.toggle();
   btnSnd.setAttribute('aria-pressed', String(m));
-  btnSnd.setAttribute('aria-label', m ? 'Unmute sound' : 'Mute sound');
+  btnSnd.setAttribute('aria-label', m ? 'Sesi aç' : 'Sesi kapat');
   document.getElementById('sndWave').style.opacity = m ? '0.22' : '1';
 });
 
+/* canvas labels use Turkish glyphs, so pull the latin-ext subset before repainting */
 if(document.fonts && document.fonts.ready){
-  document.fonts.ready.then(()=>{ if(lv) paintArt(); });
+  document.fonts.ready
+    .then(()=> document.fonts.load ? document.fonts.load('700 13px Figtree', 'DİKİŞ SAĞ KORU') : null)
+    .catch(()=>{})
+    .then(()=>{ if(lv) paintArt(); });
 }
 
 window.__BIR = { go: buildLevel, get info(){ return {
