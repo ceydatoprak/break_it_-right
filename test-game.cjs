@@ -10,9 +10,10 @@ const ctx = new Proxy({
 }, {get: (t,k) => t[k] || noop});
 
 function el(){
+  const classes=new Set();
   return {
     children: [], style: {setProperty: noop}, textContent: '', innerHTML: '',
-    classList: {add: noop, remove: noop, toggle: noop, contains: () => false},
+    classList: {add:(...v)=>v.forEach(x=>classes.add(x)),remove:(...v)=>v.forEach(x=>classes.delete(x)),toggle:(v,on)=>{if(on??!classes.has(v))classes.add(v);else classes.delete(v);},contains:v=>classes.has(v)},
     appendChild(e){ this.children.push(e); return e; },
     querySelector: () => null, setAttribute: noop, addEventListener: noop,
     getContext: () => ctx,
@@ -25,12 +26,14 @@ const document = {
   getElementById(id){ if(!elements.has(id)) elements.set(id, el()); return elements.get(id); },
   createElement: el, documentElement: el(), addEventListener: noop
 };
+const timers=new Map();let timerId=0;
+const flushTimers=()=>{const pending=[...timers.values()];timers.clear();pending.forEach(fn=>fn());};
 const sandbox = {
   document, navigator: {}, window: {addEventListener: noop},
   getComputedStyle: () => ({getPropertyValue: () => ''}),
   MutationObserver: class { observe(){} },
   performance: {now: () => 0},
-  setTimeout: () => 0, clearTimeout: noop, requestAnimationFrame: noop, console
+  setTimeout: fn=>{timers.set(++timerId,fn);return timerId;}, clearTimeout:id=>timers.delete(id), requestAnimationFrame: noop, console
 };
 vm.createContext(sandbox);
 const src = fs.readFileSync(__dirname + '/index.html', 'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
@@ -122,7 +125,7 @@ check('Bağımlılık kilidi kendi gerekçesini söylüyor', () => {
   G.go(4);
   unscrew(172,238);
   assert.equal(done('s1'), false);
-  assert.equal(G.info.say, 'Kayış vidaların üstünde.');
+  assert.equal(G.info.say, 'Bant vidaların üstünde.');
 });
 
 check('Kritik hata: çekiç kırılgan parçayı yok ediyor', () => {
@@ -238,4 +241,39 @@ check('Aynı girdi aynı sonucu veriyor', () => {
   }
 });
 
+check('İpucu on saniyeden önce gelmez ve objeyi kendi döndürmez',()=>{
+  G.go(0);unscrew(172,356);G.step(.1,99);assert.equal(G.info.hintActive,false);
+  G.step(.1,3);assert.equal(G.info.hint,'s2');assert.equal(G.info.hintActive,true);assert.equal(G.info.rot,0);
+  assert.doesNotMatch(G.info.say,/bant.*güç.*vida/i);
+});
+check('Kısmi ilerleme ipucu zamanını yeniler',()=>{
+  G.go(0);G.step(.1,95);G.pick('screwdriver');G.swipe({x:172,y:356},{x:172,y:376},3);
+  G.step(.1,20);assert.equal(G.info.hintActive,false);assert.ok(comp('s1').prog>0);
+});
+check('İki olaylık hızlı kesme kabloyu atlamaz',()=>{
+  G.go(1);G.setRot(PI);G.pick(null);G.tap({x:172,y:276});G.setRot(0);
+  G.pick('cutter');G.swipe({x:125,y:268},{x:220,y:268},2);assert.equal(done('wire'),true);
+});
+check('Uzun mıknatıs hareketi tek ceza verir',()=>{
+  G.go(3);magnet(84,360,400);assert.equal(G.info.strikes,2);
+});
+check('İptal edilen dokunuş güç düğmesini değiştirmez',()=>{
+  G.go(1);G.setRot(PI);G.pick(null);G.pointer('down',{x:172,y:276});G.cancel();G.pointer('up',{x:172,y:276});assert.equal(comp('pwr').on,true);
+});
+check('İkinci parmak ilk hareketi bitiremez',()=>{
+  G.go(1);G.setRot(PI);G.pick(null);G.pointer('down',{x:172,y:276});
+  G.pointer('down',{x:172,y:276},2);G.pointer('up',{x:172,y:276},2);assert.equal(comp('pwr').on,true);
+  G.pointer('up',{x:172,y:276});assert.equal(comp('pwr').on,false);
+});
+check('Sıfırlama eski kazanma ve kaybetme ekranlarını iptal eder',()=>{
+  solve(0);G.go(1);flushTimers();assert.equal(G.info.verdict,null);assert.equal(G.info.level,2);
+  G.go(0);G.pick('hammer');G.tap({x:172,y:212});G.go(0);flushTimers();assert.equal(G.info.verdict,null);assert.equal(G.info.failed,false);
+});
+check('Kusursuz çözüm üç yıldız ve tamamlanan adımları gösterir',()=>{
+  solve(0);flushTimers();assert.equal(G.info.verdict,'Kurtarıldı!');assert.equal(elements.get('stars').textContent,'★★★');assert.equal(elements.get('progressText').textContent,'4 / 4 adım');
+});
+check('Sıfırlama ipucunu, parçacıkları ve aktif dokunuşu temizler',()=>{
+  G.go(0);G.step(.1,105);G.pointer('down',{x:20,y:250});G.go(0);assert.equal(G.info.hintActive,false);assert.equal(G.info.hint,null);assert.equal(G.info.particles,0);assert.equal(G.info.dragging,false);
+});
 console.log(n + ' checks passed.');
+

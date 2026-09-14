@@ -33,7 +33,7 @@ Obje 360° dönen bir tabla üzerinde. Parçalar gövdenin farklı yüzlerinde d
 | --- | --- |
 | Çekiç | Kırılgan parçalara vurmak **risklidir** — burada anahtar değil, tuzaktır |
 | Tornavida | Vida sökmek (sürükle) |
-| Kesici | Kayış ve kablo kesmek (üzerinden geçir) |
+| Makas | Bant ve kablo kesmek (üzerinden geçir) |
 | Mıknatıs | İçerideki metal pimi dışarıdan sürüklemek (basılı tut) |
 | Vantuz | Cam ve panel kaldırmak (yapıştır, dışarı çek) |
 
@@ -47,7 +47,7 @@ Obje 360° dönen bir tabla üzerinde. Parçalar gövdenin farklı yüzlerinde d
 | 2 · Canlı kablo | Robotu kurtar | Önce gücü kes — yoksa çarpar |
 | 3 · Basınç odası | Kapsülü güvenle aç | Göstergeyi oku, vanayı aç |
 | 4 · Mıknatıs kilidi | Kilidi aç | Dolaylı kontrol + hassas devre riski |
-| 5 · Çok katmanlı | İçindekini kurtar | Kayış → güç → vidalar → pim → cam |
+| 5 · Çok katmanlı | İçindekini kurtar | Bant → güç → vidalar → pim → cam |
 
 ## Uygulama
 
@@ -59,8 +59,19 @@ Bileşen tabanlı: her etkileşimli parça hangi aletlerin işlediğini, neye ba
 
 Önceki sürümün Voronoi kırık motoru bu yapıda kullanılmıyor — yeni bölümlerin hiçbiri kontrollü kırmaya dayanmıyor. Eski sürümler geçici klasörde yedekli.
 
+## Görsel ve oynanabilirlik iyileştirmeleri
+
+Mevcut beş bölümün bağımlılıkları ve çevir–incele–alet seç–kurtar döngüsü korunur. İlk bölümlerde yalnızca gereken aletler sunulur; son bölümde bütün aletler görünür. Ayrı **İncele** düğmesi aleti bırakmayı kolaylaştırır.
+
+- Ahşap damarları, metal kenarlar, cam yansımaları, fiziksel döner tabla ve dikişli minder.
+- Seçili alet açıklaması, vida/vanada ilerleme halkası, elektrik/basınç/devre işaretleri, mıknatıs çekim çizgileri ve vantuz esnemesi.
+- Yararlı ilerleme olmadan 10 saniye geçince yalnızca bir sonraki parçaya kısa ipucu. İpuçları objeyi otomatik döndürmez ve bütün çözümü anlatmaz.
+- Tamamlanan adımlar ve kısa onaylar; kusursuz çözüm için üç, cezasız ama yumuşak hatalı çözüm için iki, cezalı kurtarma için bir yıldız. Hız baskısı yoktur.
+- Hızlı kesme hareketleri, tek hareket başına tek ceza, ek parmakların yok sayılması, güvenli dokunma iptali ve yeniden denemede bekleyen sonuçların temizlenmesi.
+
 ## Doğrulama
 
-`node test-game.cjs` — **21 kontrol.** Gerçek oyun betiğini sahte canvas/DOM üzerinde çalıştırır: beş bölümün tam çözümü, döndürmenin arkadaki parçayı hem gizlemesi hem kilitlemesi, yumuşak/cezalı/kritik hataların üçü, hareket başına tek ceza, üç canın bitmesi, bağımlılık kilitleri, mıknatıs menzili, basınç tuzağı, minder kuralı, sıfırlama ve belirlenimcilik.
+`node test-game.cjs` — **30 kontrol.** Gerçek oyun betiğini sahte canvas/DOM üzerinde çalıştırır: beş bölümün tam çözümü, döndürme ve bağımlılıklar, üç hata türü, mıknatıs menzili, basınç, minder, belirlenimcilik; ayrıca ipucu zamanlaması, kısmi ilerleme, hızlı kesme, uzun hareketlerde tek ceza, çoklu dokunma, dokunma iptali, gecikmiş sonuçların sıfırlanması ve yıldızlar.
 
 Tarayıcıda döndürme, alet değişimi, kesme hareketi ve düzen elle denendi. Gerçek telefon donanımı, titreşim ve ses kalitesi hâlâ elde doğrulanmayı bekliyor.
+
