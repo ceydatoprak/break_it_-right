@@ -1,71 +1,75 @@
 <title>Break It Right</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
   :root{
-    --ground:#eceff6;
-    --ground-2:#f8fafd;
-    --ink:#141824;
-    --ink-2:#4d566e;
-    --ink-3:#838ea8;
-    --line:rgba(20,24,36,.10);
-    --card:#ffffff;
-    --card-line:rgba(20,24,36,.09);
-    --cobalt:#2f5fe0;
-    --kiln-a:#ff5a2b;
-    --kiln-b:#ffa62b;
-    --jade:#0f9d6e;
-    --rose:#e0384e;
-    --gold:#e8a819;
-    --shadow:0 12px 30px -14px rgba(19,26,48,.42);
-    --glow:rgba(255,255,255,.9);
-    --btn-ghost:rgba(20,24,36,.06);
-    --btn-ghost-line:rgba(20,24,36,.12);
+    --wall-a:#f6ece0;
+    --wall-b:#e8d9c6;
+    --table-a:#c8985f;
+    --table-b:#a97742;
+    --table-edge:#8a5f33;
+    --ink:#2c2118;
+    --ink-2:#6b5949;
+    --ink-3:#9c8974;
+    --line:rgba(60,42,26,.13);
+    --card:#fffaf3;
+    --card-line:rgba(90,64,38,.14);
+    --accent:#e2622c;
+    --accent-2:#f2a03c;
+    --good:#3f9a6b;
+    --bad:#cf4436;
+    --shadow:0 14px 34px -16px rgba(70,44,20,.5);
+    --chip:rgba(90,64,38,.09);
+    --chip-line:rgba(90,64,38,.16);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --ground:#0b0e15;
-      --ground-2:#141a27;
-      --ink:#eef1f9;
-      --ink-2:#a8b2c9;
-      --ink-3:#6e7992;
-      --line:rgba(255,255,255,.11);
-      --card:#161c29;
-      --card-line:rgba(255,255,255,.09);
-      --cobalt:#6c93ff;
-      --jade:#2bd39a;
-      --rose:#ff6275;
-      --gold:#f5bf3f;
-      --shadow:0 16px 36px -16px rgba(0,0,0,.85);
-      --glow:rgba(120,152,255,.13);
-      --btn-ghost:rgba(255,255,255,.07);
-      --btn-ghost-line:rgba(255,255,255,.14);
+      --wall-a:#241b15;
+      --wall-b:#150f0b;
+      --table-a:#7a5433;
+      --table-b:#583a22;
+      --table-edge:#3d2716;
+      --ink:#f6ece0;
+      --ink-2:#c3ae97;
+      --ink-3:#8d7a66;
+      --line:rgba(255,240,225,.12);
+      --card:#2a201a;
+      --card-line:rgba(255,235,215,.12);
+      --accent:#ff7a42;
+      --accent-2:#ffb457;
+      --good:#4fc08a;
+      --bad:#ff6a58;
+      --shadow:0 18px 40px -18px rgba(0,0,0,.9);
+      --chip:rgba(255,236,216,.09);
+      --chip-line:rgba(255,236,216,.16);
     }
   }
   :root[data-theme="dark"]{
-    --ground:#0b0e15;
-    --ground-2:#141a27;
-    --ink:#eef1f9;
-    --ink-2:#a8b2c9;
-    --ink-3:#6e7992;
-    --line:rgba(255,255,255,.11);
-    --card:#161c29;
-    --card-line:rgba(255,255,255,.09);
-    --cobalt:#6c93ff;
-    --jade:#2bd39a;
-    --rose:#ff6275;
-    --gold:#f5bf3f;
-    --shadow:0 16px 36px -16px rgba(0,0,0,.85);
-    --glow:rgba(120,152,255,.13);
-    --btn-ghost:rgba(255,255,255,.07);
-    --btn-ghost-line:rgba(255,255,255,.14);
+    --wall-a:#241b15;
+    --wall-b:#150f0b;
+    --table-a:#7a5433;
+    --table-b:#583a22;
+    --table-edge:#3d2716;
+    --ink:#f6ece0;
+    --ink-2:#c3ae97;
+    --ink-3:#8d7a66;
+    --line:rgba(255,240,225,.12);
+    --card:#2a201a;
+    --card-line:rgba(255,235,215,.12);
+    --accent:#ff7a42;
+    --accent-2:#ffb457;
+    --good:#4fc08a;
+    --bad:#ff6a58;
+    --shadow:0 18px 40px -18px rgba(0,0,0,.9);
+    --chip:rgba(255,236,216,.09);
+    --chip-line:rgba(255,236,216,.16);
   }
 
   *{box-sizing:border-box}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   body{
     margin:0;
-    background:linear-gradient(178deg,var(--ground-2) 0%,var(--ground) 62%);
+    background:var(--wall-b);
     color:var(--ink);
     font-family:Figtree,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     -webkit-font-smoothing:antialiased;
@@ -73,240 +77,174 @@
     user-select:none;-webkit-user-select:none;
     touch-action:manipulation;
   }
-
   #app{
     height:100dvh;height:100vh;
-    display:grid;
-    grid-template-rows:auto minmax(0,1fr) auto;
+    display:grid;grid-template-rows:auto minmax(0,1fr);
     max-width:520px;margin-inline:auto;
-    padding-inline:16px;
+    padding-inline:14px;
   }
 
-  /* ---------- studio tag / HUD ---------- */
-  .hud{padding-block:14px 8px;display:flex;flex-direction:column;gap:9px}
-  .hud-top{display:flex;align-items:flex-start;gap:12px}
-  .tag{flex:1;min-width:0}
-  .spec{
-    font-family:"DM Mono",ui-monospace,monospace;
-    font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
-    color:var(--ink-3);display:block;margin-bottom:3px;
+  /* ---------------- top: objective only ---------------- */
+  .hud{padding-block:12px 8px;display:flex;flex-direction:column;gap:9px}
+  .hud-row{display:flex;align-items:center;gap:10px}
+  .obj-wrap{flex:1;min-width:0;display:flex;align-items:center;gap:9px}
+  .mat-chip{
+    flex:none;font-size:11px;font-weight:700;letter-spacing:.04em;
+    padding:4px 9px;border-radius:8px;
+    background:var(--chip);border:1px solid var(--chip-line);color:var(--ink-2);
   }
-  .tag h1{
-    font-family:"Bricolage Grotesque",Figtree,sans-serif;
-    font-weight:800;font-size:clamp(21px,6.4vw,27px);line-height:1;
-    margin:0;letter-spacing:-.022em;text-wrap:balance;
+  .objective{
+    margin:0;font-family:"Bricolage Grotesque",Figtree,sans-serif;
+    font-weight:800;font-size:clamp(16px,4.6vw,19px);line-height:1.15;
+    letter-spacing:-.015em;text-wrap:balance;
   }
+  .tools{display:flex;gap:6px;flex:none}
   .icon-btn{
-    flex:none;width:38px;height:38px;border-radius:12px;
-    border:1px solid var(--btn-ghost-line);background:var(--btn-ghost);
+    width:36px;height:36px;border-radius:11px;
+    border:1px solid var(--chip-line);background:var(--chip);
     color:var(--ink-2);display:grid;place-items:center;cursor:pointer;
-    transition:color .15s,background .15s;
+    transition:color .15s,transform .12s;
   }
+  .icon-btn:active{transform:scale(.93)}
   .icon-btn:hover{color:var(--ink)}
+  .icon-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   .icon-btn svg{width:17px;height:17px;display:block}
 
-  .ticks{display:flex;gap:5px;align-items:center}
-  .tick{height:4px;flex:1;border-radius:99px;background:var(--line);transition:background .3s}
-  .tick.done{background:var(--jade)}
-  .tick.now{background:linear-gradient(90deg,var(--kiln-a),var(--kiln-b))}
-
-  .goal{
-    margin:0;font-size:13.5px;line-height:1.45;color:var(--ink-2);
-    max-width:46ch;display:flex;align-items:center;gap:8px;
-    opacity:0;transition:opacity .4s ease;
+  .meta{display:flex;align-items:center;gap:12px}
+  .ticks{display:flex;gap:4px;flex:1}
+  .tick{height:3px;flex:1;border-radius:99px;background:var(--line)}
+  .tick.done{background:var(--good)}
+  .tick.now{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+  .hits{display:flex;gap:4px;align-items:center;flex:none}
+  .hit-pip{
+    width:13px;height:13px;border-radius:50%;
+    border:1.5px solid var(--chip-line);background:transparent;
+    transition:background .2s,border-color .2s;
   }
-  .goal.lit{opacity:1}
-  .goal::before{
-    content:'';flex:none;width:7px;height:7px;border-radius:99px;
-    background:linear-gradient(135deg,var(--kiln-a),var(--kiln-b));
-  }
+  .hit-pip.left{background:var(--ink-3);border-color:transparent}
 
-  /* ---------- stage ---------- */
+  /* ---------------- stage ---------------- */
   #stage{position:relative;min-height:0;touch-action:none}
-  #cv{position:absolute;inset:0;display:block;touch-action:none;cursor:crosshair}
-  .hint{
-    position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
-    font-family:"DM Mono",ui-monospace,monospace;
-    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--ink-3);pointer-events:none;
-    transition:opacity .35s;white-space:nowrap;
+  #cv{position:absolute;inset:0;display:block;touch-action:none;cursor:grab}
+  .tip{
+    position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
+    font-size:12px;font-weight:500;color:var(--ink-3);
+    pointer-events:none;transition:opacity .3s;text-align:center;
+    width:92%;
   }
-  .hint.gone{opacity:0}
+  .tip.gone{opacity:0}
 
-  /* level briefing — shows on entry, then hands off to the .goal label */
   .brief{
-    position:absolute;left:50%;top:10px;
-    width:min(340px,92%);
+    position:absolute;left:50%;top:8px;width:min(330px,92%);
     background:var(--card);border:1px solid var(--card-line);
-    border-radius:18px;padding:13px 16px 14px;
-    box-shadow:var(--shadow);
-    display:flex;flex-direction:column;gap:5px;
-    pointer-events:none;
+    border-radius:16px;padding:12px 15px 13px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:4px;pointer-events:none;
     opacity:0;transform:translate(-50%,-10px) scale(.96);
-    transition:opacity .34s ease,transform .34s cubic-bezier(.2,.9,.3,1);
+    transition:opacity .3s ease,transform .3s cubic-bezier(.2,.9,.3,1);
   }
   .brief.show{opacity:1;transform:translate(-50%,0) scale(1)}
-  .brief.gone{opacity:0;transform:translate(-50%,-18px) scale(.94)}
-  .brief-tag{
-    font-family:"DM Mono",ui-monospace,monospace;
-    font-size:10px;letter-spacing:.16em;color:var(--kiln-a);
-  }
+  .brief.gone{opacity:0;transform:translate(-50%,-16px) scale(.94)}
+  .brief-tag{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--accent)}
   .brief-obj{
     margin:0;font-family:"Bricolage Grotesque",Figtree,sans-serif;
-    font-weight:800;font-size:19px;line-height:1.14;letter-spacing:-.02em;
-    text-wrap:balance;
+    font-weight:800;font-size:18px;line-height:1.15;letter-spacing:-.02em;text-wrap:balance;
   }
-  .brief-tip{margin:0;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
-  .brief-tip b{color:var(--ink);font-weight:600}
+  .brief-tip{margin:0;font-size:12.5px;line-height:1.42;color:var(--ink-2)}
 
-  /* ---------- action bar ---------- */
-  .bar{
-    display:flex;gap:10px;align-items:stretch;
-    padding-block:10px 18px;
-    padding-bottom:max(18px,env(safe-area-inset-bottom));
-  }
-  .btn{
-    font-family:Figtree,sans-serif;font-weight:700;
-    border:0;border-radius:16px;cursor:pointer;
-    display:grid;place-items:center;
-    transition:transform .12s ease,opacity .2s,box-shadow .2s;
-  }
-  .btn:active{transform:translateY(2px) scale(.985)}
-  .btn:focus-visible{outline:3px solid var(--cobalt);outline-offset:3px}
-  .btn[disabled]{opacity:.38;pointer-events:none}
-  .ghost{
-    background:var(--btn-ghost);color:var(--ink-2);
-    border:1px solid var(--btn-ghost-line);
-    font-size:14px;padding:0 20px;min-height:58px;
-  }
-  .smash{
-    flex:1;min-height:58px;
-    background:linear-gradient(135deg,var(--kiln-a),var(--kiln-b));
-    color:#fff;font-size:19px;letter-spacing:.16em;
-    box-shadow:0 10px 22px -10px rgba(255,90,43,.9);
-  }
-  .smash.ready{animation:breathe 1.9s ease-in-out infinite}
-  @keyframes breathe{
-    0%,100%{box-shadow:0 10px 22px -10px rgba(255,90,43,.9)}
-    50%{box-shadow:0 14px 30px -10px rgba(255,120,43,1)}
-  }
-
-  /* ---------- result sheet ---------- */
+  /* ---------------- result ---------------- */
   .sheet{
-    position:fixed;inset:0;z-index:20;
-    display:flex;align-items:flex-end;justify-content:center;
-    background:rgba(8,11,20,.34);
-    backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
-    opacity:0;pointer-events:none;transition:opacity .28s;
+    position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(40,26,14,.36);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    opacity:0;pointer-events:none;transition:opacity .24s;
   }
   .sheet.show{opacity:1;pointer-events:auto}
   .card{
-    width:100%;max-width:488px;
-    background:var(--card);border:1px solid var(--card-line);
-    border-radius:24px 24px 0 0;
+    width:100%;max-width:492px;background:var(--card);
+    border:1px solid var(--card-line);border-radius:22px 22px 0 0;
     box-shadow:var(--shadow);
-    padding:22px 20px max(20px,env(safe-area-inset-bottom));
-    display:flex;flex-direction:column;gap:14px;
-    transform:translateY(102%);transition:transform .34s cubic-bezier(.18,.9,.28,1);
+    padding:20px 18px max(18px,env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;gap:11px;
+    transform:translateY(102%);transition:transform .3s cubic-bezier(.18,.9,.28,1);
   }
   .sheet.show .card{transform:translateY(0)}
-  .vtag{
-    align-self:flex-start;
-    font-family:"DM Mono",ui-monospace,monospace;
-    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    padding:5px 11px;border-radius:99px;
-    border:1px solid currentColor;
+  .verdict{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
   }
-  .vtag.good{color:var(--jade)}
-  .vtag.bad{color:var(--rose)}
-  .vrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .vstate{
-    font-family:"DM Mono",ui-monospace,monospace;
-    font-size:10.5px;letter-spacing:.14em;color:var(--ink-3);
+  .verdict h2{
+    margin:0;font-family:"Bricolage Grotesque",Figtree,sans-serif;
+    font-weight:800;font-size:clamp(26px,8vw,34px);line-height:1;letter-spacing:-.03em;
   }
-  .card h2{
-    font-family:"Bricolage Grotesque",Figtree,sans-serif;
-    font-weight:800;font-size:clamp(24px,7.4vw,32px);line-height:1.02;
-    margin:0;letter-spacing:-.025em;text-wrap:balance;
+  .verdict h2.good{color:var(--good)}
+  .verdict h2.bad{color:var(--bad)}
+  .pts{font-size:14px;font-weight:600;color:var(--ink-3)}
+  .card p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2);max-width:46ch}
+  .acts{display:flex;gap:9px;margin-top:3px}
+  .btn{
+    flex:1;min-height:54px;border:0;border-radius:15px;cursor:pointer;
+    font-family:Figtree,sans-serif;font-weight:700;font-size:15px;
+    display:grid;place-items:center;transition:transform .12s;
   }
-  .card p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2);max-width:48ch}
-
-  .readout{display:flex;align-items:center;gap:12px}
-  .meter{flex:1;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
-  .meter i{
-    display:block;height:100%;width:0;border-radius:99px;
-    background:linear-gradient(90deg,var(--kiln-a),var(--kiln-b));
-    transition:width .7s cubic-bezier(.2,.9,.3,1);
+  .btn:active{transform:translateY(2px) scale(.985)}
+  .btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .ghost{background:var(--chip);color:var(--ink-2);border:1px solid var(--chip-line)}
+  .go{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;
+    font-size:16px;box-shadow:0 9px 20px -10px rgba(226,98,44,.95);
   }
-  .meter.good i{background:linear-gradient(90deg,var(--jade),#6fe0b6)}
-  .num{
-    font-family:"DM Mono",ui-monospace,monospace;font-size:15px;
-    font-variant-numeric:tabular-nums;color:var(--ink);min-width:62px;text-align:right;
-  }
-  .num small{color:var(--ink-3);font-size:11px}
-
-  .acts{display:flex;gap:10px;margin-top:2px}
-  .acts .btn{min-height:54px;flex:1;font-size:15px;letter-spacing:.02em;border-radius:15px}
-  .acts .smash{letter-spacing:.06em;font-size:16px}
 
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important;transition-duration:.08s !important}
-  }
-  @media (max-height:620px){
-    .hud{padding-block:9px 6px}
-    .goal{font-size:12.5px}
-    .ghost,.smash{min-height:52px}
   }
 </style>
 
 <div id="app" lang="tr">
   <header class="hud">
-    <div class="hud-top">
-      <div class="tag">
-        <span class="spec" id="spec">TAŞ SERAMİK TABAK · Ø 240 MM</span>
-        <h1 id="lvName">İlk Kırılma</h1>
+    <div class="hud-row">
+      <div class="obj-wrap">
+        <span class="mat-chip" id="mat">Seramik</span>
+        <p class="objective" id="objective">Tabağı kır.</p>
       </div>
-      <button class="icon-btn" id="sndBtn" type="button" aria-label="Sesi kapat" aria-pressed="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="sndIcon">
-          <path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9a4 4 0 0 1 0 6" id="sndWave"/>
-        </svg>
-      </button>
+      <div class="tools">
+        <button class="icon-btn" id="resetBtn" type="button" aria-label="Bölümü sıfırla">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="sndBtn" type="button" aria-label="Sesi kapat" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9a4 4 0 0 1 0 6" id="sndWave"/>
+          </svg>
+        </button>
+      </div>
     </div>
-    <div class="ticks" id="ticks"></div>
-    <p class="goal" id="goal"></p>
+    <div class="meta">
+      <div class="ticks" id="ticks"></div>
+      <div class="hits" id="hits"></div>
+    </div>
   </header>
 
   <div id="stage">
     <canvas id="cv"></canvas>
     <div class="brief" id="brief">
-      <span class="brief-tag" id="briefTag">BÖLÜM 1 / 5</span>
-      <p class="brief-obj" id="briefObj">Çizgiyi çiz ve tabağı kır.</p>
+      <span class="brief-tag" id="briefTag">BÖLÜM 1 / 6</span>
+      <p class="brief-obj" id="briefObj">Tabağı kır.</p>
       <p class="brief-tip" id="briefTip"></p>
     </div>
-    <div class="hint" id="hint">TABAĞIN ÜZERİNDE SÜRÜKLE</div>
-  </div>
-
-  <div class="bar">
-    <button class="btn ghost" id="resetBtn" type="button" disabled>Sıfırla</button>
-    <button class="btn smash" id="smashBtn" type="button" disabled>KIR</button>
+    <div class="tip" id="tip">Çekici geri çek ve bırak</div>
   </div>
 </div>
 
 <div class="sheet" id="sheet" lang="tr" aria-live="polite">
   <div class="card">
-    <div class="vrow">
-      <span class="vtag good" id="vtag">MÜKEMMEL</span>
-      <span class="vstate" id="vstate"></span>
+    <div class="verdict">
+      <h2 id="vtitle" class="good">Mükemmel</h2>
+      <span class="pts" id="vpts">100 puan</span>
     </div>
-    <h2 id="vtitle">Temiz kırılma</h2>
     <p id="vmsg"></p>
-    <div class="readout">
-      <div class="meter good" id="meter"><i id="meterFill"></i></div>
-      <span class="num" id="scoreNum">0<small>/100</small></span>
-    </div>
     <div class="acts">
       <button class="btn ghost" id="retryBtn" type="button">Tekrar Dene</button>
-      <button class="btn smash" id="nextBtn" type="button">Sonraki Bölüm</button>
+      <button class="btn go" id="nextBtn" type="button">Sonraki Bölüm</button>
     </div>
   </div>
 </div>
@@ -315,9 +253,10 @@
 (function(){
 'use strict';
 
-/* ============================== world + math ============================== */
-const W = 400, H = 620;
-const TAU = Math.PI * 2;
+/* ===================== world & math ===================== */
+const W = 400, H = 620, TAU = Math.PI*2;
+const TABLE_Y = 466;          /* table surface */
+const TABLE_X0 = 34, TABLE_X1 = 366;   /* the slab has ends — things can go over them */
 
 const dist  = (a,b)=>Math.hypot(a.x-b.x, a.y-b.y);
 const clamp = (v,a,b)=>v<a?a:(v>b?b:v);
@@ -331,7 +270,6 @@ function mulberry32(a){
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
-
 function polyArea(p){
   let a = 0;
   for(let i=0;i<p.length;i++){ const q = p[(i+1)%p.length]; a += p[i].x*q.y - q.x*p[i].y; }
@@ -357,13 +295,11 @@ function pointInPoly(pt, poly){
   }
   return inside;
 }
-/* keep half-plane nx*x + ny*y <= c */
 function clipHP(poly, nx, ny, c){
   const out = [], n = poly.length;
   for(let i=0;i<n;i++){
     const A = poly[i], B = poly[(i+1)%n];
-    const da = nx*A.x + ny*A.y - c;
-    const db = nx*B.x + ny*B.y - c;
+    const da = nx*A.x + ny*A.y - c, db = nx*B.x + ny*B.y - c;
     if(da <= 0) out.push(A);
     if((da < 0 && db > 0) || (da > 0 && db < 0)){
       const t = da/(da-db);
@@ -379,12 +315,28 @@ function segSeg(p1,p2,p3,p4){
   const d4 = (p2.x-p1.x)*(p4.y-p1.y) - (p2.y-p1.y)*(p4.x-p1.x);
   return ((d1>0) !== (d2>0)) && ((d3>0) !== (d4>0));
 }
+function polylineHitsSeg(pts, a, b){
+  for(let i=1;i<pts.length;i++) if(segSeg(pts[i-1], pts[i], a, b)) return true;
+  return false;
+}
+function distPtRect(p, r){
+  const dx = Math.max(Math.abs(p.x - r.x) - r.w/2, 0);
+  const dy = Math.max(Math.abs(p.y - r.y) - r.h/2, 0);
+  return Math.hypot(dx, dy);
+}
+function distPolylineRect(pts, r){
+  let m = Infinity;
+  for(let i=1;i<pts.length;i++)
+    for(let s=0;s<=4;s++){
+      const t = s/4;
+      m = Math.min(m, distPtRect({x:lerp(pts[i-1].x,pts[i].x,t), y:lerp(pts[i-1].y,pts[i].y,t)}, r));
+    }
+  return m;
+}
 function distPtSeg(p,a,b){
-  const dx = b.x-a.x, dy = b.y-a.y;
-  const L2 = dx*dx + dy*dy;
+  const dx = b.x-a.x, dy = b.y-a.y, L2 = dx*dx + dy*dy;
   if(L2 < 1e-9) return dist(p,a);
-  let t = ((p.x-a.x)*dx + (p.y-a.y)*dy) / L2;
-  t = clamp(t,0,1);
+  const t = clamp(((p.x-a.x)*dx + (p.y-a.y)*dy)/L2, 0, 1);
   return Math.hypot(p.x-(a.x+dx*t), p.y-(a.y+dy*t));
 }
 function polyLineLen(pts){
@@ -402,9 +354,7 @@ function resample(pts, step){
   const out = [{x:pts[0].x, y:pts[0].y}];
   let carry = 0;
   for(let i=1;i<pts.length;i++){
-    let A = out[out.length-1].x === pts[i-1].x && out[out.length-1].y === pts[i-1].y
-      ? out[out.length-1] : pts[i-1];
-    A = {x:pts[i-1].x, y:pts[i-1].y};
+    let A = {x:pts[i-1].x, y:pts[i-1].y};
     const B = pts[i];
     let d = dist(A,B);
     if(d < 1e-6) continue;
@@ -412,8 +362,7 @@ function resample(pts, step){
     while(carry + d >= step && guard++ < 400){
       const t = (step - carry)/d;
       const p = {x: A.x + (B.x-A.x)*t, y: A.y + (B.y-A.y)*t};
-      out.push(p);
-      A = p; d = dist(A,B); carry = 0;
+      out.push(p); A = p; d = dist(A,B); carry = 0;
     }
     carry += d;
   }
@@ -435,7 +384,6 @@ function jagged(pts, amp, rnd){
   out.push(r[r.length-1]);
   return out;
 }
-/* first exit point of ray p+t*d from polygon */
 function rayExit(p, d, poly){
   let best = Infinity;
   for(let i=0;i<poly.length;i++){
@@ -450,34 +398,42 @@ function rayExit(p, d, poly){
   if(!isFinite(best)) best = 300;
   return {x: p.x + d.x*(best+3), y: p.y + d.y*(best+3)};
 }
+const sub = (a,b)=>({x:a.x-b.x, y:a.y-b.y});
+function norm(v){ const L = Math.hypot(v.x, v.y) || 1; return {x:v.x/L, y:v.y/L}; }
+function bbox(poly){
+  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+  for(const p of poly){
+    if(p.x<minX)minX=p.x; if(p.x>maxX)maxX=p.x;
+    if(p.y<minY)minY=p.y; if(p.y>maxY)maxY=p.y;
+  }
+  return {minX, minY, maxX, maxY};
+}
 
-/* ============================== shape builders ============================== */
+/* ===================== shapes ===================== */
 function circlePoly(cx,cy,r,n){
   const p = [];
   for(let i=0;i<n;i++){ const a = i/n*TAU; p.push({x:cx+Math.cos(a)*r, y:cy+Math.sin(a)*r}); }
   return p;
 }
 function roundRectPoly(cx,cy,w,h,rad){
-  const p = [], hw = w/2, hh = h/2, seg = 7;
+  const p = [], hw = w/2, hh = h/2, seg = 6;
   const corners = [
     [cx+hw-rad, cy-hh+rad, -Math.PI/2, 0],
     [cx+hw-rad, cy+hh-rad, 0, Math.PI/2],
     [cx-hw+rad, cy+hh-rad, Math.PI/2, Math.PI],
     [cx-hw+rad, cy-hh+rad, Math.PI, Math.PI*1.5]
   ];
-  for(const [ox,oy,a0,a1] of corners){
+  for(const [ox,oy,a0,a1] of corners)
     for(let i=0;i<=seg;i++){
       const a = lerp(a0,a1,i/seg);
       p.push({x: ox+Math.cos(a)*rad, y: oy+Math.sin(a)*rad});
     }
-  }
   return p;
 }
-/* jar silhouette: [fraction of height, fraction of half-width] */
 const JAR_PROFILE = [
   [0.00,0.34],[0.035,0.345],[0.075,0.30],[0.115,0.27],[0.155,0.265],
   [0.225,0.48],[0.305,0.74],[0.385,0.92],[0.47,0.995],[0.62,1.0],
-  [0.76,0.985],[0.865,0.93],[0.94,0.83],[0.985,0.66],[1.0,0.50]
+  [0.76,0.985],[0.865,0.945],[0.95,0.90],[1.0,0.86]
 ];
 function jarPoly(cx,cy,w,h){
   const hw = w/2, top = cy-h/2, right = [], left = [];
@@ -485,17 +441,54 @@ function jarPoly(cx,cy,w,h){
     right.push({x: cx + hw*fx, y: top + h*ty});
     left.push({x: cx - hw*fx, y: top + h*ty});
   }
-  const bot = right[right.length-1];
-  const botL = left[left.length-1];
-  const base = [];
-  for(let i=1;i<6;i++){
-    const t = i/6;
-    base.push({x: lerp(bot.x, botL.x, t), y: bot.y + Math.sin(t*Math.PI)*5});
-  }
-  return right.concat(base, left.reverse());
+  return right.concat(left.reverse());
+}
+/* tapered cup / glass */
+function cupPoly(cx,cy,w,h){
+  const hw = w/2, top = cy-h/2, bot = cy+h/2, k = 0.78;
+  return [
+    {x:cx-hw, y:top}, {x:cx-hw*0.97, y:top+h*0.12},
+    {x:cx-hw*k, y:bot-6}, {x:cx-hw*k+4, y:bot},
+    {x:cx+hw*k-4, y:bot}, {x:cx+hw*k, y:bot-6},
+    {x:cx+hw*0.97, y:top+h*0.12}, {x:cx+hw, y:top}
+  ];
 }
 
-/* ============================== shard generation ============================== */
+/* ===================== materials ===================== */
+const MAT = {
+  ceramic:{
+    label:'Seramik', shard:1.0, strength:1.00, force:1.35, range:54, run:330,
+    debris:1.0, rest:.18, slide:.55,
+    snd:{bp:2100, q:0.9, lo:800, hi:2600, tinks:5, thud:110, dur:.42, vol:.5},
+    body:'#fbfbfa', edge:'rgba(60,42,26,.30)', fresh:'rgba(255,252,246,.94)'
+  },
+  glass:{
+    label:'Cam', shard:0.60, strength:0.60, force:1.62, range:80, run:470,
+    debris:1.7, rest:.12, slide:.50,
+    snd:{bp:3300, q:1.4, lo:1500, hi:4200, tinks:9, thud:150, dur:.55, vol:.42},
+    body:'#dff1f2', edge:'rgba(28,86,92,.34)', fresh:'rgba(255,255,255,.95)'
+  },
+  ice:{
+    label:'Buz', shard:0.82, strength:0.80, force:1.28, range:64, run:390,
+    debris:1.2, rest:.10, slide:.96,
+    snd:{bp:2700, q:1.2, lo:1200, hi:3200, tinks:6, thud:120, dur:.3, vol:.44},
+    body:'#e6f4fb', edge:'rgba(40,90,120,.30)', fresh:'rgba(255,255,255,.95)'
+  },
+  wood:{
+    label:'Ahşap', shard:1.55, strength:1.95, force:0.85, range:40, run:210,
+    debris:0.5, rest:.30, slide:.40,
+    snd:{bp:900, q:0.7, lo:280, hi:900, tinks:3, thud:70, dur:.35, vol:.5},
+    body:'#d8a86a', edge:'rgba(70,42,16,.42)', fresh:'rgba(246,222,186,.95)'
+  },
+  stone:{
+    label:'Taş', shard:1.35, strength:2.45, force:0.80, range:46, run:250,
+    debris:0.85, rest:.14, slide:.45,
+    snd:{bp:700, q:0.6, lo:220, hi:760, tinks:3, thud:58, dur:.4, vol:.55},
+    body:'#c9c4bb', edge:'rgba(50,45,38,.40)', fresh:'rgba(238,234,226,.92)'
+  }
+};
+
+/* ===================== object build ===================== */
 const snap = v => (Math.round(v*10)/10) + 0;
 const vkey = p => p.x.toFixed(1) + ',' + p.y.toFixed(1);
 
@@ -515,17 +508,13 @@ function snapPoly(poly){
 }
 function seedGrid(poly, spacing, rnd, opts){
   opts = opts || {};
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-  for(const p of poly){
-    minX = Math.min(minX,p.x); maxX = Math.max(maxX,p.x);
-    minY = Math.min(minY,p.y); maxY = Math.max(maxY,p.y);
-  }
-  const xEnd = opts.mirrorX != null ? opts.mirrorX - spacing*0.42 : maxX;
+  const bb = bbox(poly);
+  const xEnd = opts.mirrorX != null ? opts.mirrorX - spacing*0.42 : bb.maxX;
   const jit = spacing*0.42, out = [];
   let row = 0;
-  for(let y = minY + spacing*0.35; y <= maxY; y += spacing*0.88, row++){
+  for(let y = bb.minY + spacing*0.35; y <= bb.maxY; y += spacing*0.88, row++){
     const off = (row % 2) ? spacing*0.5 : 0;
-    for(let x = minX + spacing*0.3 + off; x <= xEnd; x += spacing){
+    for(let x = bb.minX + spacing*0.3 + off; x <= xEnd; x += spacing){
       const p = {x: x + (rnd()*2-1)*jit, y: y + (rnd()*2-1)*jit};
       if(opts.mirrorX != null && p.x > opts.mirrorX - 5) continue;
       if(pointInPoly(p, poly)) out.push(p);
@@ -560,406 +549,23 @@ function makeShards(poly, seeds){
   return cells;
 }
 
-/* ============================== level catalogue ============================== */
-const GLAZE = {
-  cobalt:'#2f5fe0', cobaltDeep:'#1c3fa8',
-  celadon:'#6fb2a0', celadonDeep:'#3f8676',
-  glass:'#8fd0cf', gold:'#e8a819', clay:'#f4f6fb'
-};
-
-function pathPoly(c, poly){
-  c.beginPath();
-  c.moveTo(poly[0].x, poly[0].y);
-  for(let i=1;i<poly.length;i++) c.lineTo(poly[i].x, poly[i].y);
-  c.closePath();
-}
-function label(c, text, x, y, size, color){
-  c.save();
-  c.font = '700 ' + size + 'px Figtree, system-ui, sans-serif';
-  c.textAlign = 'center'; c.textBaseline = 'middle';
-  c.fillStyle = color;
-  c.letterSpacing = '0.14em';
-  c.fillText(text, x, y);
-  c.restore();
-}
-
-function drawPlateBody(c, cx, cy, r, rim){
-  const g = c.createRadialGradient(cx-r*0.34, cy-r*0.42, r*0.08, cx, cy, r*1.12);
-  g.addColorStop(0, '#ffffff');
-  g.addColorStop(0.55, '#f1f4fa');
-  g.addColorStop(1, '#dae1ef');
-  c.fillStyle = g;
-  c.beginPath(); c.arc(cx, cy, r, 0, TAU); c.fill();
-
-  c.lineWidth = 15; c.strokeStyle = rim;
-  c.beginPath(); c.arc(cx, cy, r-9, 0, TAU); c.stroke();
-
-  c.lineWidth = 2.4; c.strokeStyle = 'rgba(28,63,168,.16)';
-  c.beginPath(); c.arc(cx, cy, r*0.63, 0, TAU); c.stroke();
-  c.lineWidth = 1.2;
-  c.beginPath(); c.arc(cx, cy, r*0.585, 0, TAU); c.stroke();
-
-  c.fillStyle = 'rgba(28,63,168,.14)';
-  for(let i=0;i<14;i++){
-    const a = i/14*TAU + 0.11;
-    c.beginPath(); c.arc(cx+Math.cos(a)*r*0.78, cy+Math.sin(a)*r*0.78, 2.6, 0, TAU); c.fill();
-  }
-  c.save();
-  c.beginPath(); c.arc(cx, cy, r-2, 0, TAU); c.clip();
-  c.fillStyle = 'rgba(255,255,255,.5)';
-  c.beginPath(); c.ellipse(cx-r*0.34, cy-r*0.44, r*0.44, r*0.2, -0.66, 0, TAU); c.fill();
-  c.restore();
-}
-function drawTileBody(c, cx, cy, w, h, rad, tint, deep){
-  const poly = roundRectPoly(cx, cy, w, h, rad);
-  const g = c.createLinearGradient(0, cy-h/2, 0, cy+h/2);
-  g.addColorStop(0, '#fdfefe'); g.addColorStop(1, '#e4ebef');
-  pathPoly(c, poly); c.fillStyle = g; c.fill();
-
-  pathPoly(c, roundRectPoly(cx, cy, w-16, h-16, Math.max(4, rad-8)));
-  c.lineWidth = 9; c.strokeStyle = tint; c.stroke();
-
-  pathPoly(c, roundRectPoly(cx, cy, w-42, h-42, Math.max(3, rad-14)));
-  c.lineWidth = 1.6; c.strokeStyle = deep + '3d'; c.stroke();
-
-  c.fillStyle = deep + '2a';
-  for(let i=0;i<4;i++){
-    const sx = cx + (i%2 ? 1 : -1)*(w/2-30);
-    const sy = cy + (i<2 ? -1 : 1)*(h/2-30);
-    c.beginPath(); c.arc(sx, sy, 3.4, 0, TAU); c.fill();
-  }
-  c.save();
-  pathPoly(c, poly); c.clip();
-  c.fillStyle = 'rgba(255,255,255,.46)';
-  c.beginPath(); c.ellipse(cx-w*0.26, cy-h*0.3, w*0.36, h*0.14, -0.4, 0, TAU); c.fill();
-  c.restore();
-}
-
-const LEVELS = [
-  /* ---------------- 1 ---------------- */
-  {
-    name:'İlk Kırılma',
-    spec:'TAŞ SERAMİK TABAK · Ø 240 MM',
-    objective:'Çizgiyi çiz ve tabağı kır.',
-    tip:'Tabağın üzerinde parmağını sürükle, sonra <b>KIR</b> düğmesine bas.',
-    hint:'TABAĞIN ÜZERİNDE SÜRÜKLE',
-    seedNo:11, spacing:30,
-    build(){
-      this.cx = 200; this.cy = 300; this.r = 120;
-      return circlePoly(this.cx, this.cy, this.r, 72);
-    },
-    art(c){ drawPlateBody(c, this.cx, this.cy, this.r, GLAZE.cobalt); },
-    judge(R){
-      if(R.majors < 2) return {ok:false, tag:'TEKRAR DENE', title:'Hiçbir şey ayrılmadı', msg:'Çizginin tabağı baştan sona geçmesi gerek. Bir kenardan başla, karşı kenara kadar sürükle.', score:20};
-      return {ok:true, tag:'MÜKEMMEL', title:'Temiz kırılma', msg:'Tek çizgiden iki parça. Oyunun tamamı bu: bundan sonrası çizgiyi nereye çizdiğine bakacak.', score:100};
-    }
-  },
-  /* ---------------- 2 ---------------- */
-  {
-    name:'İşaretli Kırılma',
-    spec:'SIRLI TABAK · KOBALT KENAR',
-    objective:'İşaretli bölgeden kır.',
-    tip:'<b>Altın bölgeden</b> kır, kobalt tarafı tek parça bırak.',
-    hint:'ALTINI KES, MAVİYİ KORU',
-    seedNo:207, spacing:28,
-    build(){
-      this.cx = 200; this.cy = 300; this.r = 120;
-      this.zone = {x:266, y:294, r:46};
-      this.keepX = 184;
-      return circlePoly(this.cx, this.cy, this.r, 72);
-    },
-    art(c){
-      drawPlateBody(c, this.cx, this.cy, this.r, GLAZE.cobalt);
-      c.save();
-      c.beginPath(); c.arc(this.cx, this.cy, this.r-2, 0, TAU); c.clip();
-      c.fillStyle = 'rgba(47,95,224,.13)';
-      c.fillRect(this.cx-this.r-4, this.cy-this.r-4, (this.keepX-this.cx)+this.r+4, this.r*2+8);
-      label(c, 'KORU', this.cx-62, this.cy+2, 13, 'rgba(28,63,168,.5)');
-      const g = c.createRadialGradient(this.zone.x, this.zone.y, 4, this.zone.x, this.zone.y, this.zone.r);
-      g.addColorStop(0, 'rgba(232,168,25,.42)');
-      g.addColorStop(1, 'rgba(232,168,25,.14)');
-      c.fillStyle = g;
-      c.beginPath(); c.arc(this.zone.x, this.zone.y, this.zone.r, 0, TAU); c.fill();
-      c.lineWidth = 2.6; c.strokeStyle = GLAZE.gold; c.setLineDash([7,5]);
-      c.beginPath(); c.arc(this.zone.x, this.zone.y, this.zone.r, 0, TAU); c.stroke();
-      c.setLineDash([]);
-      label(c, 'KIR', this.zone.x, this.zone.y, 13, '#a8740a');
-      c.restore();
-    },
-    judge(R){
-      if(R.majors < 2) return {ok:false, tag:'TEKRAR DENE', title:'Hiçbir şey ayrılmadı', msg:'Çizgiyi kenardan kenara, altın bölgenin içinden geçir.', score:15};
-      const hit = distPolylinePt(R.crack, {x:this.zone.x, y:this.zone.y}) < this.zone.r;
-      if(!hit) return {ok:false, tag:'TEKRAR DENE', title:'Hedefi ıskaladın', msg:'Kırılma altın bölgeden geçmeli. Çizgini tabağın o tarafına at.', score:30};
-      const ratio = R.keepRatio;
-      if(ratio < 0.86) return {ok:false, tag:'FAZLA HASAR', title:'Kobalt taraf paramparça', msg:'Korunacak taraftan tek parça olarak sadece %' + Math.round(ratio*100) + ' kaldı. Altın bölgeyi kenara yakın tek bir kesikle al.', score:Math.round(ratio*70)};
-      const score = Math.round(60 + ratio*40);
-      return {
-        ok:true,
-        tag: ratio > 0.97 ? 'MÜKEMMEL' : 'İYİ',
-        title: ratio > 0.97 ? 'Kusursuz kesik' : 'İyi kırılma',
-        msg:'Altın bölge ayrıldı, kobalt tarafın %' + Math.round(ratio*100) + ' kadarı sağlam.',
-        score
-      };
-    }
-  },
-  /* ---------------- 3 ---------------- */
-  {
-    name:'Gizli Anahtar',
-    spec:'KAPALI KAVANOZ · İÇİNDE 1 ANAHTAR',
-    objective:'Anahtara zarar vermeden kabı kır.',
-    tip:'Anahtarı kurtar. Çizgi anahtara çok yaklaşırsa anahtar da kırılır.',
-    hint:'ANAHTARDAN UZAK DUR',
-    seedNo:733, spacing:26,
-    build(){
-      this.cx = 200; this.cy = 302; this.w = 172; this.h = 256;
-      this.key = {x:200, y:332, w:52, h:17};
-      this.safeR = 27;
-      return jarPoly(this.cx, this.cy, this.w, this.h);
-    },
-    art(c){
-      const poly = jarPoly(this.cx, this.cy, this.w, this.h);
-      const g = c.createLinearGradient(this.cx-this.w/2, 0, this.cx+this.w/2, 0);
-      g.addColorStop(0, '#bfe6e4'); g.addColorStop(0.34, '#e9f7f6');
-      g.addColorStop(0.62, '#cfeceb'); g.addColorStop(1, '#9fd2d0');
-      pathPoly(c, poly); c.fillStyle = g; c.fill();
-      c.save();
-      pathPoly(c, poly); c.clip();
-      c.fillStyle = 'rgba(255,255,255,.75)';
-      c.beginPath(); c.ellipse(this.cx-42, this.cy-10, 12, this.h*0.3, 0.06, 0, TAU); c.fill();
-      c.fillStyle = 'rgba(255,255,255,.4)';
-      c.beginPath(); c.ellipse(this.cx+46, this.cy+12, 7, this.h*0.2, -0.05, 0, TAU); c.fill();
-      c.fillStyle = 'rgba(63,134,118,.2)';
-      c.fillRect(this.cx-this.w, this.cy-this.h/2+28, this.w*2, 9);
-      c.restore();
-      c.lineWidth = 2; c.strokeStyle = 'rgba(63,134,118,.35)';
-      pathPoly(c, poly); c.stroke();
-    },
-    judge(R){
-      if(R.keyDist < this.safeR) return {ok:false, tag:'FAZLA HASAR', title:'Anahtar kırıldı', msg:'Çizgi anahtarın ' + Math.round(R.keyDist) + ' mm yakınından geçti. ' + this.safeR + ' mm altı anahtarı da beraberinde götürüyor. Omuzdan ya da tabandan kes.', score:Math.round(R.keyDist*1.4), keyDead:true};
-      if(R.parts < 2) return {ok:false, tag:'TEKRAR DENE', title:'Kavanoz açılmadı', msg:'Anahtardan kaçtın ama kavanozu açmadın. Çizgiyi bir kenardan diğerine kadar geçir.', score:35};
-      const d = R.keyDist;
-      const score = Math.round(clamp(55 + (d - this.safeR)*0.9, 55, 100));
-      return {
-        ok:true,
-        tag: d > 62 ? 'MÜKEMMEL' : 'İYİ',
-        title:'Anahtar kurtuldu',
-        msg:'Kavanoz ' + Math.round(d) + ' mm boşlukla açıldı. Anahtarın haberi bile olmadı.',
-        score
-      };
-    }
-  },
-  /* ---------------- 4 ---------------- */
-  {
-    name:'Üç Parça',
-    spec:'SELADON KARO · FABRİKA DİKİŞİ',
-    objective:'Objeyi tam 3 parçaya ayır.',
-    tip:'Ortadaki dikiş her zaman ayrılır. Tek çizgiyle geriye tam <b>3</b> parça kalsın.',
-    hint:'ÇİZGİNİ DİKİŞİN TEK TARAFINDA TUT',
-    seedNo:404, spacing:29, seamX:200,
-    build(){
-      this.cx = 200; this.cy = 300; this.w = 234; this.h = 234; this.rad = 22;
-      return roundRectPoly(this.cx, this.cy, this.w, this.h, this.rad);
-    },
-    art(c){
-      drawTileBody(c, this.cx, this.cy, this.w, this.h, this.rad, GLAZE.celadon, GLAZE.celadonDeep);
-      c.save();
-      pathPoly(c, roundRectPoly(this.cx, this.cy, this.w, this.h, this.rad)); c.clip();
-      c.lineWidth = 5; c.strokeStyle = 'rgba(63,134,118,.16)';
-      c.beginPath(); c.moveTo(this.seamX, this.cy-this.h); c.lineTo(this.seamX, this.cy+this.h); c.stroke();
-      c.lineWidth = 1.6; c.strokeStyle = 'rgba(63,134,118,.55)'; c.setLineDash([6,6]);
-      c.beginPath(); c.moveTo(this.seamX, this.cy-this.h); c.lineTo(this.seamX, this.cy+this.h); c.stroke();
-      c.setLineDash([]);
-      label(c, 'DİKİŞ', this.seamX, this.cy-this.h/2+20, 10, 'rgba(63,134,118,.75)');
-      c.restore();
-    },
-    judge(R){
-      if(R.majors === 3){
-        const areas = R.majorAreas.slice().sort((a,b)=>b-a);
-        const even = areas[2]/areas[0];
-        const score = Math.round(clamp(72 + even*60, 72, 100));
-        return {ok:true, tag: even > 0.45 ? 'MÜKEMMEL' : 'İYİ', title:'Üç parça', msg:'Dikiş artı tek çizgi: ' + R.majorAreas.map(a=>'%'+Math.round(a/R.total*100)).join(' / ') + '.', score};
-      }
-      if(R.majors < 3) return {ok:false, tag:'TEKRAR DENE', title:'Sadece ' + R.majors + ' parça', msg:'Dikiş zaten iki parça veriyor. Çizgin bu yarımlardan birini baştan sona kesmeli.', score:40};
-      return {ok:false, tag:'FAZLA HASAR', title:R.majors + ' parça, bir fazla', msg:'Çizgin dikişi geçti ve iki yarım birden ayrıldı. Çizgiyi kesikli dikişin tek tarafında tut.', score:45};
-    }
-  },
-  /* ---------------- 5 ---------------- */
-  {
-    name:'Hedefe Düşür',
-    spec:'KOBALT KARO · HEDEFLERİN 1,4 M ÜSTÜNDE',
-    objective:'Parçaları hedef alanlara düşür.',
-    tip:'Çizgiyi öyle aç ki sol parça sol hedefe, sağ parça sağ hedefe düşsün.',
-    hint:'DİKEYE YAKIN ÇİZGİ PARÇALARI YANA SAVURUR',
-    seedNo:515, spacing:26,
-    build(){
-      this.cx = 200; this.cy = 198; this.w = 192; this.h = 120; this.rad = 16;
-      this.ground = 512;
-      this.trays = [{x0:16, x1:104}, {x0:296, x1:384}];
-      return roundRectPoly(this.cx, this.cy, this.w, this.h, this.rad);
-    },
-    physics:{sep:105, pop:-60, g:900, ground:true, jitter:0.04},
-    art(c){ drawTileBody(c, this.cx, this.cy, this.w, this.h, this.rad, GLAZE.cobalt, GLAZE.cobaltDeep); },
-    judge(R){
-      if(R.majors < 2) return {ok:false, tag:'TEKRAR DENE', title:'Hiçbir şey ayrılmadı', msg:'Çizgiyi kenardan kenara geçir ki karo gerçekten ikiye ayrılsın.', score:15};
-      if(R.majors > 2) return {ok:false, tag:'FAZLA HASAR', title:R.majors + ' parça', msg:'Burada iki temiz yarım gerekiyor: tek çizgi, tek kesik, köşelerden kırıntı yok.', score:35};
-      const L = R.landing;
-      if(!L || !L.ok){
-        const where = L ? L.detail : 'Parçalar hedeflere ulaşamadı.';
-        return {ok:false, tag:'TEKRAR DENE', title:'Hedefleri ıskaladın', msg:where + ' Parçalar çizgine dik savruluyor, o yüzden çizgiyi dikeye yaklaştır.', score: L ? L.score : 25};
-      }
-      return {ok:true, tag: L.score > 88 ? 'MÜKEMMEL' : 'İYİ', title:'İkisi de yerinde', msg:'Sol parça merkezden ' + L.dL + ' mm, sağ parça ' + L.dR + ' mm. Gerisini yer çekimi hallediyor.', score:L.score};
-    }
-  }
-];
-
-/* ============================== audio ============================== */
-const audio = (function(){
-  let ctxA = null, noise = null, muted = false;
-  function get(){
-    if(!ctxA){
-      try{ ctxA = new (window.AudioContext || window.webkitAudioContext)(); }
-      catch(e){ return null; }
-    }
-    if(ctxA.state === 'suspended') ctxA.resume();
-    return ctxA;
-  }
-  function buf(a){
-    if(noise) return noise;
-    const n = Math.floor(a.sampleRate*0.6);
-    noise = a.createBuffer(1, n, a.sampleRate);
-    const d = noise.getChannelData(0);
-    for(let i=0;i<n;i++) d[i] = (Math.random()*2-1) * (1 - i/n);
-    return noise;
-  }
-  function tone(a, type, f0, f1, t0, dur, vol){
-    const o = a.createOscillator(), g = a.createGain();
-    o.type = type;
-    o.frequency.setValueAtTime(f0, t0);
-    if(f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(20,f1), t0+dur);
-    g.gain.setValueAtTime(0, t0);
-    g.gain.linearRampToValueAtTime(vol, t0+0.006);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
-    o.connect(g); g.connect(a.destination);
-    o.start(t0); o.stop(t0+dur+0.02);
-  }
-  return {
-    unlock(){ if(!muted) get(); },
-    toggle(){ muted = !muted; return muted; },
-    get muted(){ return muted; },
-    tick(){
-      if(muted) return; const a = get(); if(!a) return;
-      const t = a.currentTime;
-      tone(a, 'square', 1500, 1500, t, 0.018, 0.016);
-    },
-    smash(){
-      if(muted) return; const a = get(); if(!a) return;
-      const t = a.currentTime;
-      const src = a.createBufferSource(); src.buffer = buf(a);
-      const bp = a.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2100; bp.Q.value = 0.9;
-      const g = a.createGain();
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.linearRampToValueAtTime(0.5, t+0.008);
-      g.gain.exponentialRampToValueAtTime(0.0001, t+0.42);
-      src.connect(bp); bp.connect(g); g.connect(a.destination);
-      src.start(t); src.stop(t+0.5);
-      tone(a, 'sine', 110, 48, t, 0.22, 0.34);
-      for(let i=0;i<5;i++){
-        const f = 780 + Math.random()*2000;
-        tone(a, 'triangle', f, f*0.82, t + Math.random()*0.1, 0.13, 0.085);
-      }
-    },
-    win(){
-      if(muted) return; const a = get(); if(!a) return;
-      const t = a.currentTime;
-      [523.25, 659.25, 880].forEach((f,i)=> tone(a, 'triangle', f, f, t+i*0.085, 0.3, 0.14));
-    },
-    lose(){
-      if(muted) return; const a = get(); if(!a) return;
-      const t = a.currentTime;
-      tone(a, 'sawtooth', 190, 96, t, 0.4, 0.1);
-    }
+function buildObj(spec){
+  const mat = MAT[spec.mat];
+  const o = {
+    spec, mat, name:spec.name || '',
+    poly: spec.poly(), weakLines: [], struck:false, cracked:false
   };
-})();
+  const rnd = mulberry32(spec.seed);
+  const spacing = (spec.spacing || 30) * mat.shard;
+  const seeds = seedGrid(o.poly, spacing, rnd, spec.mirrorX != null ? {mirrorX:spec.mirrorX} : {});
+  o.shards = makeShards(o.poly, seeds);
+  o.shardMid = o.shards.map(polyCentroid);
 
-/* ============================== DOM ============================== */
-const cv = document.getElementById('cv');
-const ctx = cv.getContext('2d');
-const stage = document.getElementById('stage');
-const elSpec = document.getElementById('spec');
-const elName = document.getElementById('lvName');
-const elGoal = document.getElementById('goal');
-const elHint = document.getElementById('hint');
-const elBrief = document.getElementById('brief');
-const elBriefTag = document.getElementById('briefTag');
-const elBriefObj = document.getElementById('briefObj');
-const elBriefTip = document.getElementById('briefTip');
-const elVstate = document.getElementById('vstate');
-const elTicks = document.getElementById('ticks');
-const btnReset = document.getElementById('resetBtn');
-const btnSmash = document.getElementById('smashBtn');
-const sheet = document.getElementById('sheet');
-const elVtag = document.getElementById('vtag');
-const elVtitle = document.getElementById('vtitle');
-const elVmsg = document.getElementById('vmsg');
-const elMeter = document.getElementById('meter');
-const elFill = document.getElementById('meterFill');
-const elScore = document.getElementById('scoreNum');
-const btnRetry = document.getElementById('retryBtn');
-const btnNext = document.getElementById('nextBtn');
-const btnSnd = document.getElementById('sndBtn');
-
-for(let i=0;i<LEVELS.length;i++){
-  const d = document.createElement('div');
-  d.className = 'tick';
-  elTicks.appendChild(d);
-}
-const ticks = Array.from(elTicks.children);
-
-/* ============================== canvas fit ============================== */
-let dpr = 1, scale = 1, offX = 0, offY = 0, cssW = 0, cssH = 0, glow = 'rgba(255,255,255,.9)';
-function readTheme(){
-  glow = getComputedStyle(document.documentElement).getPropertyValue('--glow').trim() || glow;
-}
-function resize(){
-  const r = stage.getBoundingClientRect();
-  cssW = Math.max(1, r.width); cssH = Math.max(1, r.height);
-  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-  cv.width = Math.round(cssW*dpr); cv.height = Math.round(cssH*dpr);
-  cv.style.width = cssW + 'px'; cv.style.height = cssH + 'px';
-  scale = Math.min(cssW/W, cssH/H);
-  offX = (cssW - W*scale)/2; offY = (cssH - H*scale)/2;
-  readTheme();
-}
-window.addEventListener('resize', resize);
-window.addEventListener('orientationchange', ()=>setTimeout(resize, 120));
-if(window.ResizeObserver) new ResizeObserver(resize).observe(stage);
-if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', readTheme);
-new MutationObserver(readTheme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
-
-/* ============================== game state ============================== */
-let lvIndex = 0, lv = null;
-let objPoly = null, shards = [], shardMid = [], walls = [], shardWall = [], pieces = [], totalArea = 0;
-let art = null, actx = null;
-let state = 'aim';            /* aim | drawing | armed | breaking | result */
-let drawPts = [], crack = null, revealT = 0;
-let particles = [], shake = 0, flash = 0, breakT = 0, settled = false;
-let keyObj = null, sparkles = [], seamWalls = [];
-let phys = {sep:150, pop:-72, g:1100, ground:false, jitter:0.12};
-
-function buildLevel(i){
-  lvIndex = i; lv = LEVELS[i];
-  objPoly = lv.build();
-  const rnd = mulberry32(lv.seedNo);
-  const seeds = seedGrid(objPoly, lv.spacing, rnd, lv.seamX != null ? {mirrorX:lv.seamX} : {});
-  shards = makeShards(objPoly, seeds);
-
-  /* edge map -> walls + per-shard wall index */
   const map = new Map();
-  shardWall = shards.map(s => new Array(s.length).fill(-1));
-  totalArea = 0;
-  shardMid = shards.map(polyCentroid);
-  shards.forEach((s, si)=>{
-    totalArea += Math.abs(polyArea(s));
+  o.shardWall = o.shards.map(s => new Array(s.length).fill(-1));
+  o.totalArea = 0;
+  o.shards.forEach((s, si)=>{
+    o.totalArea += Math.abs(polyArea(s));
     for(let e=0;e<s.length;e++){
       const a = s[e], b = s[(e+1)%s.length];
       const ka = vkey(a), kb = vkey(b);
@@ -968,83 +574,63 @@ function buildLevel(i){
       map.get(key).push({si, e, a, b});
     }
   });
-  walls = [];
+  o.walls = [];
   map.forEach(list=>{
     if(list.length !== 2) return;
     const [p, q] = list;
     if(p.si === q.si) return;
-    const wi = walls.length;
-    walls.push({a:p.a, b:p.b, s1:p.si, s2:q.si, mid:{x:(p.a.x+p.b.x)/2, y:(p.a.y+p.b.y)/2}, broken:false});
-    shardWall[p.si][p.e] = wi;
-    shardWall[q.si][q.e] = wi;
+    const wi = o.walls.length;
+    o.walls.push({
+      a:p.a, b:p.b, s1:p.si, s2:q.si,
+      mid:{x:(p.a.x+p.b.x)/2, y:(p.a.y+p.b.y)/2},
+      strength: mat.strength * (0.84 + 0.32*rnd()),
+      weak:false, broken:false
+    });
+    o.shardWall[p.si][p.e] = wi;
+    o.shardWall[q.si][q.e] = wi;
   });
 
-  /* factory seam: walls sitting exactly on the mirror line, released by the smash */
-  seamWalls = [];
-  if(lv.seamX != null){
-    walls.forEach((w,i)=>{
-      if(Math.abs(w.a.x - lv.seamX) < 0.16 && Math.abs(w.b.x - lv.seamX) < 0.16) seamWalls.push(i);
+  /* grain / built-in weak seams (wood planks, factory seam) */
+  if(spec.grain) spec.grain.forEach(line=>{
+    o.walls.forEach(w=>{ if(distPolylinePt(line, w.mid) < 11) w.strength *= 0.30; });
+  });
+  if(spec.seamX != null){
+    o.walls.forEach(w=>{
+      if(Math.abs(w.a.x - spec.seamX) < 0.16 && Math.abs(w.b.x - spec.seamX) < 0.16) w.strength *= 0.22;
     });
   }
 
-  phys = Object.assign({sep:150, pop:-72, g:1100, ground:false, jitter:0.12}, lv.physics || {});
+  /* art layer over the object's own box */
+  const bb = bbox(o.poly), pad = 10, AS = 2;
+  o.ax = bb.minX - pad; o.ay = bb.minY - pad;
+  o.aw = (bb.maxX - bb.minX) + pad*2; o.ah = (bb.maxY - bb.minY) + pad*2;
+  o.art = document.createElement('canvas');
+  o.art.width = Math.ceil(o.aw*AS); o.art.height = Math.ceil(o.ah*AS);
+  o.actx = o.art.getContext('2d');
+  paintObjArt(o);
 
-  art = document.createElement('canvas');
-  art.width = W*2; art.height = H*2;
-  actx = art.getContext('2d');
-  paintArt();
-
-  keyObj = lv.key ? {x:lv.key.x, y:lv.key.y, vy:0, ang:0, av:0, dead:false, free:false} : null;
-
-  pieces = buildPieces();
-  drawPts = []; crack = null; revealT = 0;
-  particles = []; sparkles = []; shake = 0; flash = 0; breakT = 0; settled = false;
-  setState('aim');
-  paintHud();
+  o.pieces = buildPieces(o);
+  o.pieces.forEach(p=>{ p.rest = true; });
+  o.chainLock = 0;
+  o.centerCache = polyCentroid(o.poly);
+  o.radCache = 0;
+  o.poly.forEach(p=>{ o.radCache = Math.max(o.radCache, dist(p, o.centerCache)); });
+  return o;
 }
-function paintArt(){
-  if(!actx) return;
-  actx.setTransform(2,0,0,2,0,0);
-  actx.clearRect(0,0,W,H);
-  lv.art(actx);
-}
-function paintHud(){
-  elSpec.textContent = lv.spec;
-  elName.textContent = lv.name;
-  elGoal.textContent = lv.objective;
-  elHint.textContent = lv.hint;
-  elHint.classList.remove('gone');
-  ticks.forEach((t,i)=>{
-    t.className = 'tick' + (i < lvIndex ? ' done' : i === lvIndex ? ' now' : '');
-  });
-  showBrief();
-}
-/* objective card on entry, then it hands off to the small label in the HUD */
-let briefTimer = 0;
-function showBrief(){
-  clearTimeout(briefTimer);
-  elBriefTag.textContent = 'BÖLÜM ' + (lvIndex + 1) + ' / ' + LEVELS.length;
-  elBriefObj.textContent = lv.objective;
-  elBriefTip.innerHTML = lv.tip;
-  elBrief.classList.remove('show', 'gone');
-  elGoal.classList.remove('lit');
-  void elBrief.offsetWidth;
-  elBrief.classList.add('show');
-  briefTimer = setTimeout(()=>{
-    elBrief.classList.remove('show');
-    elBrief.classList.add('gone');
-    elGoal.classList.add('lit');
-  }, 2400);
+function paintObjArt(o){
+  const AS = 2, c = o.actx;
+  c.setTransform(AS, 0, 0, AS, -o.ax*AS, -o.ay*AS);
+  c.clearRect(o.ax, o.ay, o.aw, o.ah);
+  o.spec.art(c, o);
 }
 
-/* ---------- pieces ---------- */
-function buildPieces(){
-  const n = shards.length;
+function buildPieces(o){
+  const n = o.shards.length;
   const parent = new Array(n);
   for(let i=0;i<n;i++) parent[i] = i;
   const find = x => { while(parent[x] !== x){ parent[x] = parent[parent[x]]; x = parent[x]; } return x; };
   const uni = (a,b)=>{ a = find(a); b = find(b); if(a !== b) parent[a] = b; };
-  walls.forEach(w=>{ if(!w.broken) uni(w.s1, w.s2); });
+  o.walls.forEach(w=>{ if(!w.broken) uni(w.s1, w.s2); });
 
   const groups = new Map();
   for(let i=0;i<n;i++){
@@ -1052,24 +638,27 @@ function buildPieces(){
     if(!groups.has(r)) groups.set(r, []);
     groups.get(r).push(i);
   }
-
+  const prev = o.pieces || [];
   const out = [];
   groups.forEach(idxs=>{
     const inPiece = new Set(idxs);
-    const dirEdges = [], breakSegs = [];
+    const dirEdges = [], breakSegs = [], crackSegs = [];
     let area = 0, ax = 0, ay = 0;
     idxs.forEach(si=>{
-      const sp = shards[si];
-      const a = Math.abs(polyArea(sp)), c = polyCentroid(sp);
-      area += a; ax += c.x*a; ay += c.y*a;
+      const sp = o.shards[si];
+      const a = Math.abs(polyArea(sp)), ct = o.shardMid[si];
+      area += a; ax += ct.x*a; ay += ct.y*a;
       for(let e=0;e<sp.length;e++){
-        const wi = shardWall[si][e];
-        if(wi >= 0){
-          const w = walls[wi];
-          const other = w.s1 === si ? w.s2 : w.s1;
-          if(inPiece.has(other)) continue;
-        }
         const A = sp[e], B = sp[(e+1)%sp.length];
+        const wi = o.shardWall[si][e];
+        if(wi >= 0){
+          const w = o.walls[wi];
+          const other = w.s1 === si ? w.s2 : w.s1;
+          if(inPiece.has(other)){
+            if(w.broken && si < other) crackSegs.push([A,B]);
+            continue;
+          }
+        }
         dirEdges.push({a:A, b:B});
         if(wi >= 0) breakSegs.push([A,B]);
       }
@@ -1077,18 +666,27 @@ function buildPieces(){
     const cx = ax/area, cy = ay/area;
     const loops = traceLoops(dirEdges);
     const path = new Path2D();
-    let rad = 0;
-    const src = loops.length ? loops : idxs.map(i=>shards[i]);
+    let low = 0, high = 0, rad = 0;
+    const src = loops.length ? loops : idxs.map(i=>o.shards[i]);
     src.forEach(loop=>{
       path.moveTo(loop[0].x, loop[0].y);
       for(let i=1;i<loop.length;i++) path.lineTo(loop[i].x, loop[i].y);
       path.closePath();
-      loop.forEach(p=>{ rad = Math.max(rad, Math.hypot(p.x-cx, p.y-cy)); });
+      loop.forEach(p=>{
+        low = Math.max(low, p.y - cy);
+        high = Math.max(high, cy - p.y);
+        rad = Math.max(rad, Math.hypot(p.x-cx, p.y-cy));
+      });
     });
-    out.push({
-      shards:idxs, area, cx, cy, rad, path, breakSegs,
-      ox:0, oy:0, vx:0, vy:0, ang:0, av:0, scl:1, rest:false
-    });
+    /* carry motion across a re-split so a second hit doesn't teleport things */
+    let ox=0, oy=0, vx=0, vy=0, ang=0, av=0, rest=false;
+    for(const q of prev){
+      if(q.shards.indexOf(idxs[0]) >= 0){
+        ox=q.ox; oy=q.oy; vx=q.vx; vy=q.vy; ang=q.ang; av=q.av; rest=q.rest; break;
+      }
+    }
+    out.push({shards:idxs, area, cx, cy, low, high, rad, path, breakSegs, crackSegs,
+              ox, oy, vx, vy, ang, av, scl:1, rest});
   });
   return out;
 }
@@ -1118,552 +716,1255 @@ function traceLoops(edges){
   return loops;
 }
 
-/* ---------- crack drawing ---------- */
+/* ===================== the strike ===================== */
+/* A hit does two things: it crushes shards around the contact point, and it
+   starts a crack that RUNS through the object. How far that crack travels is
+   what decides a chip from a clean split. Position, angle and power all feed in. */
+function trimLine(line, pt, budget){
+  let bi = 0, bd = Infinity;
+  line.forEach((p,i)=>{ const d = dist(p, pt); if(d < bd){ bd = d; bi = i; } });
+  let a = bi, b = bi, accA = 0, accB = 0;
+  while(a > 0 && accA < budget){ accA += dist(line[a], line[a-1]); a--; }
+  while(b < line.length-1 && accB < budget){ accB += dist(line[b], line[b+1]); b++; }
+  return line.slice(a, b+1);
+}
+function segPoint(p1,p2,p3,p4){
+  const d = (p2.x-p1.x)*(p4.y-p3.y) - (p2.y-p1.y)*(p4.x-p3.x);
+  if(Math.abs(d) < 1e-9) return {x:p2.x, y:p2.y};
+  const t = ((p3.x-p1.x)*(p4.y-p3.y) - (p3.y-p1.y)*(p4.x-p3.x))/d;
+  return {x: p1.x + (p2.x-p1.x)*t, y: p1.y + (p2.y-p1.y)*t};
+}
+function firstCrossing(A, B){
+  for(let i=1;i<A.length;i++)
+    for(let j=1;j<B.length;j++)
+      if(segSeg(A[i-1], A[i], B[j-1], B[j]))
+        return {i, p: segPoint(A[i-1], A[i], B[j-1], B[j])};
+  return null;
+}
+function crackPath(o, pt, dir, power){
+  const mat = o.mat;
+  const runLen = mat.run * power;
+
+  /* a blow landing right on a prepared line is carried by it from the start */
+  let best = null, bd = Infinity;
+  o.weakLines.forEach(L=>{ const d = distPolylinePt(L, pt); if(d < bd){ bd = d; best = L; } });
+  if(best && bd < 30 + 42*power) return {paths:[trimLine(best, pt, runLen*0.9)], weak:true};
+
+  /* otherwise the crack runs along the line of the blow */
+  const fwd = rayExit(pt, dir, o.poly);
+  const bwd = rayExit(pt, {x:-dir.x, y:-dir.y}, o.poly);
+  const fL = Math.min(dist(pt, fwd), runLen);
+  const bL = Math.min(dist(pt, bwd), runLen*0.42);
+  const rnd = mulberry32(((pt.x*31 + pt.y*17)|0) ^ 0x5bf0);
+  const nx = -dir.y, ny = dir.x, steps = 14, pts = [];
+  for(let i=-steps;i<=steps;i++){
+    const t = i/steps;
+    const L = t < 0 ? bL*t : fL*t;
+    const wob = (Math.sin(t*4.1)*6*(0.4+power) + (rnd()*2-1)*2.4) * Math.abs(t);
+    pts.push({x: pt.x + dir.x*L + nx*wob, y: pt.y + dir.y*L + ny*wob});
+  }
+
+  /* running into a scored line deflects the crack along it */
+  for(const Lw of o.weakLines){
+    const x = firstCrossing(pts, Lw);
+    if(!x) continue;
+    const head = pts.slice(0, x.i).concat([x.p]);
+    const spent = polyLineLen(head.slice(Math.max(0, head.length - x.i)));
+    const leftOver = Math.max(0, runLen - Math.max(0, spent));
+    if(leftOver < 24) continue;
+    return {paths:[head, trimLine(Lw, x.p, leftOver)], weak:true};
+  }
+  return {paths:[pts], weak:false};
+}
+function strike(o, pt, dir, ptW, dirW, power, kind){
+  power = clamp(power, 0, 1);
+  ptW = ptW || pt; dirW = dirW || dir;
+  const mat = o.mat;
+  const before = o.pieces.length;
+  const cr = crackPath(o, pt, dir, power);
+  const band = 9 + 9*power;
+  const crush = mat.range * (0.35 + 0.8*power);
+  let broke = 0;
+
+  o.walls.forEach(w=>{
+    if(w.broken) return;
+    let s = 0;
+    const m1 = o.shardMid[w.s1], m2 = o.shardMid[w.s2];
+    /* the crack ran between these two shards, so the join gives way */
+    if(cr.paths.some(P => polylineHitsSeg(P, m1, m2)))
+      s += power * mat.force * 3.6 * (w.weak ? 1.4 : 1);
+    /* plus local crushing around the contact point */
+    const dImp = dist(w.mid, pt);
+    s += power * mat.force * 1.5 * Math.exp(-(dImp*dImp)/(2*crush*crush));
+    /* a wide blow frays the edges of the crack too */
+    if(band > 13 && cr.paths.some(P => distPolylinePt(P, w.mid) < band))
+      s += power * mat.force * 0.9;
+    if(s > w.strength){ w.broken = true; broke++; }
+  });
+
+  o.lastCrack = cr.paths;
+
+  /* the key only breaks if the blow itself, or the crack it opens, reaches it */
+  if(keyObj && !keyObj.dead && lv.key){
+    let d = distPtRect(pt, lv.key);
+    cr.paths.forEach(P=>{ d = Math.min(d, distPolylineRect(P, lv.key)); });
+    if(d < 20){ keyObj.dead = true; pushDust(keyObj.x, keyObj.y, '#cf4436', 12); }
+  }
+  if(broke === 0){ bounceOnly(o, ptW, dirW, power); return {broke:0, split:0}; }
+
+  o.pieces = buildPieces(o);
+  const split = o.pieces.length - before;
+  const moving = o.pieces.length > 1;
+  const avg = o.totalArea / Math.max(1, o.pieces.length);
+  const range = mat.range * (0.5 + 0.85*power);
+  const rnd = Math.random;
+
+  o.pieces.forEach(p=>{
+    const c = {x:p.cx+p.ox, y:p.cy+p.oy};
+    const d = dist(c, ptW);
+    const f = Math.exp(-d/(range*1.35));
+    let ax = c.x-ptW.x, ay = c.y-ptW.y;
+    const L = Math.hypot(ax,ay) || 1; ax/=L; ay/=L;
+    const bx = ax*0.45 + dirW.x*0.55, by = ay*0.45 + dirW.y*0.55;
+    const mass = Math.sqrt(Math.max(60,p.area)/Math.max(60,avg));
+    const sp = (moving ? 1 : 0.14) * power * mat.force * 340 * (0.3 + f) / mass;
+    p.vx += bx*sp; p.vy += by*sp;
+    p.av += (rnd()-0.5)*7*power/mass;
+    p.scl = 1 + 0.05*power*f;
+    p.rest = false;
+  });
+
+  o.struck = true;
+  o.cracked = true;
+  spawnDebris(o, ptW, power, range, null);
+  impactFx(o, ptW, power, kind);
+  return {broke, split};
+}
+function bounceOnly(o, pt, dir, power){
+  o.pieces.forEach(p=>{
+    p.vx += dir.x*26*power; p.vy += dir.y*20*power;
+    p.rest = false;
+  });
+  impactFx(o, pt, power*0.5, 'dull');
+  pushDust(pt.x, pt.y, null, 5);
+}
+
+/* ===================== fx ===================== */
+const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let particles = [], shake = 0, flash = 0, freeze = 0;
+
+function impactFx(o, pt, power, kind){
+  shake = Math.max(shake, 0.45 + power*0.75);
+  flash = Math.max(flash, 0.16 + power*0.3);
+  freeze = Math.max(freeze, kind === 'dull' ? 0.03 : 0.055 + power*0.035);
+  audio.hit(o.mat, power, kind);
+  if(navigator.vibrate) { try{ navigator.vibrate(kind === 'dull' ? 10 : Math.round(14 + power*26)); }catch(e){} }
+}
+function spawnDebris(o, pt, power, range, path){
+  const mat = o.mat;
+  const n = Math.round((reduced ? 10 : 34) * mat.debris * (0.35 + power));
+  for(let i=0;i<n;i++){
+    let x, y;
+    if(path && path.length > 1 && i % 2){
+      /* half the debris comes off the crack itself */
+      const t = Math.random()*(path.length-1), i0 = Math.floor(t), u = t-i0;
+      const a1 = path[i0], b1 = path[Math.min(path.length-1, i0+1)];
+      x = lerp(a1.x, b1.x, u); y = lerp(a1.y, b1.y, u);
+    } else {
+      const a = Math.random()*TAU, r = Math.random()*range*0.8;
+      x = pt.x + Math.cos(a)*r; y = pt.y + Math.sin(a)*r;
+    }
+    const sp = 70 + Math.random()*340*power;
+    const ang = Math.random()*TAU;
+    particles.push({
+      x, y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 70*power,
+      r: 1.2 + Math.random()*3.2*(mat.shard), rot:Math.random()*TAU, rv:(Math.random()*2-1)*10,
+      life:0, max:0.45+Math.random()*0.65, dust:false, col:mat.body
+    });
+  }
+  pushDust(pt.x, pt.y, null, reduced ? 4 : Math.round(6 + power*10));
+}
+function pushDust(x, y, col, n){
+  for(let i=0;i<n;i++)
+    particles.push({
+      x, y, vx:(Math.random()*2-1)*46, vy:-12 - Math.random()*34,
+      r: 7 + Math.random()*15, rot:0, rv:0,
+      life:0, max:0.5+Math.random()*0.5, dust:true, col
+    });
+}
+
+/* ===================== audio ===================== */
+const audio = (function(){
+  let A = null, noise = null, muted = false;
+  function get(){
+    if(!A){ try{ A = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(A.state === 'suspended') A.resume();
+    return A;
+  }
+  function buf(a){
+    if(noise) return noise;
+    const n = Math.floor(a.sampleRate*0.7);
+    noise = a.createBuffer(1, n, a.sampleRate);
+    const d = noise.getChannelData(0);
+    for(let i=0;i<n;i++) d[i] = (Math.random()*2-1)*(1 - i/n);
+    return noise;
+  }
+  function tone(a, type, f0, f1, t0, dur, vol){
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f0, t0);
+    if(f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(20,f1), t0+dur);
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0+0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+    o.connect(g); g.connect(a.destination);
+    o.start(t0); o.stop(t0+dur+0.02);
+  }
+  return {
+    unlock(){ if(!muted) get(); },
+    toggle(){ muted = !muted; return muted; },
+    whoosh(power){
+      if(muted) return; const a = get(); if(!a) return;
+      const t = a.currentTime;
+      const s = a.createBufferSource(); s.buffer = buf(a);
+      const f = a.createBiquadFilter(); f.type='bandpass'; f.frequency.setValueAtTime(400,t);
+      f.frequency.exponentialRampToValueAtTime(1600, t+0.12); f.Q.value = 1.2;
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.linearRampToValueAtTime(0.16*power, t+0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.16);
+      s.connect(f); f.connect(g); g.connect(a.destination);
+      s.start(t); s.stop(t+0.2);
+    },
+    hit(mat, power, kind){
+      if(muted) return; const a = get(); if(!a) return;
+      const t = a.currentTime, S = mat.snd;
+      const dull = kind === 'dull';
+      const s = a.createBufferSource(); s.buffer = buf(a);
+      const bp = a.createBiquadFilter();
+      bp.type = 'bandpass'; bp.frequency.value = dull ? S.bp*0.4 : S.bp; bp.Q.value = S.q;
+      const g = a.createGain();
+      const dur = dull ? 0.12 : S.dur*(0.6+power*0.6);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(S.vol*(dull?0.4:0.55+power*0.5), t+0.007);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      s.connect(bp); bp.connect(g); g.connect(a.destination);
+      s.start(t); s.stop(t+dur+0.05);
+      tone(a, 'sine', S.thud, S.thud*0.45, t, 0.18+power*0.1, 0.3*(0.5+power));
+      if(dull) return;
+      const n = Math.round(S.tinks*(0.4+power*0.8));
+      for(let i=0;i<n;i++){
+        const f = S.lo + Math.random()*(S.hi-S.lo);
+        tone(a, 'triangle', f, f*0.84, t + Math.random()*0.11, 0.1+Math.random()*0.09, 0.07*(0.5+power));
+      }
+    },
+    win(){
+      if(muted) return; const a = get(); if(!a) return;
+      const t = a.currentTime;
+      [523.25, 659.25, 880].forEach((f,i)=> tone(a,'triangle',f,f,t+i*0.08,0.28,0.13));
+    },
+    lose(){
+      if(muted) return; const a = get(); if(!a) return;
+      tone(a, 'sawtooth', 190, 96, a.currentTime, 0.36, 0.09);
+    }
+  };
+})();
+
+/* ===================== art helpers ===================== */
+function pathPoly(c, poly){
+  c.beginPath();
+  c.moveTo(poly[0].x, poly[0].y);
+  for(let i=1;i<poly.length;i++) c.lineTo(poly[i].x, poly[i].y);
+  c.closePath();
+}
+function glaze(c, poly, top, bot){
+  const bb = bbox(poly);
+  const g = c.createLinearGradient(0, bb.minY, 0, bb.maxY);
+  g.addColorStop(0, top); g.addColorStop(1, bot);
+  pathPoly(c, poly); c.fillStyle = g; c.fill();
+}
+function shine(c, poly, cx, cy, rx, ry, rot, alpha){
+  c.save(); pathPoly(c, poly); c.clip();
+  c.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+  c.beginPath(); c.ellipse(cx, cy, rx, ry, rot, 0, TAU); c.fill();
+  c.restore();
+}
+function plateArt(c, o, rim){
+  const s = o.spec;
+  const g = c.createRadialGradient(s.cx-s.r*0.34, s.cy-s.r*0.4, s.r*0.08, s.cx, s.cy, s.r*1.12);
+  g.addColorStop(0,'#ffffff'); g.addColorStop(0.56,'#f6f4ef'); g.addColorStop(1,'#e2ded4');
+  c.fillStyle = g; c.beginPath(); c.arc(s.cx, s.cy, s.r, 0, TAU); c.fill();
+  c.lineWidth = 13; c.strokeStyle = rim;
+  c.beginPath(); c.arc(s.cx, s.cy, s.r-8, 0, TAU); c.stroke();
+  c.lineWidth = 2; c.strokeStyle = 'rgba(60,42,26,.12)';
+  c.beginPath(); c.arc(s.cx, s.cy, s.r*0.6, 0, TAU); c.stroke();
+  shine(c, circlePoly(s.cx,s.cy,s.r,40), s.cx-s.r*0.34, s.cy-s.r*0.42, s.r*0.42, s.r*0.19, -0.66, 0.5);
+}
+
+/* ===================== levels ===================== */
+const LEVELS = [
+  /* ---- 1 ---- */
+  {
+    name:'İlk Vuruş', maxHits:3,
+    objective:'Tabağı kır.',
+    tip:'Çekici geri çek, bırak. Ne kadar çok çekersen o kadar sert vurur.',
+    hint:'Çekici geri çek ve bırak',
+    make(){
+      return [buildObj({
+        mat:'ceramic', seed:11, spacing:30, name:'plate',
+        cx:200, cy:TABLE_Y-98, r:98,
+        poly(){ return circlePoly(this.cx, this.cy, this.r, 68); },
+        art(c,o){ plateArt(c, o, '#3f6fd0'); }
+      })];
+    },
+    judge(R){
+      const o = R.objs[0];
+      if(R.majors(o) < 2)
+        return {ok:false, title:'Sadece çatladı', msg:'Çatlak var ama tabak ayrılmadı. Çekici biraz daha geri çekip tekrar vur.', score:30};
+      return {ok:true, title:'Mükemmel', msg:'Tabak ayrıldı. Vuruşun yeri, açısı ve gücü bundan sonraki bölümlerde önemli olacak.', score:100};
+    }
+  },
+  /* ---- 2 ---- */
+  {
+    name:'Kontrollü Kırık', maxHits:2,
+    objective:'İşaretli tarafı kır, mavi tarafı koru.',
+    tip:'Altın bölgeye yakın vur. Çok sert vurursan mavi taraf da dağılır.',
+    hint:'Altın bölgeye yakın ve ölçülü vur',
+    make(){
+      return [buildObj({
+        mat:'ceramic', seed:207, spacing:28, name:'plate',
+        cx:200, cy:TABLE_Y-98, r:98,
+        zone:{x:262, y:TABLE_Y-112, r:40}, keepX:184,
+        poly(){ return circlePoly(this.cx, this.cy, this.r, 68); },
+        art(c,o){
+          const s = o.spec;
+          plateArt(c, o, '#3f6fd0');
+          c.save();
+          c.beginPath(); c.arc(s.cx, s.cy, s.r-2, 0, TAU); c.clip();
+          c.fillStyle = 'rgba(63,111,208,.13)';
+          c.fillRect(s.cx-s.r-4, s.cy-s.r-4, (s.keepX-s.cx)+s.r+4, s.r*2+8);
+          const g = c.createRadialGradient(s.zone.x,s.zone.y,3,s.zone.x,s.zone.y,s.zone.r);
+          g.addColorStop(0,'rgba(232,168,25,.5)'); g.addColorStop(1,'rgba(232,168,25,.16)');
+          c.fillStyle = g;
+          c.beginPath(); c.arc(s.zone.x, s.zone.y, s.zone.r, 0, TAU); c.fill();
+          c.lineWidth = 2.4; c.strokeStyle = '#d99b15'; c.setLineDash([6,5]);
+          c.beginPath(); c.arc(s.zone.x, s.zone.y, s.zone.r, 0, TAU); c.stroke();
+          c.setLineDash([]);
+          c.restore();
+        }
+      })];
+    },
+    judge(R){
+      const o = R.objs[0], s = o.spec;
+      if(o.pieces.length < 2)
+        return {ok:false, title:'Kırılmadı', msg:'Tabak ayrılmadı. Altın bölgeye biraz daha güçlü vur.', score:25};
+      const keep = R.keepRatio(o, s.keepX);
+      const zoneHit = R.zoneBroken(o, s.zone);
+      /* overpowering is checked first: a shattered plate is a failure even if the zone came off */
+      if(keep < 0.86 || o.pieces.length > 6)
+        return {ok:false, title:'Fazla hasar', msg:'Tabak fazla dağıldı. Daha kısa çek: az güçle, işaretin hemen solundan vurmak yeter.', score:Math.round(keep*60)};
+      if(!zoneHit)
+        return {ok:false, title:'Yanlış taraf', msg:'Altın bölge hâlâ büyük parçanın üstünde. Vuruşunu işaretin biraz soluna al ki o taraf komple kopsun.', score:35};
+      const score = Math.round(58 + keep*42);
+      return {ok:true, title: keep > 0.96 ? 'Mükemmel' : 'İyi',
+        msg:'İşaretli taraf koptu, mavi taraf tek parça kaldı.', score};
+    }
+  },
+  /* ---- 3 ---- */
+  {
+    name:'Anahtarı Kurtar', maxHits:2,
+    objective:'Kabı kır, anahtarı kurtar.',
+    tip:'Anahtar camın içinde. Sert vuruş onu da kırar ya da masadan fırlatır.',
+    hint:'Anahtardan uzak bir noktaya ölçülü vur',
+    key:{x:200, y:TABLE_Y-66, w:46, h:15},
+    safe:{x0:60, x1:340},
+    make(){
+      return [buildObj({
+        mat:'glass', seed:733, spacing:30, name:'jar',
+        cx:200, cy:TABLE_Y-104, w:150, h:208,
+        poly(){ return jarPoly(this.cx, this.cy, this.w, this.h); },
+        art(c,o){
+          const p = jarPoly(o.spec.cx,o.spec.cy,o.spec.w,o.spec.h);
+          glaze(c, p, '#eafaf9', '#b9e2e2');
+          shine(c, p, o.spec.cx-36, o.spec.cy-12, 10, o.spec.h*0.28, 0.05, 0.75);
+          shine(c, p, o.spec.cx+40, o.spec.cy+16, 6, o.spec.h*0.19, -0.05, 0.45);
+          c.lineWidth = 2; c.strokeStyle = 'rgba(28,86,92,.3)';
+          pathPoly(c, p); c.stroke();
+        }
+      })];
+    },
+    judge(R){
+      const o = R.objs[0];
+      if(o.pieces.length < 2)
+        return {ok:false, title:'Kavanoz açılmadı', msg:'Cam sadece çatladı. Biraz daha güçlü vur.', score:25};
+      if(keyObj.dead)
+        return {ok:false, title:'Anahtar kırıldı', msg:'Vuruş anahtarın üstüne geldi. Kavanozun omzuna ya da tabanına vur.', score:10};
+      if(keyObj.x < this.safe.x0 || keyObj.x > this.safe.x1 || keyObj.y > TABLE_Y + 40)
+        return {ok:false, title:'Anahtar fırladı', msg:'Çok sert vurdun, anahtar masadan uçtu. Daha kısa çek.', score:30};
+      const gentle = clamp(1 - R.maxPower, 0, 1);
+      const score = Math.round(64 + gentle*36);
+      return {ok:true, title: score > 88 ? 'Mükemmel' : 'İyi',
+        msg:'Kavanoz açıldı, anahtar masada sağlam duruyor.', score};
+    }
+  },
+  /* ---- 4 ---- */
+  {
+    name:'Tam 3 Parça', maxHits:3,
+    objective:'Tam 3 parçaya ayır.',
+    tip:'Karonun üstüne parmağınla zayıf hat çizebilirsin. Kırık o hattı izler.',
+    hint:'Objeye çiz: zayıf hat · Çekici çek: vuruş',
+    make(){
+      return [buildObj({
+        mat:'ceramic', seed:404, spacing:29, name:'tile',
+        cx:200, cy:TABLE_Y-96, w:192, h:192, rad:18,
+        poly(){ return roundRectPoly(this.cx, this.cy, this.w, this.h, this.rad); },
+        art(c,o){
+          const s = o.spec, p = roundRectPoly(s.cx,s.cy,s.w,s.h,s.rad);
+          glaze(c, p, '#fdfdfb', '#e6ece8');
+          pathPoly(c, roundRectPoly(s.cx,s.cy,s.w-14,s.h-14,Math.max(4,s.rad-7)));
+          c.lineWidth = 8; c.strokeStyle = '#74b3a1'; c.stroke();
+          pathPoly(c, roundRectPoly(s.cx,s.cy,s.w-36,s.h-36,Math.max(3,s.rad-12)));
+          c.lineWidth = 1.5; c.strokeStyle = 'rgba(58,120,106,.3)'; c.stroke();
+          shine(c, p, s.cx-s.w*0.25, s.cy-s.h*0.29, s.w*0.32, s.h*0.12, -0.4, 0.42);
+        }
+      })];
+    },
+    judge(R){
+      const o = R.objs[0], m = R.majors(o);
+      if(m === 3)
+        return {ok:true, title: R.maxPower < 0.75 ? 'Mükemmel' : 'İyi',
+          msg:'Tam üç parça. Zayıf hat ve ölçülü vuruş işini gördü.',
+          score: Math.round(R.maxPower < 0.75 ? 100 : 84)};
+      if(m < 3)
+        return {ok:false, title:'Sadece ' + m + ' parça', msg:'Bir parça daha lazım. Zayıf hat çizip kalan büyük parçaya vur.', score:40};
+      return {ok:false, title:m + ' parça', msg:'Fazla dağıldı. Daha az güçle ve zayıf hattın üstüne vur.', score:40};
+    }
+  },
+  /* ---- 5 ---- */
+  {
+    name:'Tek Vuruş', maxHits:1,
+    objective:'Tek vuruşla en çok objeyi kır.',
+    tip:'Kırılan parçalar yandakine çarpar. Açını iyi seç.',
+    hint:'Tek hakkın var — açıyı iyi seç',
+    make(){
+      const objs = [];
+      const set = [
+        {x:88,  mat:'glass',   seed:901, w:52, h:76},
+        {x:162, mat:'ceramic', seed:902, w:56, h:64},
+        {x:238, mat:'glass',   seed:903, w:52, h:80},
+        {x:312, mat:'ceramic', seed:904, w:56, h:62}
+      ];
+      set.forEach(s=>{
+        objs.push(buildObj({
+          mat:s.mat, seed:s.seed, spacing:22, name:'cup',
+          cx:s.x, cy:TABLE_Y-s.h/2, w:s.w, h:s.h,
+          poly(){ return cupPoly(this.cx, this.cy, this.w, this.h); },
+          art(c,o){
+            const p = cupPoly(o.spec.cx,o.spec.cy,o.spec.w,o.spec.h);
+            if(o.spec.mat === 'glass'){
+              glaze(c, p, '#e9f9f8', '#bfe4e4');
+              shine(c, p, o.spec.cx-12, o.spec.cy, 5, o.spec.h*0.3, 0, 0.7);
+            } else {
+              glaze(c, p, '#fffdf8', '#e8ded0');
+              c.save(); pathPoly(c,p); c.clip();
+              c.fillStyle = '#d4813f';
+              c.fillRect(o.spec.cx-40, o.spec.cy-o.spec.h*0.12, 80, 9);
+              c.restore();
+              shine(c, p, o.spec.cx-13, o.spec.cy-6, 5, o.spec.h*0.24, 0, 0.5);
+            }
+            c.lineWidth = 1.6; c.strokeStyle = 'rgba(60,42,26,.26)';
+            pathPoly(c, p); c.stroke();
+          }
+        }));
+      });
+      return objs;
+    },
+    judge(R){
+      const n = R.objs.filter(o=>o.pieces.length > 1).length;
+      const total = R.objs.length;
+      if(n === 0) return {ok:false, title:'Hiçbiri kırılmadı', msg:'Vuruşun hiçbir objeyi ayıramadı. Daha sert ve daha yakın nişan al.', score:10};
+      if(n === 1) return {ok:false, title:'Sadece 1 tane', msg:'Zincir başlamadı. Kenardan açılı vur ki parçalar yandakine savrulsun.', score:35};
+      const score = Math.round(40 + (n/total)*60);
+      return {ok:true, title: n === total ? 'Mükemmel' : 'İyi',
+        msg: n + ' / ' + total + ' obje tek vuruşla kırıldı. Uçan parçalar diğerlerini götürdü.', score};
+    }
+  },
+  /* ---- 6 ---- */
+  {
+    name:'Pastayı Koru', maxHits:2,
+    objective:'Tabağı kır, pasta yere düşmesin.',
+    tip:'Pasta tabağın üstünde. Sert vuruş onu masadan fırlatır.',
+    hint:'Kenardan ölçülü vur, pastayı savurma',
+    cake:{x:200, y:TABLE_Y-92-92-21, r:21},   /* balanced on the plate's top edge */
+    make(){
+      return [buildObj({
+        mat:'ceramic', seed:606, spacing:30, name:'plate',
+        cx:200, cy:TABLE_Y-92, r:92,
+        poly(){ return circlePoly(this.cx, this.cy, this.r, 68); },
+        art(c,o){ plateArt(c, o, '#c0668f'); }
+      })];
+    },
+    judge(R){
+      const o = R.objs[0];
+      if(cake.y > TABLE_Y - 70) cake.fell = true;   /* it went all the way down to the table */
+      if(cake.fell)
+        return {ok:false, title:'Pasta düştü', msg:'Altındaki destek gitti, pasta sert düştü. Daha az güçle ve tabağın kenarına vur ki bir parça pastayı taşımaya devam etsin.', score:20};
+      if(o.pieces.length < 2)
+        return {ok:false, title:'Tabak kırılmadı', msg:'Pasta duruyor ama tabak bütün. Biraz daha güçlü vur.', score:35};
+      const gentle = clamp(1 - R.maxPower, 0, 1);
+      const score = Math.round(62 + gentle*38);
+      return {ok:true, title: score > 88 ? 'Mükemmel' : 'İyi',
+        msg:'Tabak kırıldı, pasta masada sapasağlam. En sert vuruş her zaman en iyisi değil.', score};
+    }
+  }
+];
+
+/* ===================== DOM ===================== */
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const stage = document.getElementById('stage');
+const elMat = document.getElementById('mat');
+const elObjective = document.getElementById('objective');
+const elTip = document.getElementById('tip');
+const elTicks = document.getElementById('ticks');
+const elHits = document.getElementById('hits');
+const elBrief = document.getElementById('brief');
+const elBriefTag = document.getElementById('briefTag');
+const elBriefObj = document.getElementById('briefObj');
+const elBriefTip = document.getElementById('briefTip');
+const sheet = document.getElementById('sheet');
+const elVtitle = document.getElementById('vtitle');
+const elVpts = document.getElementById('vpts');
+const elVmsg = document.getElementById('vmsg');
+const btnRetry = document.getElementById('retryBtn');
+const btnNext = document.getElementById('nextBtn');
+const btnReset = document.getElementById('resetBtn');
+const btnSnd = document.getElementById('sndBtn');
+
+for(let i=0;i<LEVELS.length;i++) elTicks.appendChild(document.createElement('div')).className = 'tick';
+const ticks = Array.from(elTicks.children);
+
+/* ===================== canvas fit ===================== */
+let dpr = 1, scale = 1, offX = 0, offY = 0, cssW = 0, cssH = 0;
+const theme = {wallA:'#f6ece0', wallB:'#e8d9c6', tableA:'#c8985f', tableB:'#a97742', edge:'#8a5f33'};
+function readTheme(){
+  const cs = getComputedStyle(document.documentElement);
+  const g = k => cs.getPropertyValue(k).trim();
+  theme.wallA = g('--wall-a') || theme.wallA;
+  theme.wallB = g('--wall-b') || theme.wallB;
+  theme.tableA = g('--table-a') || theme.tableA;
+  theme.tableB = g('--table-b') || theme.tableB;
+  theme.edge = g('--table-edge') || theme.edge;
+}
+function resize(){
+  const r = stage.getBoundingClientRect();
+  cssW = Math.max(1, r.width); cssH = Math.max(1, r.height);
+  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  cv.width = Math.round(cssW*dpr); cv.height = Math.round(cssH*dpr);
+  cv.style.width = cssW + 'px'; cv.style.height = cssH + 'px';
+  scale = Math.min(cssW/W, cssH/H);
+  offX = (cssW - W*scale)/2; offY = (cssH - H*scale)/2;
+  readTheme();
+}
+window.addEventListener('resize', resize);
+window.addEventListener('orientationchange', ()=>setTimeout(resize, 120));
+if(window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', readTheme);
+new MutationObserver(readTheme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+/* ===================== game state ===================== */
+let lvIndex = 0, lv = null, objects = [];
+let state = 'ready';         /* ready | drawing | aiming | flying | settling | result */
+let hitsUsed = 0, maxPower = 0, resultShown = false, settleT = 0;
+let drawPts = [], drawObj = null;
+let keyObj = null, cake = null;
+const PULL_MAX = 108;
+const hammer = {
+  home:{x:200, y:556}, x:200, y:556, ang:0,
+  vx:0, vy:0, power:0, aim:{x:0,y:-1}, state:'idle', t:0
+};
+
+function buildLevel(i){
+  lvIndex = clamp(i, 0, LEVELS.length-1);
+  lv = LEVELS[lvIndex];
+  objects = lv.make();
+  keyObj = lv.key ? {x:lv.key.x, y:lv.key.y, vx:0, vy:0, ang:0, av:0, dead:false, free:false, rest:true} : null;
+  cake = lv.cake ? {x:lv.cake.x, y:lv.cake.y, vx:0, vy:0, r:lv.cake.r, rest:true, fell:false} : null;
+  hitsUsed = 0; maxPower = 0; resultShown = false; settleT = 0;
+  drawPts = []; drawObj = null;
+  particles = []; shake = 0; flash = 0; freeze = 0;
+  hammer.home.x = 200; hammer.home.y = 556;
+  hammer.state = 'idle'; hammer.x = hammer.home.x; hammer.y = hammer.home.y;
+  hammer.vx = hammer.vy = 0; hammer.power = 0; hammer.ang = 0;
+  sheet.classList.remove('show');
+  setState('ready');
+  paintHud();
+}
+function paintHud(){
+  elMat.textContent = objects.length > 1 ? 'Cam + Seramik' : objects[0].mat.label;
+  elObjective.textContent = lv.objective;
+  elTip.textContent = lv.hint;
+  elTip.classList.remove('gone');
+  ticks.forEach((t,i)=>{ t.className = 'tick' + (i < lvIndex ? ' done' : i === lvIndex ? ' now' : ''); });
+  paintHits();
+  showBrief();
+}
+function paintHits(){
+  elHits.innerHTML = '';
+  for(let i=0;i<lv.maxHits;i++){
+    const d = document.createElement('div');
+    d.className = 'hit-pip' + (i < lv.maxHits - hitsUsed ? ' left' : '');
+    elHits.appendChild(d);
+  }
+}
+let briefTimer = 0;
+function showBrief(){
+  clearTimeout(briefTimer);
+  elBriefTag.textContent = 'BÖLÜM ' + (lvIndex+1) + ' / ' + LEVELS.length;
+  elBriefObj.textContent = lv.objective;
+  elBriefTip.textContent = lv.tip;
+  elBrief.classList.remove('show','gone');
+  void elBrief.offsetWidth;
+  elBrief.classList.add('show');
+  briefTimer = setTimeout(()=>{
+    elBrief.classList.remove('show');
+    elBrief.classList.add('gone');
+  }, 2300);
+}
+function setState(s){ state = s; }
+
+/* ===================== input ===================== */
 function toWorld(e){
   const r = cv.getBoundingClientRect();
-  return {x: (e.clientX - r.left - offX)/scale, y: (e.clientY - r.top - offY)/scale};
+  return {x:(e.clientX - r.left - offX)/scale, y:(e.clientY - r.top - offY)/scale};
+}
+/* shards live in the object's own coordinates; pieces carry a transform on top.
+   A world point must be pulled back into that space before any fracture maths. */
+function hitTest(wp){
+  for(const o of objects){
+    for(const pc of o.pieces){
+      const lp = toLocal(pc, wp);
+      for(const si of pc.shards) if(pointInPoly(lp, o.shards[si])) return {o, pc, lp};
+    }
+  }
+  return null;
+}
+function objAt(p){ const h = hitTest(p); return h ? h.o : null; }
+function rot(v, a){
+  const c = Math.cos(a), s = Math.sin(a);
+  return {x: v.x*c - v.y*s, y: v.x*s + v.y*c};
+}
+function toLocal(p, wp){
+  const dx = wp.x - (p.cx + p.ox), dy = wp.y - (p.cy + p.oy);
+  const c = Math.cos(-p.ang), s = Math.sin(-p.ang);
+  return {x: (dx*c - dy*s)/p.scl + p.cx, y: (dx*s + dy*c)/p.scl + p.cy};
 }
 function onDown(e){
-  if(state !== 'aim' && state !== 'armed') return;
+  if(state !== 'ready' && state !== 'aiming') return;
   const p = toWorld(e);
-  if(!pointInPoly(p, objPoly)) return;
-  if(state === 'armed'){ crack = null; revealT = 0; }
   e.preventDefault();
   try{ cv.setPointerCapture(e.pointerId); }catch(err){}
   audio.unlock();
-  drawPts = [p];
-  setState('drawing');
-  elHint.classList.add('gone');
+  elTip.classList.add('gone');
+  if(dist(p, hammer.home) < 86 || p.y > TABLE_Y + 34){
+    hammer.state = 'aiming';
+    setState('aiming');
+    aimTo(p);
+    return;
+  }
+  const o = objAt(p);
+  if(o){ drawObj = o; drawPts = [p]; setState('drawing'); }
 }
 function onMove(e){
+  if(state === 'aiming'){ e.preventDefault(); aimTo(toWorld(e)); return; }
   if(state !== 'drawing') return;
   e.preventDefault();
   const p = toWorld(e);
-  if(!pointInPoly(p, objPoly)){ finalize(); return; }
-  const last = drawPts[drawPts.length-1];
-  if(dist(p, last) > 5){
-    drawPts.push(p);
-    if(drawPts.length % 5 === 0) audio.tick();
-  }
+  if(!pointInPoly(p, drawObj.poly)){ finishWeak(); return; }
+  if(dist(p, drawPts[drawPts.length-1]) > 5) drawPts.push(p);
 }
-function onUp(){ if(state === 'drawing') finalize(); }
-
-function finalize(){
-  if(drawPts.length < 2 || polyLineLen(drawPts) < 26){
-    drawPts = []; setState('aim'); elHint.classList.remove('gone'); return;
+function onUp(){
+  if(state === 'aiming'){ release(); return; }
+  if(state === 'drawing') finishWeak();
+}
+function aimTo(p){
+  const pull = sub(hammer.home, p);
+  const L = Math.hypot(pull.x, pull.y);
+  const cl = Math.min(L, PULL_MAX);
+  hammer.power = cl / PULL_MAX;
+  hammer.aim = L > 1 ? norm(pull) : {x:0,y:-1};
+  hammer.x = hammer.home.x - hammer.aim.x*cl*0.55;
+  hammer.y = hammer.home.y - hammer.aim.y*cl*0.55;
+  hammer.ang = Math.atan2(hammer.aim.y, hammer.aim.x) + Math.PI/2;
+}
+function release(){
+  if(hammer.power < 0.12){
+    hammer.state = 'idle';
+    hammer.x = hammer.home.x; hammer.y = hammer.home.y; hammer.power = 0;
+    setState('ready');
+    return;
   }
+  const sp = 420 + hammer.power*1150;
+  hammer.vx = hammer.aim.x*sp; hammer.vy = hammer.aim.y*sp;
+  hammer.state = 'flying'; hammer.t = 0;
+  hitsUsed++; maxPower = Math.max(maxPower, hammer.power);
+  paintHits();
+  audio.whoosh(hammer.power);
+  setState('flying');
+}
+function finishWeak(){
+  const o = drawObj;
+  drawObj = null;
+  if(!o || drawPts.length < 2 || polyLineLen(drawPts) < 26){ drawPts = []; setState('ready'); return; }
   const path = resample(drawPts, 10);
   const n = path.length;
-  const dA = norm(sub(path[0], path[Math.min(3, n-1)]));
-  const dB = norm(sub(path[n-1], path[Math.max(0, n-4)]));
-  const exA = rayExit(path[0], dA, objPoly);
-  const exB = rayExit(path[n-1], dB, objPoly);
-  const rnd = mulberry32(((path[0].x*13 + path[0].y*7) | 0) ^ 0x9e37);
-  const jagA = jagged([path[0], exA], 2.3, rnd);
-  const jagD = jagged(path, 2.1, rnd);
-  const jagB = jagged([path[n-1], exB], 2.3, rnd);
-  crack = {
-    jagA, jagD, jagB,
-    full: jagA.slice().reverse().concat(jagD.slice(1), jagB.slice(1)),
-    /* smooth line, run well past both edges — this is what sorts shards into sides */
-    cut: [{x: exA.x + dA.x*40, y: exA.y + dA.y*40}]
-      .concat(path, [{x: exB.x + dB.x*40, y: exB.y + dB.y*40}])
-  };
-  revealT = 0;
-  setState('armed');
-}
-const sub = (a,b)=>({x:a.x-b.x, y:a.y-b.y});
-function norm(v){ const L = Math.hypot(v.x, v.y) || 1; return {x:v.x/L, y:v.y/L}; }
-
-function clearCrack(){
-  drawPts = []; crack = null; revealT = 0;
-  setState('aim');
-  elHint.classList.remove('gone');
+  const dA = norm(sub(path[0], path[Math.min(3,n-1)]));
+  const dB = norm(sub(path[n-1], path[Math.max(0,n-4)]));
+  const exA = rayExit(path[0], dA, o.poly);
+  const exB = rayExit(path[n-1], dB, o.poly);
+  const rnd = mulberry32(((path[0].x*13 + path[0].y*7)|0) ^ 0x9e37);
+  const full = jagged([exA].concat(path, [exB]), 2.0, rnd);
+  o.weakLines.push(full);
+  o.walls.forEach(w=>{ if(distPolylinePt(full, w.mid) < 13) w.weak = true; });
+  drawPts = [];
+  setState('ready');
 }
 
-/* ---------- smash ---------- */
-function smash(){
-  if(state !== 'armed' || !crack) return;
-  audio.unlock();
-  seamWalls.forEach(i=>{ walls[i].broken = true; });
-  const side = shardMid.map(c=>sideOf(c, crack.cut));
-  walls.forEach(w=>{ if(side[w.s1] !== side[w.s2]) w.broken = true; });
-  pieces = buildPieces();
-
-  const rnd = Math.random;
-  pieces.forEach(p=>{
-    const nrm = crackNormal({x:p.cx, y:p.cy});
-    const j = 1 + (rnd()*2-1)*phys.jitter;
-    p.vx = nrm.x * phys.sep * j;
-    p.vy = nrm.y * phys.sep * j + phys.pop;
-    p.av = (rnd()*2-1) * (phys.ground ? 1.6 : 3.4);
-    p.scl = 1.05;
-  });
-
-  spawnDebris();
-  shake = 1;
-  flash = 0.55;
-  breakT = 0;
-  settled = false;
-  audio.smash();
-
-  if(keyObj){
-    keyObj.free = true;
-    keyObj.dead = distPolylineToRect(crack.full, lv.key) < lv.safeR;
-    keyObj.vy = keyObj.dead ? -40 : -110;
-    keyObj.av = (rnd()*2-1)*1.4;
-    if(keyObj.dead) for(let i=0;i<18;i++) pushDust(lv.key.x, lv.key.y, '#e0384e');
-  }
-  setState('breaking');
-}
-/* which side of the crack a point sits on, by the normal of the nearest segment */
-function sideOf(p, line){
-  let best = Infinity, s = 1;
-  for(let i=1;i<line.length;i++){
-    const a = line[i-1], b = line[i];
-    const d = distPtSeg(p, a, b);
-    if(d < best){
-      best = d;
-      const dx = b.x-a.x, dy = b.y-a.y, L = Math.hypot(dx,dy) || 1;
-      s = ((p.x-a.x)*(-dy/L) + (p.y-a.y)*(dx/L)) >= 0 ? 1 : 0;
+/* ===================== hammer flight & collisions ===================== */
+function flyHammer(dt){
+  hammer.t += dt;
+  const steps = Math.max(1, Math.ceil(Math.hypot(hammer.vx, hammer.vy)*dt / 7));
+  const sx = hammer.vx*dt/steps, sy = hammer.vy*dt/steps;
+  /* the head leads the swing, so it is what lands first */
+  hammer.ang = Math.atan2(hammer.vy, hammer.vx) + Math.PI/2;
+  for(let i=0;i<steps;i++){
+    hammer.x += sx; hammer.y += sy;
+    const head = {x: hammer.x + Math.cos(hammer.ang - Math.PI/2)*18,
+                  y: hammer.y + Math.sin(hammer.ang - Math.PI/2)*18};
+    /* contact point must be a point genuinely inside the object */
+    let h = hitTest(head), pt = head;
+    if(!h){ pt = {x:hammer.x, y:hammer.y}; h = hitTest(pt); }
+    if(h){
+      const dirW = norm({x:hammer.vx, y:hammer.vy});
+      strike(h.o, h.lp, rot(dirW, -h.pc.ang), pt, dirW, hammer.power, 'hammer');
+      hammer.vx *= -0.32; hammer.vy *= -0.32;
+      hammer.state = 'recoil'; hammer.t = 0;
+      setState('settling'); settleT = 0;
+      return;
     }
   }
-  return s;
+  if(hammer.t > 1.3 || hammer.y < -60 || hammer.x < -80 || hammer.x > W+80 || hammer.y > H+80){
+    hammer.state = 'recoil'; hammer.t = 0;
+    setState('settling'); settleT = 0;
+  }
 }
-function crackNormal(pt){
-  let best = Infinity, bn = {x:1, y:0};
-  const f = crack.cut;
-  for(let i=1;i<f.length;i++){
-    const a = f[i-1], b = f[i];
-    const d = distPtSeg(pt, a, b);
-    if(d < best){
-      best = d;
-      const dx = b.x-a.x, dy = b.y-a.y, L = Math.hypot(dx,dy) || 1;
-      let nx = -dy/L, ny = dx/L;
-      const s = Math.sign((pt.x-a.x)*nx + (pt.y-a.y)*ny) || 1;
-      bn = {x:nx*s, y:ny*s};
+function chainCheck(){
+  for(const src of objects){
+    for(const p of src.pieces){
+      const sp = Math.hypot(p.vx, p.vy);
+      if(sp < 150) continue;
+      const c = {x:p.cx+p.ox, y:p.cy+p.oy};
+      for(const dst of objects){
+        if(dst === src || dst.chainLock > 0) continue;
+        if(dist(c, dst.centerCache) > dst.radCache + p.rad) continue;
+        const h = hitTest(c);
+        if(!h || h.o !== dst) continue;
+        const dirW = norm({x:p.vx, y:p.vy});
+        const power = clamp(sp/760, 0, 1) * clamp(Math.sqrt(p.area)/22, 0.35, 1.1);
+        strike(dst, h.lp, rot(dirW, -h.pc.ang), c, dirW, clamp(power, 0, 1), 'chain');
+        dst.chainLock = 0.18;
+        p.vx *= -0.28; p.vy *= -0.28;
+      }
     }
   }
-  return bn;
 }
-function distPolylineToRect(pts, rect){
-  const hw = rect.w/2, hh = rect.h/2;
-  let m = Infinity;
-  for(let i=1;i<pts.length;i++){
-    for(let s=0;s<=4;s++){
-      const t = s/4;
-      const p = {x: lerp(pts[i-1].x, pts[i].x, t), y: lerp(pts[i-1].y, pts[i].y, t)};
-      const dx = Math.max(Math.abs(p.x-rect.x) - hw, 0);
-      const dy = Math.max(Math.abs(p.y-rect.y) - hh, 0);
-      m = Math.min(m, Math.hypot(dx, dy));
+
+/* ===================== physics ===================== */
+const GRAV = 1150;
+function stepPieces(dt){
+  for(const o of objects){
+    if(o.chainLock > 0) o.chainLock -= dt;
+    const mat = o.mat;
+    for(const p of o.pieces){
+      if(p.rest){ p.scl += (1-p.scl)*Math.min(1, dt*9); continue; }
+      p.vy += GRAV*dt;
+      p.ox += p.vx*dt; p.oy += p.vy*dt;
+      p.ang += p.av*dt;
+      p.scl += (1-p.scl)*Math.min(1, dt*9);
+      const foot = p.cy + p.oy + p.low;
+      if(foot > TABLE_Y){
+        const cx = p.cx + p.ox;
+        if(cx > TABLE_X0 && cx < TABLE_X1){
+          p.oy -= (foot - TABLE_Y);
+          p.av *= 0.4;
+          if(p.vy > 80){ p.vy = -p.vy*mat.rest; p.vx *= 0.72; }
+          else {
+            p.vy = 0;
+            p.vx *= Math.pow(1 - mat.slide*0.98, dt*60);
+            if(Math.abs(p.vx) < 12){ p.rest = true; p.vx = 0; p.av = 0; }
+          }
+        }
+      }
+      if(p.cy + p.oy > H + 220){ p.rest = true; p.vx = p.vy = 0; }
     }
   }
-  return m;
+}
+function stepProp(dt){
+  if(keyObj && !keyObj.rest){
+    keyObj.vy += GRAV*0.85*dt;
+    keyObj.x += keyObj.vx*dt; keyObj.y += keyObj.vy*dt;
+    keyObj.ang += keyObj.av*dt;
+    if(keyObj.y > TABLE_Y - 6 && keyObj.x > TABLE_X0 && keyObj.x < TABLE_X1){
+      keyObj.y = TABLE_Y - 6;
+      if(keyObj.vy > 60){ keyObj.vy = -keyObj.vy*0.24; keyObj.vx *= 0.6; }
+      else { keyObj.vy = 0; keyObj.vx *= Math.pow(0.02, dt); keyObj.av *= 0.8;
+             if(Math.abs(keyObj.vx) < 8){ keyObj.rest = true; keyObj.vx = 0; keyObj.av = 0; } }
+    }
+  }
+  if(cake && !cake.rest){
+    cake.vy += GRAV*0.8*dt;
+    cake.x += cake.vx*dt; cake.y += cake.vy*dt;
+    /* the cake rides whatever plate piece is still under it, else the table */
+    let supportY = Infinity, rider = null;
+    const onTable = cake.x > TABLE_X0 && cake.x < TABLE_X1;
+    if(onTable) supportY = TABLE_Y;
+    for(const p of objects[0].pieces){
+      const px = p.cx + p.ox;
+      /* a piece only holds the cake while it is under it and still sitting level */
+      if(Math.abs(cake.x - px) > p.rad*0.5) continue;
+      if(Math.abs(p.ang) > 0.45) continue;
+      const top = p.cy + p.oy - p.high;
+      if(top < supportY && top > cake.y - cake.r){ supportY = top; rider = p; }
+    }
+    if(cake.y + cake.r >= supportY && supportY < Infinity){
+      if(cake.vy > 500 && !rider) cake.fell = true;   /* nothing left holding it: a hard drop */
+      cake.y = supportY - cake.r;
+      if(cake.vy > 70){ cake.vy = -cake.vy*0.2; cake.vx *= 0.6; }
+      else {
+        cake.vy = rider ? rider.vy : 0;
+        cake.vx *= Math.pow(0.01, dt);
+        if(Math.abs(cake.vx) < 8 && (!rider || rider.rest)){ cake.rest = true; cake.vx = 0; }
+      }
+    }
+    if(cake.y > H + 60) cake.fell = true;             /* went over the table edge */
+  }
+}
+function releaseProps(){
+  /* props ride the piece they were sitting on */
+  if(keyObj && !keyObj.free){
+    const o = objects[0];
+    if(o.pieces.length > 1){
+      keyObj.free = true; keyObj.rest = false;
+      const near = nearestPiece(o, keyObj);
+      if(near){ keyObj.vx = near.vx*0.5; keyObj.vy = near.vy*0.5 - 20; keyObj.av = (Math.random()-0.5)*3; }
+    }
+  }
+  if(cake && cake.rest && objects[0].pieces.length > 1){
+    cake.rest = false;
+    const near = nearestPiece(objects[0], cake);
+    if(near){ cake.vx = near.vx*0.55; cake.vy = near.vy*0.55; }
+  }
+}
+function nearestPiece(o, pt){
+  let best = null, bd = Infinity;
+  for(const p of o.pieces){
+    const d = Math.hypot(p.cx+p.ox-pt.x, p.cy+p.oy-pt.y);
+    if(d < bd){ bd = d; best = p; }
+  }
+  return best;
 }
 
-/* ---------- particles ---------- */
-const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-function spawnDebris(){
-  const f = crack.full;
-  const count = reduced ? 22 : 62;
-  for(let i=0;i<count;i++){
-    const t = Math.random()*(f.length-1);
-    const i0 = Math.floor(t), u = t - i0;
-    const a = f[i0], b = f[Math.min(f.length-1, i0+1)];
-    const x = lerp(a.x, b.x, u), y = lerp(a.y, b.y, u);
-    const ang = Math.random()*TAU, sp = 60 + Math.random()*280;
-    particles.push({
-      x, y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 60,
-      r: 1.4 + Math.random()*3.4, rot: Math.random()*TAU, rv:(Math.random()*2-1)*9,
-      life:0, max: 0.5 + Math.random()*0.7, dust:false
-    });
-  }
-  const dcount = reduced ? 6 : 16;
-  for(let i=0;i<dcount;i++){
-    const t = Math.random()*(f.length-1);
-    const i0 = Math.floor(t);
-    pushDust(f[i0].x, f[i0].y, null);
-  }
-}
-function pushDust(x, y, col){
-  particles.push({
-    x, y, vx:(Math.random()*2-1)*40, vy:-14 - Math.random()*32,
-    r: 8 + Math.random()*16, rot:0, rv:0,
-    life:0, max: 0.55 + Math.random()*0.5, dust:true, col
-  });
-}
-
-/* ---------- evaluation ---------- */
-function gather(){
-  const majorCut = totalArea * 0.10;
-  const majorList = pieces.filter(p=>p.area >= majorCut);
-  const R = {
-    pieces: pieces.length,
-    parts: pieces.filter(p=>p.area >= totalArea*0.03).length,
-    majors: majorList.length,
-    majorAreas: majorList.map(p=>p.area),
-    total: totalArea,
-    crack: crack ? crack.full : []
-  };
-  if(lv.keepX != null){
-    let keepTotal = 0;
-    const per = pieces.map(p=>{
-      let k = 0;
-      p.shards.forEach(si=>{
-        const c = polyCentroid(shards[si]);
-        if(c.x < lv.keepX) k += Math.abs(polyArea(shards[si]));
+/* ===================== evaluation ===================== */
+function measures(){
+  return {
+    objs: objects,
+    maxPower,
+    majors(o){ return o.pieces.filter(p=>p.area >= o.totalArea*0.10).length; },
+    parts(o){ return o.pieces.length > 1; },
+    keepRatio(o, keepX){
+      let total = 0;
+      const per = o.pieces.map(p=>{
+        let k = 0;
+        p.shards.forEach(si=>{ if(o.shardMid[si].x < keepX) k += Math.abs(polyArea(o.shards[si])); });
+        return k;
       });
-      return k;
-    });
-    per.forEach(v=>keepTotal += v);
-    R.keepRatio = keepTotal > 0 ? Math.max.apply(null, per)/keepTotal : 0;
-  }
-  if(lv.key) R.keyDist = distPolylineToRect(crack.full, lv.key);
-  if(lv.trays){
-    const maj = majorList.slice().sort((a,b)=>(a.cx) - (b.cx));
-    if(maj.length === 2){
-      const L = maj[0], Rp = maj[1];
-      const lx = L.cx + L.ox, rx = Rp.cx + Rp.ox;
-      const t0 = lv.trays[0], t1 = lv.trays[1];
-      const inL = lx >= t0.x0 && lx <= t0.x1;
-      const inR = rx >= t1.x0 && rx <= t1.x1;
-      const cL = (t0.x0+t0.x1)/2, cR = (t1.x0+t1.x1)/2;
-      const dL = Math.round(Math.abs(lx-cL)), dR = Math.round(Math.abs(rx-cR));
-      const acc = 1 - clamp((dL+dR)/((t0.x1-t0.x0)), 0, 1);
-      const detail = !inL && !inR ? 'İki parça da hedefe giremedi.'
-        : !inL ? 'Sol parça hedefin dışına düştü.'
-        : 'Sağ parça hedefin dışına düştü.';
-      R.landing = {ok: inL && inR, dL, dR, detail, score: Math.round(inL&&inR ? 70 + acc*30 : 30 + acc*20)};
+      per.forEach(v=>total += v);
+      return total > 0 ? Math.max.apply(null, per)/total : 0;
+    },
+    zoneBroken(o, zone){
+      /* the marked zone counts as taken off once its shards leave the biggest piece */
+      let big = null, ba = 0;
+      o.pieces.forEach(p=>{ if(p.area > ba){ ba = p.area; big = p; } });
+      let zoneTotal = 0, inBig = 0;
+      o.shards.forEach((s, si)=>{
+        const c = o.shardMid[si];
+        if(Math.hypot(c.x-zone.x, c.y-zone.y) > zone.r) return;
+        const a = Math.abs(polyArea(s));
+        zoneTotal += a;
+        if(big && big.shards.indexOf(si) >= 0) inBig += a;
+      });
+      return zoneTotal > 0 && (inBig/zoneTotal) < 0.45;
     }
-  }
-  return R;
+  };
+}
+function everythingSettled(){
+  if(hammer.state === 'flying') return false;
+  for(const o of objects) for(const p of o.pieces) if(!p.rest) return false;
+  if(keyObj && !keyObj.rest && keyObj.y < H) return false;
+  if(cake && !cake.rest && !cake.fell && cake.y < H) return false;
+  return true;
+}
+function levelResolved(){
+  const R = measures();
+  if(lv.maxHits === 1) return true;
+  if(lv.name === 'Tam 3 Parça') return R.majors(objects[0]) >= 3;
+  if(objects.length > 1) return objects.every(o=>o.pieces.length > 1);
+  return objects[0].pieces.length > 1 || (cake && cake.fell) || (keyObj && keyObj.dead);
+}
+function afterSettle(){
+  if(resultShown) return;
+  const done = levelResolved() || hitsUsed >= lv.maxHits;
+  if(done) evaluate();
+  else { hammer.state = 'idle'; hammer.x = hammer.home.x; hammer.y = hammer.home.y; hammer.power = 0; setState('ready'); }
 }
 function evaluate(){
-  const R = gather();
-  const res = lv.judge(R);
-  showSheet(res);
-  setState('result');
-}
-function showSheet(res){
-  elVtag.textContent = res.tag;
-  elVtag.className = 'vtag ' + (res.ok ? 'good' : 'bad');
+  resultShown = true;
+  const res = lv.judge(measures());
   elVtitle.textContent = res.title;
+  elVtitle.className = res.ok ? 'good' : 'bad';
+  elVpts.textContent = res.score + ' puan';
   elVmsg.textContent = res.msg;
-  elMeter.className = 'meter' + (res.ok ? ' good' : '');
-  elScore.innerHTML = res.score + '<small>/100</small>';
-  elFill.style.width = '0%';
-  const last = lvIndex === LEVELS.length - 1;
-  elVstate.textContent = res.ok ? (last ? 'TÜM BÖLÜMLER TAMAMLANDI' : 'BÖLÜM TAMAMLANDI') : '';
+  const last = lvIndex === LEVELS.length-1;
   btnNext.textContent = res.ok ? (last ? 'Baştan Başla' : 'Sonraki Bölüm') : 'Tekrar Dene';
   btnNext.style.display = res.ok ? '' : 'none';
-  btnRetry.style.display = res.ok ? '' : '';
   btnRetry.textContent = res.ok ? 'Tekrar Oyna' : 'Tekrar Dene';
+  lastOk = res.ok;
   sheet.classList.add('show');
-  requestAnimationFrame(()=>{ elFill.style.width = res.score + '%'; });
   if(res.ok) audio.win(); else audio.lose();
-  if(res.ok && !reduced) for(let i=0;i<14;i++) sparkles.push({
-    x: 200 + (Math.random()*2-1)*120, y: 240 + (Math.random()*2-1)*90,
-    life:0, max: 0.6 + Math.random()*0.5, r: 2 + Math.random()*3
-  });
-  lastResult = res;
+  setState('result');
 }
-let lastResult = null;
+let lastOk = false;
 
-/* ---------- ui state ---------- */
-function setState(s){
-  state = s;
-  btnSmash.disabled = s !== 'armed';
-  btnSmash.classList.toggle('ready', s === 'armed');
-  btnReset.disabled = !(s === 'armed');
-  if(s !== 'result') sheet.classList.remove('show');
-}
-
-/* ============================== loop ============================== */
+/* ===================== loop ===================== */
 let last = performance.now();
 function frame(now){
-  const dt = Math.min(0.034, (now - last)/1000);
+  const dt = Math.min(0.032, (now-last)/1000);
   last = now;
   update(dt);
   render();
   requestAnimationFrame(frame);
 }
 function update(dt){
-  if(state === 'armed' && revealT < 1) revealT = Math.min(1, revealT + dt*4.6);
+  if(freeze > 0){ freeze -= dt; dt = 0; }
 
-  if(state === 'breaking' || state === 'result'){
-    breakT += dt;
-    pieces.forEach(p=>{
-      if(p.rest) return;
-      p.vy += phys.g*dt;
-      p.ox += p.vx*dt; p.oy += p.vy*dt;
-      p.ang += p.av*dt;
-      p.scl += (1 - p.scl)*Math.min(1, dt*9);
-      if(phys.ground){
-        const foot = p.cy + p.oy + p.rad*0.45;
-        if(foot > lv.ground){
-          p.oy -= (foot - lv.ground);
-          p.av *= 0.42;
-          if(p.vy > 90){ p.vy = -p.vy*0.26; p.vx *= 0.6; }
-          else {
-            p.vy = 0;
-            p.vx *= Math.pow(0.004, dt);
-            if(Math.abs(p.vx) < 14){ p.rest = true; p.av = 0; p.vx = 0; }
-          }
-        }
+  if(hammer.state === 'flying' && dt > 0) flyHammer(dt);
+  else if(hammer.state === 'recoil'){
+    hammer.t += dt;
+    hammer.x += hammer.vx*dt; hammer.y += hammer.vy*dt;
+    hammer.vx *= Math.pow(0.02, dt); hammer.vy *= Math.pow(0.02, dt);
+    hammer.ang += 0.06;
+    if(hammer.t > 0.4){
+      hammer.x = lerp(hammer.x, hammer.home.x, Math.min(1, dt*7));
+      hammer.y = lerp(hammer.y, hammer.home.y, Math.min(1, dt*7));
+      hammer.ang = lerp(hammer.ang, 0, Math.min(1, dt*7));
+      if(Math.abs(hammer.x-hammer.home.x) < 2 && Math.abs(hammer.y-hammer.home.y) < 2){
+        hammer.state = 'idle'; hammer.power = 0;
       }
-    });
-    if(keyObj && keyObj.free){
-      keyObj.vy += phys.g*0.72*dt;
-      keyObj.y += keyObj.vy*dt;
-      keyObj.ang += keyObj.av*dt;
     }
+  }
+
+  if(dt > 0){
+    stepPieces(dt);
+    chainCheck();
+    releaseProps();
+    stepProp(dt);
   }
 
   for(let i=particles.length-1;i>=0;i--){
     const q = particles[i];
     q.life += dt;
     if(q.life >= q.max){ particles.splice(i,1); continue; }
-    q.vy += (q.dust ? 120 : 1300)*dt;
+    q.vy += (q.dust ? 110 : 1250)*dt;
     q.x += q.vx*dt; q.y += q.vy*dt;
     q.rot += q.rv*dt;
-    if(q.dust){ q.vx *= 0.97; q.r += dt*26; }
+    if(q.dust){ q.vx *= 0.97; q.r += dt*24; }
+    else if(q.y > TABLE_Y && q.vy > 0 && q.x > TABLE_X0 && q.x < TABLE_X1){ q.y = TABLE_Y; q.vy *= -0.25; q.vx *= 0.7; }
   }
-  for(let i=sparkles.length-1;i>=0;i--){
-    sparkles[i].life += dt;
-    if(sparkles[i].life >= sparkles[i].max) sparkles.splice(i,1);
-  }
-
-  shake *= Math.pow(0.0035, dt);
+  shake *= Math.pow(0.004, dt);
   if(shake < 0.002) shake = 0;
-  flash *= Math.pow(0.0006, dt);
+  flash *= Math.pow(0.0008, dt);
 
-  if(state === 'breaking'){
-    if(phys.ground){
-      const allRest = pieces.every(p=>p.rest || p.cy + p.oy > H + 200);
-      if(allRest || breakT > 3.4) evaluate();
-    } else if(breakT > 1.05) evaluate();
+  if(state === 'settling'){
+    settleT += dt;
+    if((everythingSettled() && settleT > 0.35) || settleT > 2.8) afterSettle();
   }
 }
 
+/* ===================== render ===================== */
 function render(){
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, cssW, cssH);
-  const sx = shake ? (Math.random()*2-1)*9*shake : 0;
-  const sy = shake ? (Math.random()*2-1)*9*shake : 0;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssW,cssH);
+  const sx = shake ? (Math.random()*2-1)*8*shake : 0;
+  const sy = shake ? (Math.random()*2-1)*8*shake : 0;
   ctx.save();
   ctx.translate(offX + sx*scale, offY + sy*scale);
   ctx.scale(scale, scale);
 
-  /* stage light */
-  const g = ctx.createRadialGradient(200, 296, 20, 200, 300, 260);
-  g.addColorStop(0, glow);
-  g.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, W, H);
-
-  if(lv.trays) drawTrays();
-
-  /* ground shadow while whole */
-  if(state === 'aim' || state === 'drawing' || state === 'armed'){
-    const cy = lv.trays ? lv.ground - 3 : 452;
-    const sw = lv.r ? lv.r*0.86 : (lv.w || 200)*0.42;
-    const sg = ctx.createRadialGradient(200, cy, 2, 200, cy, sw);
-    sg.addColorStop(0, 'rgba(24,32,58,.26)');
-    sg.addColorStop(1, 'rgba(24,32,58,0)');
-    ctx.fillStyle = sg;
-    ctx.save(); ctx.translate(200, cy); ctx.scale(1, 0.19); ctx.translate(-200, -cy);
-    ctx.beginPath(); ctx.arc(200, cy, sw, 0, TAU); ctx.fill();
-    ctx.restore();
-  }
-
-  pieces.forEach(drawPiece);
-
-  if(keyObj) drawKey();
-  if(crack && (state === 'armed' || state === 'drawing')) drawCrackArmed();
-  if(state === 'drawing') drawCrackLive();
+  drawScene();
+  objects.forEach(drawContactShadows);
+  objects.forEach(drawObject);
+  if(keyObj && !keyObj.dead) drawKey();
+  if(cake && !cake.fell) drawCake();
   drawParticles();
-  drawSparkles();
+  drawAim();
+  drawHammer();
 
   ctx.restore();
-
   if(flash > 0.01){
-    ctx.fillStyle = 'rgba(255,255,255,' + (flash*0.5) + ')';
-    ctx.fillRect(0, 0, cssW, cssH);
+    ctx.fillStyle = 'rgba(255,248,238,' + (flash*0.55) + ')';
+    ctx.fillRect(0,0,cssW,cssH);
   }
 }
+function drawScene(){
+  const g = ctx.createLinearGradient(0,0,0,TABLE_Y);
+  g.addColorStop(0, theme.wallA); g.addColorStop(1, theme.wallB);
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,TABLE_Y);
 
-function drawPiece(p){
+  /* warm pool of light behind the objects */
+  const lg = ctx.createRadialGradient(200, TABLE_Y-140, 20, 200, TABLE_Y-120, 250);
+  lg.addColorStop(0,'rgba(255,236,205,.42)'); lg.addColorStop(1,'rgba(255,236,205,0)');
+  ctx.fillStyle = lg; ctx.fillRect(0,0,W,TABLE_Y);
+
+  /* floor behind and below the table */
+  ctx.fillStyle = theme.edge;
+  ctx.fillRect(0, TABLE_Y, W, H-TABLE_Y);
+  ctx.fillStyle = 'rgba(0,0,0,.16)';
+  ctx.fillRect(0, TABLE_Y, W, H-TABLE_Y);
+
+  /* the slab itself, with ends you can knock things over */
+  const TH = 26;
+  const tg = ctx.createLinearGradient(0,TABLE_Y,0,TABLE_Y+TH);
+  tg.addColorStop(0, theme.tableA); tg.addColorStop(1, theme.tableB);
+  ctx.fillStyle = tg;
+  ctx.fillRect(TABLE_X0-6, TABLE_Y, (TABLE_X1-TABLE_X0)+12, TH);
+  ctx.fillStyle = 'rgba(0,0,0,.22)';
+  ctx.fillRect(TABLE_X0-6, TABLE_Y+TH-5, (TABLE_X1-TABLE_X0)+12, 5);
+
+  ctx.strokeStyle = 'rgba(255,236,205,.4)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(TABLE_X0-6, TABLE_Y+1); ctx.lineTo(TABLE_X1+6, TABLE_Y+1); ctx.stroke();
+
+  /* legs */
+  ctx.fillStyle = theme.tableB;
+  ctx.fillRect(TABLE_X0+16, TABLE_Y+TH, 20, H-TABLE_Y-TH);
+  ctx.fillRect(TABLE_X1-36, TABLE_Y+TH, 20, H-TABLE_Y-TH);
+  ctx.fillStyle = 'rgba(0,0,0,.2)';
+  ctx.fillRect(TABLE_X0+30, TABLE_Y+TH, 6, H-TABLE_Y-TH);
+  ctx.fillRect(TABLE_X1-22, TABLE_Y+TH, 6, H-TABLE_Y-TH);
+
   ctx.save();
-  ctx.translate(p.cx + p.ox, p.cy + p.oy);
-  ctx.rotate(p.ang);
-  ctx.scale(p.scl, p.scl);
-  ctx.translate(-p.cx, -p.cy);
-
-  if(pieces.length <= 10){
-    ctx.shadowColor = 'rgba(18,26,50,.30)';
-    ctx.shadowBlur = 13;
-    ctx.shadowOffsetY = 7;
-  }
-  ctx.fillStyle = '#f2f5fa';
-  ctx.fill(p.path);
-  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
-
-  ctx.save();
-  ctx.clip(p.path);
-  ctx.drawImage(art, 0, 0, art.width, art.height, 0, 0, W, H);
-  ctx.restore();
-
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = 'rgba(34,44,74,.28)';
-  ctx.stroke(p.path);
-
-  if(p.breakSegs.length){
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    p.breakSegs.forEach(s=>{ ctx.moveTo(s[0].x, s[0].y); ctx.lineTo(s[1].x, s[1].y); });
-    ctx.lineWidth = 3.2; ctx.strokeStyle = 'rgba(255,253,248,.92)'; ctx.stroke();
-    ctx.lineWidth = 1.1; ctx.strokeStyle = 'rgba(120,96,78,.30)'; ctx.stroke();
+  ctx.beginPath(); ctx.rect(TABLE_X0-6, TABLE_Y, (TABLE_X1-TABLE_X0)+12, TH); ctx.clip();
+  ctx.globalAlpha = 0.15; ctx.strokeStyle = theme.edge; ctx.lineWidth = 1.3;
+  for(let i=0;i<3;i++){
+    const y = TABLE_Y + 7 + i*8;
+    ctx.beginPath(); ctx.moveTo(TABLE_X0-10, y);
+    ctx.bezierCurveTo(140, y-2, 250, y+2, TABLE_X1+10, y);
+    ctx.stroke();
   }
   ctx.restore();
 }
-
-function strokePolyline(pts){
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
-  ctx.stroke();
-}
-function strokePartial(pts, t){
-  if(pts.length < 2) return;
-  if(t >= 1){ strokePolyline(pts); return; }
-  let want = polyLineLen(pts)*t;
-  ctx.beginPath();
-  ctx.moveTo(pts[0].x, pts[0].y);
-  for(let i=1;i<pts.length;i++){
-    const d = dist(pts[i-1], pts[i]);
-    if(d <= want){ ctx.lineTo(pts[i].x, pts[i].y); want -= d; }
-    else{
-      const u = d > 0 ? want/d : 0;
-      ctx.lineTo(lerp(pts[i-1].x, pts[i].x, u), lerp(pts[i-1].y, pts[i].y, u));
-      break;
-    }
-  }
-  ctx.stroke();
-}
-function crackStroke(fn){
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  ctx.lineWidth = 8; ctx.strokeStyle = 'rgba(255,122,50,.22)'; fn();
-  ctx.lineWidth = 3.4; ctx.strokeStyle = 'rgba(26,32,52,.88)'; fn();
-  ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(255,255,255,.92)'; fn();
-}
-function drawCrackLive(){
-  if(drawPts.length < 2) return;
-  crackStroke(()=>strokePolyline(drawPts));
-}
-function drawCrackArmed(){
-  crackStroke(()=>{
-    strokePolyline(crack.jagD);
-    strokePartial(crack.jagA, revealT);
-    strokePartial(crack.jagB, revealT);
+function drawContactShadows(o){
+  o.pieces.forEach(p=>{
+    const cx = p.cx + p.ox, foot = p.cy + p.oy + p.low;
+    const h = clamp((TABLE_Y - foot)/140, 0, 1);
+    const a = 0.30*(1-h);
+    if(a < 0.02) return;
+    const rx = Math.max(8, p.rad*0.9*(1 + h*0.4));
+    const gg = ctx.createRadialGradient(cx, TABLE_Y, 1, cx, TABLE_Y, rx);
+    gg.addColorStop(0, 'rgba(60,36,14,' + a + ')');
+    gg.addColorStop(1, 'rgba(60,36,14,0)');
+    ctx.fillStyle = gg;
+    ctx.save(); ctx.translate(cx, TABLE_Y); ctx.scale(1, 0.22); ctx.translate(-cx, -TABLE_Y);
+    ctx.beginPath(); ctx.arc(cx, TABLE_Y, rx, 0, TAU); ctx.fill();
+    ctx.restore();
   });
 }
+function drawObject(o){
+  const mat = o.mat;
+  o.pieces.forEach(p=>{
+    ctx.save();
+    ctx.translate(p.cx + p.ox, p.cy + p.oy);
+    ctx.rotate(p.ang);
+    ctx.scale(p.scl, p.scl);
+    ctx.translate(-p.cx, -p.cy);
 
+    if(o.pieces.length <= 12){
+      ctx.shadowColor = 'rgba(50,30,12,.30)';
+      ctx.shadowBlur = 11; ctx.shadowOffsetY = 5;
+    }
+    ctx.fillStyle = mat.body;
+    ctx.fill(p.path);
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+    ctx.save(); ctx.clip(p.path);
+    ctx.drawImage(o.art, o.ax, o.ay, o.aw, o.ah);
+    ctx.restore();
+
+    ctx.lineWidth = 1.4; ctx.strokeStyle = mat.edge; ctx.stroke(p.path);
+
+    if(p.crackSegs.length){
+      ctx.beginPath();
+      p.crackSegs.forEach(s=>{ ctx.moveTo(s[0].x,s[0].y); ctx.lineTo(s[1].x,s[1].y); });
+      ctx.lineWidth = 1.6; ctx.strokeStyle = 'rgba(40,26,14,.5)'; ctx.stroke();
+      ctx.lineWidth = 0.7; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.stroke();
+    }
+    if(p.breakSegs.length){
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      p.breakSegs.forEach(s=>{ ctx.moveTo(s[0].x,s[0].y); ctx.lineTo(s[1].x,s[1].y); });
+      ctx.lineWidth = 2.8; ctx.strokeStyle = mat.fresh; ctx.stroke();
+      ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(90,62,36,.28)'; ctx.stroke();
+    }
+    ctx.restore();
+  });
+  /* scored weak lines, drawn while the object is still whole */
+  if(o.weakLines.length && !o.struck){
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    o.weakLines.forEach(line=>{
+      ctx.beginPath();
+      ctx.moveTo(line[0].x, line[0].y);
+      for(let i=1;i<line.length;i++) ctx.lineTo(line[i].x, line[i].y);
+      ctx.lineWidth = 4.5; ctx.strokeStyle = 'rgba(226,98,44,.2)'; ctx.stroke();
+      ctx.setLineDash([7,5]);
+      ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(180,70,26,.8)'; ctx.stroke();
+      ctx.setLineDash([]);
+    });
+    ctx.restore();
+  }
+  if(state === 'drawing' && drawObj === o && drawPts.length > 1){
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(drawPts[0].x, drawPts[0].y);
+    for(let i=1;i<drawPts.length;i++) ctx.lineTo(drawPts[i].x, drawPts[i].y);
+    ctx.lineWidth = 4.5; ctx.strokeStyle = 'rgba(226,98,44,.25)'; ctx.stroke();
+    ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(180,70,26,.85)'; ctx.stroke();
+    ctx.restore();
+  }
+}
 function drawKey(){
   const k = lv.key;
-  const x = keyObj.x, y = keyObj.y;
-  if(!keyObj.free || !keyObj.dead){
-    if(!keyObj.free){
-      const near = crack ? distPolylineToRect(crack.full, k) : (state === 'drawing' && drawPts.length > 1 ? distPolylineToRect(drawPts, k) : 999);
-      const danger = near < lv.safeR;
-      ctx.save();
-      ctx.setLineDash([5,5]);
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = danger ? 'rgba(224,56,78,.95)' : 'rgba(63,134,118,.5)';
-      const pulse = danger ? 1 + Math.sin(performance.now()/140)*0.05 : 1;
-      ctx.beginPath(); ctx.ellipse(k.x, k.y, (k.w/2 + lv.safeR)*pulse, (k.h/2 + lv.safeR)*pulse, 0, 0, TAU);
-      ctx.stroke();
-      ctx.restore();
-    }
-    ctx.save();
-    ctx.translate(x, y); ctx.rotate(keyObj.ang);
-    ctx.shadowColor = 'rgba(90,60,10,.4)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 3;
-    const gg = ctx.createLinearGradient(-k.w/2, 0, k.w/2, 0);
-    gg.addColorStop(0, '#f6d27a'); gg.addColorStop(0.5, '#e8a819'); gg.addColorStop(1, '#c98708');
-    ctx.fillStyle = gg;
-    ctx.beginPath(); ctx.arc(-k.w/2 + 7, 0, 8.5, 0, TAU); ctx.fill();
-    ctx.shadowColor = 'transparent';
-    ctx.fillRect(-k.w/2 + 12, -3, k.w - 15, 6);
-    ctx.fillRect(k.w/2 - 11, -3, 4, 11);
-    ctx.fillRect(k.w/2 - 4, -3, 4, 8);
-    ctx.fillStyle = 'rgba(255,255,255,.55)';
-    ctx.beginPath(); ctx.arc(-k.w/2 + 7, 0, 3.4, 0, TAU); ctx.fill();
-    ctx.restore();
-  }
-}
-
-function drawTrays(){
   ctx.save();
-  ctx.strokeStyle = 'rgba(47,95,224,.22)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([4,6]);
-  ctx.beginPath(); ctx.moveTo(10, lv.ground); ctx.lineTo(390, lv.ground); ctx.stroke();
-  ctx.setLineDash([]);
-  lv.trays.forEach((t,i)=>{
-    const w = t.x1 - t.x0;
-    const gd = ctx.createLinearGradient(0, lv.ground, 0, lv.ground + 46);
-    gd.addColorStop(0, 'rgba(47,95,224,.20)');
-    gd.addColorStop(1, 'rgba(47,95,224,.05)');
-    ctx.fillStyle = gd;
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(t.x0, lv.ground, w, 46, 10) : ctx.rect(t.x0, lv.ground, w, 46);
-    ctx.fill();
-    ctx.lineWidth = 2.4; ctx.strokeStyle = 'rgba(47,95,224,.55)';
-    ctx.beginPath(); ctx.moveTo(t.x0, lv.ground); ctx.lineTo(t.x1, lv.ground); ctx.stroke();
-    ctx.font = '700 11px Figtree, system-ui, sans-serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'rgba(47,95,224,.75)';
-    ctx.fillText(i === 0 ? 'SOL HEDEF' : 'SAĞ HEDEF', (t.x0+t.x1)/2, lv.ground + 24);
-  });
+  ctx.translate(keyObj.x, keyObj.y); ctx.rotate(keyObj.ang);
+  ctx.shadowColor = 'rgba(90,60,10,.4)'; ctx.shadowBlur = 7; ctx.shadowOffsetY = 3;
+  const g = ctx.createLinearGradient(-k.w/2,0,k.w/2,0);
+  g.addColorStop(0,'#f7d789'); g.addColorStop(0.5,'#e0a51d'); g.addColorStop(1,'#bd8408');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(-k.w/2+7, 0, 8, 0, TAU); ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.fillRect(-k.w/2+11, -3, k.w-14, 5.5);
+  ctx.fillRect(k.w/2-10, -3, 3.5, 10);
+  ctx.fillRect(k.w/2-4, -3, 3.5, 7);
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.beginPath(); ctx.arc(-k.w/2+7, 0, 3, 0, TAU); ctx.fill();
   ctx.restore();
 }
-
+function drawCake(){
+  ctx.save();
+  ctx.translate(cake.x, cake.y);
+  ctx.shadowColor = 'rgba(80,40,20,.35)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 4;
+  ctx.fillStyle = '#f2d3a8';
+  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-cake.r, -cake.r*0.5, cake.r*2, cake.r*1.35, 5) : ctx.rect(-cake.r,-cake.r*0.5,cake.r*2,cake.r*1.35);
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.fillStyle = '#e8759a';
+  ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-cake.r, -cake.r, cake.r*2, cake.r*0.66, 5) : ctx.rect(-cake.r,-cake.r,cake.r*2,cake.r*0.66);
+  ctx.fill();
+  ctx.fillStyle = '#c03a5a';
+  ctx.beginPath(); ctx.arc(0, -cake.r-3, 4.5, 0, TAU); ctx.fill();
+  ctx.restore();
+}
 function drawParticles(){
   particles.forEach(q=>{
     const a = 1 - q.life/q.max;
     if(q.dust){
-      const rg = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.r);
-      const col = q.col || '#c9d3e6';
-      rg.addColorStop(0, hexA(col, 0.30*a));
-      rg.addColorStop(1, hexA(col, 0));
+      const col = q.col || '#d8c6ad';
+      const rg = ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,q.r);
+      rg.addColorStop(0, hexA(col, 0.3*a)); rg.addColorStop(1, hexA(col, 0));
       ctx.fillStyle = rg;
-      ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, TAU); ctx.fill();
+      ctx.beginPath(); ctx.arc(q.x,q.y,q.r,0,TAU); ctx.fill();
     } else {
       ctx.save();
-      ctx.translate(q.x, q.y); ctx.rotate(q.rot);
-      ctx.fillStyle = 'rgba(240,244,251,' + a + ')';
+      ctx.translate(q.x,q.y); ctx.rotate(q.rot);
+      ctx.fillStyle = hexA(q.col || '#f4f1ea', a);
       ctx.beginPath();
-      ctx.moveTo(-q.r, -q.r*0.6); ctx.lineTo(q.r, -q.r*0.3); ctx.lineTo(q.r*0.3, q.r); ctx.closePath();
+      ctx.moveTo(-q.r,-q.r*0.6); ctx.lineTo(q.r,-q.r*0.3); ctx.lineTo(q.r*0.3,q.r); ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = 'rgba(80,96,130,' + (a*0.5) + ')';
-      ctx.lineWidth = 0.8; ctx.stroke();
       ctx.restore();
     }
   });
 }
-function drawSparkles(){
-  sparkles.forEach(s=>{
-    const a = 1 - s.life/s.max;
-    ctx.fillStyle = 'rgba(255,214,120,' + a + ')';
-    ctx.beginPath(); ctx.arc(s.x, s.y - s.life*40, s.r*a, 0, TAU); ctx.fill();
-  });
+function drawAim(){
+  if(hammer.state !== 'aiming' || hammer.power < 0.06) return;
+  const p = hammer.power;
+  const col = p < 0.45 ? '#3f9a6b' : p < 0.78 ? '#e2a02c' : '#cf4436';
+  ctx.save();
+  ctx.strokeStyle = 'rgba(120,86,52,.35)';
+  ctx.lineWidth = 2; ctx.setLineDash([4,5]);
+  ctx.beginPath(); ctx.moveTo(hammer.home.x, hammer.home.y); ctx.lineTo(hammer.x, hammer.y); ctx.stroke();
+  ctx.setLineDash([]);
+
+  const n = Math.round(3 + p*8);
+  for(let i=0;i<n;i++){
+    const t = 24 + i*20;
+    const x = hammer.home.x + hammer.aim.x*t, y = hammer.home.y + hammer.aim.y*t;
+    const a = 0.85 - i/n*0.6;
+    ctx.fillStyle = hexA(col, a);
+    ctx.beginPath(); ctx.arc(x, y, 3.6 - i/n*1.4, 0, TAU); ctx.fill();
+  }
+  const tipD = 24 + n*20;
+  const tx = hammer.home.x + hammer.aim.x*tipD, ty = hammer.home.y + hammer.aim.y*tipD;
+  const ang = Math.atan2(hammer.aim.y, hammer.aim.x);
+  ctx.fillStyle = col;
+  ctx.save(); ctx.translate(tx,ty); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(9,0); ctx.lineTo(-5,5.5); ctx.lineTo(-5,-5.5); ctx.closePath(); ctx.fill();
+  ctx.restore();
+  ctx.restore();
+}
+function drawHammer(){
+  ctx.save();
+  ctx.translate(hammer.x, hammer.y);
+  ctx.rotate(hammer.ang);
+  ctx.shadowColor = 'rgba(50,30,12,.4)'; ctx.shadowBlur = 9; ctx.shadowOffsetY = 4;
+  /* handle */
+  const hg = ctx.createLinearGradient(-5,0,5,0);
+  hg.addColorStop(0,'#a9773f'); hg.addColorStop(0.5,'#d7a464'); hg.addColorStop(1,'#8d5f2e');
+  ctx.fillStyle = hg;
+  ctx.beginPath();
+  ctx.roundRect ? ctx.roundRect(-4.5, -8, 9, 52, 4) : ctx.rect(-4.5,-8,9,52);
+  ctx.fill();
+  /* head */
+  ctx.shadowBlur = 6;
+  const mg = ctx.createLinearGradient(-20,-14,20,4);
+  mg.addColorStop(0,'#e8ebef'); mg.addColorStop(0.45,'#9aa3ad'); mg.addColorStop(1,'#5d666f');
+  ctx.fillStyle = mg;
+  ctx.beginPath();
+  ctx.roundRect ? ctx.roundRect(-21, -21, 42, 17, 4) : ctx.rect(-21,-21,42,17);
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.fillStyle = 'rgba(255,255,255,.45)';
+  ctx.fillRect(-19, -19.5, 38, 3);
+  ctx.restore();
 }
 function hexA(hex, a){
-  if(hex[0] !== '#') return hex;
-  const n = parseInt(hex.slice(1), 16);
+  if(!hex || hex[0] !== '#') return 'rgba(230,225,215,' + a + ')';
+  let h = hex.slice(1);
+  if(h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  const n = parseInt(h,16);
   return 'rgba(' + ((n>>16)&255) + ',' + ((n>>8)&255) + ',' + (n&255) + ',' + a + ')';
 }
 
-/* ============================== wiring ============================== */
+/* ===================== wiring ===================== */
 cv.addEventListener('pointerdown', onDown, {passive:false});
 cv.addEventListener('pointermove', onMove, {passive:false});
 window.addEventListener('pointerup', onUp);
@@ -1671,13 +1972,11 @@ window.addEventListener('pointercancel', onUp);
 stage.addEventListener('touchmove', e=>e.preventDefault(), {passive:false});
 document.addEventListener('gesturestart', e=>e.preventDefault());
 
-btnSmash.addEventListener('click', smash);
-btnReset.addEventListener('click', clearCrack);
+btnReset.addEventListener('click', ()=>buildLevel(lvIndex));
 btnRetry.addEventListener('click', ()=>{ sheet.classList.remove('show'); buildLevel(lvIndex); });
 btnNext.addEventListener('click', ()=>{
   sheet.classList.remove('show');
-  if(lastResult && lastResult.ok) buildLevel((lvIndex + 1) % LEVELS.length);
-  else buildLevel(lvIndex);
+  buildLevel(lastOk ? (lvIndex+1) % LEVELS.length : lvIndex);
 });
 btnSnd.addEventListener('click', ()=>{
   const m = audio.toggle();
@@ -1686,28 +1985,56 @@ btnSnd.addEventListener('click', ()=>{
   document.getElementById('sndWave').style.opacity = m ? '0.22' : '1';
 });
 
-/* canvas labels use Turkish glyphs, so pull the latin-ext subset before repainting */
-if(document.fonts && document.fonts.ready){
-  document.fonts.ready
-    .then(()=> document.fonts.load ? document.fonts.load('700 13px Figtree', 'DİKİŞ SAĞ KORU') : null)
-    .catch(()=>{})
-    .then(()=>{ if(lv) paintArt(); });
-}
+window.__BIR = {
+  go: buildLevel,
+  levels: LEVELS.length,
+  /* fire the hammer programmatically: power 0..1, angle in degrees (0 = up) */
+  fire(power, angleDeg, fromX){
+    if(state !== 'ready') return false;
+    const a = (angleDeg||0) * Math.PI/180;
+    if(fromX != null) hammer.home.x = fromX;
+    hammer.power = clamp(power,0,1);
+    hammer.aim = {x: Math.sin(a), y: -Math.cos(a)};
+    hammer.x = hammer.home.x; hammer.y = hammer.home.y;
+    release();
+    return true;
+  },
+  /* advance the simulation by hand — deterministic, independent of rAF */
+  step(dt, n){ for(let i=0;i<(n||1);i++) update(dt||1/60); return null; },
+  settle(cap){
+    let i = 0;
+    while(i++ < (cap||600) && (state === 'flying' || state === 'settling')) update(1/60);
+    return this.info;
+  },
+  weak(pts){
+    const o = objAt(pts[0]);
+    if(!o) return false;
+    drawObj = o; drawPts = pts.slice(); state = 'drawing';
+    finishWeak();
+    return true;
+  },
+  get info(){
+    const R = measures();
+    return {
+      state, hitsUsed, maxPower: +maxPower.toFixed(2), resultShown,
+      objs: objects.map(o=>({
+        mat:o.mat.label, shards:o.shards.length, walls:o.walls.length,
+        broken:o.walls.filter(w=>w.broken).length, weak:o.walls.filter(w=>w.weak).length,
+        pieces:o.pieces.length, majors:R.majors(o),
+        areas:o.pieces.map(p=>Math.round(p.area/o.totalArea*100)).sort((a,b)=>b-a).slice(0,5)
+      })),
+      key: keyObj ? {x:Math.round(keyObj.x), y:Math.round(keyObj.y), dead:keyObj.dead} : null,
+      cake: cake ? {x:Math.round(cake.x), y:Math.round(cake.y), fell:cake.fell} : null,
+      verdict: resultShown ? elVtitle.textContent : null,
+      score: resultShown ? elVpts.textContent : null
+    };
+  }
+};
 
-window.__BIR = { go: buildLevel, get info(){ return {
-  state, shards: shards.length, walls: walls.length,
-  broken: walls.filter(w=>w.broken).length,
-  pieces: pieces.length,
-  areas: pieces.map(p=>Math.round(p.area/totalArea*100)).sort((a,b)=>b-a).slice(0,6),
-  crack: crack ? {n: crack.full.length,
-    x:[Math.round(Math.min.apply(null,crack.full.map(p=>p.x))), Math.round(Math.max.apply(null,crack.full.map(p=>p.x)))],
-    y:[Math.round(Math.min.apply(null,crack.full.map(p=>p.y))), Math.round(Math.max.apply(null,crack.full.map(p=>p.y)))]} : null
-}; } };
-
-/* republish-safe boot */
 function start(data){
   resize();
-  buildLevel(data && typeof data.level === 'number' ? clamp(data.level, 0, LEVELS.length-1) : 0);
+  objects = [];
+  buildLevel(data && typeof data.level === 'number' ? data.level : 0);
   requestAnimationFrame(frame);
 }
 if(window.claude && window.claude.hot){
