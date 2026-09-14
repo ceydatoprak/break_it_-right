@@ -1,4 +1,10 @@
-<title>Break It Right</title>
+<!doctype html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6ece0">
+<title>BREAK &amp; RESCUE — Dikkatli kır. Güvenle kurtar.</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
@@ -196,14 +202,37 @@
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important;transition-duration:.08s !important}
   }
+
+  body{background:radial-gradient(ellipse at 20% 0%,#fff9ef,#e5d5c1);}
+  #app{max-width:600px;height:100vh;height:100dvh;padding:0 20px 10px;}
+  .brand{display:flex;align-items:center;gap:11px;padding:8px 0 14px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+  .brand-mark{width:43px;height:43px;display:grid;place-items:center;background:#628a72;color:#fff9ec;border-radius:14px;font-size:35px;}
+  .brand h1{margin:0;font-size:20px;letter-spacing:-.7px;font-weight:800;}
+  .brand h1 i{font-style:normal;color:#cf794b;}
+  .brand p{font-size:11px;color:var(--ink-2);margin:4px 0 0;}
+  .edition{margin-left:auto;font-size:9px;letter-spacing:1.8px;line-height:1.7;color:var(--ink-3);text-align:right;}
+  .icon-btn{width:44px;height:44px;border-radius:14px;}
+  .objective{font-size:20px;}
+  .tick{height:5px;}
+  .brief{background:rgba(255,250,243,.92);box-shadow:none;border-radius:18px;top:14px;}
+  .brief-tag{color:#64846c;}
+  .tip{bottom:5px;font-size:12px;line-height:1.5;color:var(--ink-2);background:#fff7e9e8;padding:10px 14px;border-radius:14px;width:96%;}
+  #stage{border-radius:24px;overflow:hidden;background:#f0e3d2;box-shadow:0 10px 36px #5b3b1812;}
+  .hud{padding-top:max(8px,env(safe-area-inset-top));}
+  .sheet:not(.show){visibility:hidden;}
+  .card{margin-bottom:0;}
+  @media(max-width:380px){#app{padding-inline:10px}.brand h1{font-size:17px}.edition{display:none}.objective{font-size:17px}.hud-row{gap:5px}.mat-chip{padding:4px 6px}.obj-wrap{gap:6px}}
+  @media(max-height:600px){.brand{padding:0 0 5px;margin:0}.brand-mark{height:30px;width:30px;font-size:25px}.brand p,.edition{display:none}.hud{gap:4px}.brief{top:3px;padding:6px 10px}.brief-obj{display:none}.brief-tip{font-size:11px}.tip{font-size:10px;padding:5px}}
 </style>
 
+</head><body>
 <div id="app" lang="tr">
   <header class="hud">
+    <div class="brand"><span class="brand-mark">✳</span><div><h1>BREAK <i>&amp;</i> RESCUE</h1><p>Dikkatli kır. Güvenle kurtar.</p></div><span class="edition">KURTARMA<br>ATÖLYESİ</span></div>
     <div class="hud-row">
       <div class="obj-wrap">
         <span class="mat-chip" id="mat">Seramik</span>
-        <p class="objective" id="objective">Tabağı kır.</p>
+        <p class="objective" id="objective">Anahtarı kurtar.</p>
       </div>
       <div class="tools">
         <button class="icon-btn" id="resetBtn" type="button" aria-label="Bölümü sıfırla">
@@ -225,13 +254,13 @@
   </header>
 
   <div id="stage">
-    <canvas id="cv"></canvas>
+    <canvas id="cv" aria-label="Kurtarma atölyesi. Çekici geri çekip bırakarak kabuğu aç."></canvas>
     <div class="brief" id="brief">
       <span class="brief-tag" id="briefTag">BÖLÜM 1 / 6</span>
-      <p class="brief-obj" id="briefObj">Tabağı kır.</p>
+      <p class="brief-obj" id="briefObj">Anahtarı kurtar.</p>
       <p class="brief-tip" id="briefTip"></p>
     </div>
-    <div class="tip" id="tip">Çekici geri çek ve bırak</div>
+    <div class="tip" id="tip" role="status">Çekici geri çek ve bırak</div>
   </div>
 </div>
 
@@ -778,6 +807,7 @@ function crackPath(o, pt, dir, power){
 }
 function strike(o, pt, dir, ptW, dirW, power, kind){
   power = clamp(power, 0, 1);
+  o.hitCount=(o.hitCount||0)+1;
   ptW = ptW || pt; dirW = dirW || dir;
   const mat = o.mat;
   const before = o.pieces.length;
@@ -799,17 +829,17 @@ function strike(o, pt, dir, ptW, dirW, power, kind){
     /* a wide blow frays the edges of the crack too */
     if(band > 13 && cr.paths.some(P => distPolylinePt(P, w.mid) < band))
       s += power * mat.force * 0.9;
-    if(s > w.strength){ w.broken = true; broke++; }
+    if(s > w.strength && !(o.spec.mat==='ice' && o.hitCount===1 && power<.8)){ w.broken = true; broke++; }
+    else w.strength=Math.max(.12,w.strength-s*.3);
   });
 
   o.lastCrack = cr.paths;
 
-  /* the key only breaks if the blow itself, or the crack it opens, reaches it */
-  if(keyObj && !keyObj.dead && lv.key){
-    let d = distPtRect(pt, lv.key);
-    cr.paths.forEach(P=>{ d = Math.min(d, distPolylineRect(P, lv.key)); });
-    if(d < 20){ keyObj.dead = true; pushDust(keyObj.x, keyObj.y, '#cf4436', 12); }
-  }
+  rescueImpact(o, ptW, dirW, power);
+  cr.paths.forEach(path=>o.weakLines.push(path));
+  o.walls.forEach(w=>{if(!w.broken && cr.paths.some(path=>distPolylinePt(path,w.mid)<15)){w.strength=Math.max(.12,w.strength-power*.65);w.weak=true;}});
+  o.cracked=true;
+
   if(broke === 0){ bounceOnly(o, ptW, dirW, power); return {broke:0, split:0}; }
 
   o.pieces = buildPieces(o);
@@ -817,7 +847,7 @@ function strike(o, pt, dir, ptW, dirW, power, kind){
   const moving = o.pieces.length > 1;
   const avg = o.totalArea / Math.max(1, o.pieces.length);
   const range = mat.range * (0.5 + 0.85*power);
-  const rnd = Math.random;
+  const rnd = mulberry32(o.spec.seed + hitsUsed*997);
 
   o.pieces.forEach(p=>{
     const c = {x:p.cx+p.ox, y:p.cy+p.oy};
@@ -834,20 +864,17 @@ function strike(o, pt, dir, ptW, dirW, power, kind){
     p.rest = false;
   });
 
+  const largest=Math.max(...o.pieces.map(p=>p.area))/o.totalArea;
+  o.open = largest < .86 && o.pieces.length>1;
+  if(!o.open)o.pieces.forEach(p=>{p.rest=true;p.vx=p.vy=p.av=0;});
   o.struck = true;
   o.cracked = true;
   spawnDebris(o, ptW, power, range, null);
   impactFx(o, ptW, power, kind);
   return {broke, split};
 }
-function bounceOnly(o, pt, dir, power){
-  o.pieces.forEach(p=>{
-    p.vx += dir.x*26*power; p.vy += dir.y*20*power;
-    p.rest = false;
-  });
-  impactFx(o, pt, power*0.5, 'dull');
-  pushDust(pt.x, pt.y, null, 5);
-}
+function bounceOnly(o,pt,dir,power){ impactFx(o,pt,power,'hammer'); }
+
 
 /* ===================== fx ===================== */
 const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1002,222 +1029,52 @@ function plateArt(c, o, rim){
 }
 
 /* ===================== levels ===================== */
+
+// Each rescue recipe supplies layers, a body and a landing zone. Additional
+// bodies, hazards or tools can extend these definitions without changing fracture geometry.
+function shell(mat, seed, inner=false){
+  const w=inner?112:180, h=inner?138:184, cy=lvIndex===2?322:TABLE_Y-h/2;
+  return buildObj({mat,seed,spacing:mat==='wood'?43:32,name:'shell',cx:200,cy,w,h,
+    poly(){
+      if(mat==='ceramic')return jarPoly(200,cy,w,h);
+      if(mat==='glass'){
+        const p=[{x:200-w/2,y:cy+h/2},{x:200+w/2,y:cy+h/2}];
+        for(let i=0;i<=32;i++){const a=-Math.PI*i/32;p.push({x:200+Math.cos(a)*w/2,y:cy-h/2+w/2+Math.sin(a)*w/2});}
+        return p;
+      }
+      return roundRectPoly(200,cy,w,h,16);
+    },
+    art(c,o){
+      const palettes={ceramic:['#f6c8b5','#d88f79'],glass:['#edf9ef','#b6d4cb'],ice:['#f2fcff','#a4d3e6'],wood:['#e3bd88','#b98953'],stone:['#dedcd3','#aaa99b']};
+      glaze(c,o.poly,...palettes[mat]);
+      shine(c,o.poly,166,cy-25,12,h*.29,-.12,.65);
+      if(mat==='wood'){
+        c.save();pathPoly(c,o.poly);c.clip();
+        for(let x=116;x<290;x+=35){c.fillStyle='#76533155';c.fillRect(x,cy-h/2,3,h);c.strokeStyle='#9a693c55';c.beginPath();c.moveTo(x+10,cy-h/2);c.bezierCurveTo(x+20,cy-20,x+5,cy+20,x+13,cy+h/2);c.stroke();}
+        c.fillStyle='#8c6241';c.fillRect(184,cy-h/2+8,101,19);c.fillRect(251,cy-h/2+8,22,h-16);
+        c.fillStyle='#658b70';c.fillRect(113,cy+h/2-42,44,25);
+        c.fillStyle='#fff9e9';c.font='bold 19px sans-serif';c.fillText('✓',125,cy+h/2-23);c.fillStyle='#e9b49a';c.fillText('!',260,cy+6);c.restore();
+      }
+      if(mat==='ice'){c.strokeStyle='#ffffffaa';c.lineWidth=3;for(let i=0;i<5;i++){c.beginPath();c.moveTo(120+i*32,cy-h/2+9);c.lineTo(134+i*28,cy-h/2+32);c.stroke();}}
+      if(mat==='stone'){const r=mulberry32(seed);c.fillStyle='#74766d44';for(let i=0;i<95;i++){const x=115+r()*170,y=cy-h/2+r()*h;if(pointInPoly({x,y},o.poly))c.fillRect(x,y,2+r()*3,2);}}
+      // A cutaway window makes the protected object legible in opaque shells.
+      c.fillStyle=mat==='glass'||mat==='ice'?'#ffffff33':'#fff6e5';c.beginPath();c.ellipse(200,cy+5,inner?36:48,inner?30:42,0,0,TAU);c.fill();
+      c.strokeStyle='#fff9ec99';c.lineWidth=5;c.stroke();
+    }});
+}
 const LEVELS = [
-  /* ---- 1 ---- */
-  {
-    name:'İlk Vuruş', maxHits:3,
-    objective:'Tabağı kır.',
-    tip:'Çekici geri çek, bırak. Ne kadar çok çekersen o kadar sert vurur.',
-    hint:'Çekici geri çek ve bırak',
-    make(){
-      return [buildObj({
-        mat:'ceramic', seed:11, spacing:30, name:'plate',
-        cx:200, cy:TABLE_Y-98, r:98,
-        poly(){ return circlePoly(this.cx, this.cy, this.r, 68); },
-        art(c,o){ plateArt(c, o, '#3f6fd0'); }
-      })];
-    },
-    judge(R){
-      const o = R.objs[0];
-      if(R.majors(o) < 2)
-        return {ok:false, title:'Sadece çatladı', msg:'Çatlak var ama tabak ayrılmadı. Çekici biraz daha geri çekip tekrar vur.', score:30};
-      return {ok:true, title:'Mükemmel', msg:'Tabak ayrıldı. Vuruşun yeri, açısı ve gücü bundan sonraki bölümlerde önemli olacak.', score:100};
-    }
-  },
-  /* ---- 2 ---- */
-  {
-    name:'Kontrollü Kırık', maxHits:2,
-    objective:'İşaretli tarafı kır, mavi tarafı koru.',
-    tip:'Altın bölgeye yakın vur. Çok sert vurursan mavi taraf da dağılır.',
-    hint:'Altın bölgeye yakın ve ölçülü vur',
-    make(){
-      return [buildObj({
-        mat:'ceramic', seed:207, spacing:28, name:'plate',
-        cx:200, cy:TABLE_Y-98, r:98,
-        zone:{x:262, y:TABLE_Y-112, r:40}, keepX:184,
-        poly(){ return circlePoly(this.cx, this.cy, this.r, 68); },
-        art(c,o){
-          const s = o.spec;
-          plateArt(c, o, '#3f6fd0');
-          c.save();
-          c.beginPath(); c.arc(s.cx, s.cy, s.r-2, 0, TAU); c.clip();
-          c.fillStyle = 'rgba(63,111,208,.13)';
-          c.fillRect(s.cx-s.r-4, s.cy-s.r-4, (s.keepX-s.cx)+s.r+4, s.r*2+8);
-          const g = c.createRadialGradient(s.zone.x,s.zone.y,3,s.zone.x,s.zone.y,s.zone.r);
-          g.addColorStop(0,'rgba(232,168,25,.5)'); g.addColorStop(1,'rgba(232,168,25,.16)');
-          c.fillStyle = g;
-          c.beginPath(); c.arc(s.zone.x, s.zone.y, s.zone.r, 0, TAU); c.fill();
-          c.lineWidth = 2.4; c.strokeStyle = '#d99b15'; c.setLineDash([6,5]);
-          c.beginPath(); c.arc(s.zone.x, s.zone.y, s.zone.r, 0, TAU); c.stroke();
-          c.setLineDash([]);
-          c.restore();
-        }
-      })];
-    },
-    judge(R){
-      const o = R.objs[0], s = o.spec;
-      if(o.pieces.length < 2)
-        return {ok:false, title:'Kırılmadı', msg:'Tabak ayrılmadı. Altın bölgeye biraz daha güçlü vur.', score:25};
-      const keep = R.keepRatio(o, s.keepX);
-      const zoneHit = R.zoneBroken(o, s.zone);
-      /* overpowering is checked first: a shattered plate is a failure even if the zone came off */
-      if(keep < 0.86 || o.pieces.length > 6)
-        return {ok:false, title:'Fazla hasar', msg:'Tabak fazla dağıldı. Daha kısa çek: az güçle, işaretin hemen solundan vurmak yeter.', score:Math.round(keep*60)};
-      if(!zoneHit)
-        return {ok:false, title:'Yanlış taraf', msg:'Altın bölge hâlâ büyük parçanın üstünde. Vuruşunu işaretin biraz soluna al ki o taraf komple kopsun.', score:35};
-      const score = Math.round(58 + keep*42);
-      return {ok:true, title: keep > 0.96 ? 'Mükemmel' : 'İyi',
-        msg:'İşaretli taraf koptu, mavi taraf tek parça kaldı.', score};
-    }
-  },
-  /* ---- 3 ---- */
-  {
-    name:'Anahtarı Kurtar', maxHits:2,
-    objective:'Kabı kır, anahtarı kurtar.',
-    tip:'Anahtar camın içinde. Sert vuruş onu da kırar ya da masadan fırlatır.',
-    hint:'Anahtardan uzak bir noktaya ölçülü vur',
-    key:{x:200, y:TABLE_Y-66, w:46, h:15},
-    safe:{x0:60, x1:340},
-    make(){
-      return [buildObj({
-        mat:'glass', seed:733, spacing:30, name:'jar',
-        cx:200, cy:TABLE_Y-104, w:150, h:208,
-        poly(){ return jarPoly(this.cx, this.cy, this.w, this.h); },
-        art(c,o){
-          const p = jarPoly(o.spec.cx,o.spec.cy,o.spec.w,o.spec.h);
-          glaze(c, p, '#eafaf9', '#b9e2e2');
-          shine(c, p, o.spec.cx-36, o.spec.cy-12, 10, o.spec.h*0.28, 0.05, 0.75);
-          shine(c, p, o.spec.cx+40, o.spec.cy+16, 6, o.spec.h*0.19, -0.05, 0.45);
-          c.lineWidth = 2; c.strokeStyle = 'rgba(28,86,92,.3)';
-          pathPoly(c, p); c.stroke();
-        }
-      })];
-    },
-    judge(R){
-      const o = R.objs[0];
-      if(o.pieces.length < 2)
-        return {ok:false, title:'Kavanoz açılmadı', msg:'Cam sadece çatladı. Biraz daha güçlü vur.', score:25};
-      if(keyObj.dead)
-        return {ok:false, title:'Anahtar kırıldı', msg:'Vuruş anahtarın üstüne geldi. Kavanozun omzuna ya da tabanına vur.', score:10};
-      if(keyObj.x < this.safe.x0 || keyObj.x > this.safe.x1 || keyObj.y > TABLE_Y + 40)
-        return {ok:false, title:'Anahtar fırladı', msg:'Çok sert vurdun, anahtar masadan uçtu. Daha kısa çek.', score:30};
-      const gentle = clamp(1 - R.maxPower, 0, 1);
-      const score = Math.round(64 + gentle*36);
-      return {ok:true, title: score > 88 ? 'Mükemmel' : 'İyi',
-        msg:'Kavanoz açıldı, anahtar masada sağlam duruyor.', score};
-    }
-  },
-  /* ---- 4 ---- */
-  {
-    name:'Tam 3 Parça', maxHits:3,
-    objective:'Tam 3 parçaya ayır.',
-    tip:'Karonun üstüne parmağınla zayıf hat çizebilirsin. Kırık o hattı izler.',
-    hint:'Objeye çiz: zayıf hat · Çekici çek: vuruş',
-    make(){
-      return [buildObj({
-        mat:'ceramic', seed:404, spacing:29, name:'tile',
-        cx:200, cy:TABLE_Y-96, w:192, h:192, rad:18,
-        poly(){ return roundRectPoly(this.cx, this.cy, this.w, this.h, this.rad); },
-        art(c,o){
-          const s = o.spec, p = roundRectPoly(s.cx,s.cy,s.w,s.h,s.rad);
-          glaze(c, p, '#fdfdfb', '#e6ece8');
-          pathPoly(c, roundRectPoly(s.cx,s.cy,s.w-14,s.h-14,Math.max(4,s.rad-7)));
-          c.lineWidth = 8; c.strokeStyle = '#74b3a1'; c.stroke();
-          pathPoly(c, roundRectPoly(s.cx,s.cy,s.w-36,s.h-36,Math.max(3,s.rad-12)));
-          c.lineWidth = 1.5; c.strokeStyle = 'rgba(58,120,106,.3)'; c.stroke();
-          shine(c, p, s.cx-s.w*0.25, s.cy-s.h*0.29, s.w*0.32, s.h*0.12, -0.4, 0.42);
-        }
-      })];
-    },
-    judge(R){
-      const o = R.objs[0], m = R.majors(o);
-      if(m === 3)
-        return {ok:true, title: R.maxPower < 0.75 ? 'Mükemmel' : 'İyi',
-          msg:'Tam üç parça. Zayıf hat ve ölçülü vuruş işini gördü.',
-          score: Math.round(R.maxPower < 0.75 ? 100 : 84)};
-      if(m < 3)
-        return {ok:false, title:'Sadece ' + m + ' parça', msg:'Bir parça daha lazım. Zayıf hat çizip kalan büyük parçaya vur.', score:40};
-      return {ok:false, title:m + ' parça', msg:'Fazla dağıldı. Daha az güçle ve zayıf hattın üstüne vur.', score:40};
-    }
-  },
-  /* ---- 5 ---- */
-  {
-    name:'Tek Vuruş', maxHits:1,
-    objective:'Tek vuruşla en çok objeyi kır.',
-    tip:'Kırılan parçalar yandakine çarpar. Açını iyi seç.',
-    hint:'Tek hakkın var — açıyı iyi seç',
-    make(){
-      const objs = [];
-      const set = [
-        {x:88,  mat:'glass',   seed:901, w:52, h:76},
-        {x:162, mat:'ceramic', seed:902, w:56, h:64},
-        {x:238, mat:'glass',   seed:903, w:52, h:80},
-        {x:312, mat:'ceramic', seed:904, w:56, h:62}
-      ];
-      set.forEach(s=>{
-        objs.push(buildObj({
-          mat:s.mat, seed:s.seed, spacing:22, name:'cup',
-          cx:s.x, cy:TABLE_Y-s.h/2, w:s.w, h:s.h,
-          poly(){ return cupPoly(this.cx, this.cy, this.w, this.h); },
-          art(c,o){
-            const p = cupPoly(o.spec.cx,o.spec.cy,o.spec.w,o.spec.h);
-            if(o.spec.mat === 'glass'){
-              glaze(c, p, '#e9f9f8', '#bfe4e4');
-              shine(c, p, o.spec.cx-12, o.spec.cy, 5, o.spec.h*0.3, 0, 0.7);
-            } else {
-              glaze(c, p, '#fffdf8', '#e8ded0');
-              c.save(); pathPoly(c,p); c.clip();
-              c.fillStyle = '#d4813f';
-              c.fillRect(o.spec.cx-40, o.spec.cy-o.spec.h*0.12, 80, 9);
-              c.restore();
-              shine(c, p, o.spec.cx-13, o.spec.cy-6, 5, o.spec.h*0.24, 0, 0.5);
-            }
-            c.lineWidth = 1.6; c.strokeStyle = 'rgba(60,42,26,.26)';
-            pathPoly(c, p); c.stroke();
-          }
-        }));
-      });
-      return objs;
-    },
-    judge(R){
-      const n = R.objs.filter(o=>o.pieces.length > 1).length;
-      const total = R.objs.length;
-      if(n === 0) return {ok:false, title:'Hiçbiri kırılmadı', msg:'Vuruşun hiçbir objeyi ayıramadı. Daha sert ve daha yakın nişan al.', score:10};
-      if(n === 1) return {ok:false, title:'Sadece 1 tane', msg:'Zincir başlamadı. Kenardan açılı vur ki parçalar yandakine savrulsun.', score:35};
-      const score = Math.round(40 + (n/total)*60);
-      return {ok:true, title: n === total ? 'Mükemmel' : 'İyi',
-        msg: n + ' / ' + total + ' obje tek vuruşla kırıldı. Uçan parçalar diğerlerini götürdü.', score};
-    }
-  },
-  /* ---- 6 ---- */
-  {
-    name:'Pastayı Koru', maxHits:2,
-    objective:'Tabağı kır, pasta yere düşmesin.',
-    tip:'Pasta tabağın üstünde. Sert vuruş onu masadan fırlatır.',
-    hint:'Kenardan ölçülü vur, pastayı savurma',
-    cake:{x:200, y:TABLE_Y-92-92-21, r:21},   /* balanced on the plate's top edge */
-    make(){
-      return [buildObj({
-        mat:'ceramic', seed:606, spacing:30, name:'plate',
-        cx:200, cy:TABLE_Y-92, r:92,
-        poly(){ return circlePoly(this.cx, this.cy, this.r, 68); },
-        art(c,o){ plateArt(c, o, '#c0668f'); }
-      })];
-    },
-    judge(R){
-      const o = R.objs[0];
-      if(cake.y > TABLE_Y - 70) cake.fell = true;   /* it went all the way down to the table */
-      if(cake.fell)
-        return {ok:false, title:'Pasta düştü', msg:'Altındaki destek gitti, pasta sert düştü. Daha az güçle ve tabağın kenarına vur ki bir parça pastayı taşımaya devam etsin.', score:20};
-      if(o.pieces.length < 2)
-        return {ok:false, title:'Tabak kırılmadı', msg:'Pasta duruyor ama tabak bütün. Biraz daha güçlü vur.', score:35};
-      const gentle = clamp(1 - R.maxPower, 0, 1);
-      const score = Math.round(62 + gentle*38);
-      return {ok:true, title: score > 88 ? 'Mükemmel' : 'İyi',
-        msg:'Tabak kırıldı, pasta masada sapasağlam. En sert vuruş her zaman en iyisi değil.', score};
-    }
-  }
-];
+ {name:'Küçük bir başlangıç',objective:'Anahtarı kurtar.',tip:'Anahtar içeride. Çekici biraz geri çekip bırak. Kenara vurmak daha nazik.',hint:'Çekici tut → geri çek → bırak · Konum için kabuğa dokun',material:'ceramic',kind:'key',maxHits:5,safe:{x0:55,x1:345},key:{x:200,y:379,w:46,h:15}},
+ {name:'Nazik eller',objective:'Oyuncağı çıkar.',tip:'Cam kolay kırılır. Oyuncağın altına sert vurma; kenara kısa bir vuruş yeter.',hint:'Kenar seç · Kısa çek · Oyuncağı koru',material:'glass',kind:'toy',maxHits:4,safe:{x0:70,x1:330},key:{x:200,y:379,w:34,h:32}},
+ {name:'Yumuşak bir iniş',objective:'Mücevheri mindere indir.',tip:'Buzu önce çatlat. Düz bir vuruş mücevheri minderin üstünde tutar; yana savurma.',hint:'Çatlağa tekrar vur · Yönünü mindere göre seç',material:'ice',kind:'gem',maxHits:5,safe:{x0:160,x1:240},key:{x:200,y:327,w:30,h:30}},
+ {name:'Doğru kapı',objective:'Minik dostunu çıkar.',tip:'Soldaki yeşil tahta güvenli. Sağdaki kalın destek ağır; ona vurma.',hint:'Yeşil tarafı seç · Aynı çatlağa iki ölçülü vuruş',material:'wood',kind:'creature',maxHits:6,safe:{x0:65,x1:335},key:{x:200,y:379,w:34,h:30}},
+ {name:'İki kat dikkat',objective:'Taşı aç. Camı nazikçe kır.',tip:'Dış taş için güçlü vur. İç cam görününce gücü azalt; mücevher çok narin.',hint:'Önce güçlü · Sonra nazik',material:'stone',kind:'gem',maxHits:6,safe:{x0:80,x1:320},key:{x:200,y:402,w:30,h:30},layers:true}
+].map((level,i)=>({...level,make(){return [shell(level.material,101+i*177)];},judge:rescueVerdict}));
+function rescueVerdict(){
+ if(keyObj.dead)return {ok:false,title:'Biraz daha nazik',msg:keyObj.reason,score:0};
+ if(!keyObj.free)return {ok:false,title:'Bir çatlak daha…',msg:'Kabuk henüz açılmadı. Aynı çatlağa tekrar vur; gücü biraz artırabilirsin.',score:0};
+ if(!keyObj.rest || keyObj.x-keyObj.radius<lv.safe.x0 || keyObj.x+keyObj.radius>lv.safe.x1)return {ok:false,title:'Minderi kaçırdı',msg:'Vuruş yana savurdu. Daha düz ve daha kısa çekerek tekrar dene.',score:0};
+ return {ok:true,title:'Güvende!',msg:lvIndex===4?'Taş için güç, cam için özen. Beş kurtarma da tamam!':'Kabuk açıldı, küçük hazinen güvenle mindere ulaştı.',score:Math.max(1,3-(keyObj.damage>0?1:0)-(hitsUsed>3?1:0))};
+}
 
 /* ===================== DOM ===================== */
 const cv = document.getElementById('cv');
@@ -1257,6 +1114,7 @@ function readTheme(){
   theme.edge = g('--table-edge') || theme.edge;
 }
 function resize(){
+  cancelAim();
   const r = stage.getBoundingClientRect();
   cssW = Math.max(1, r.width); cssH = Math.max(1, r.height);
   dpr = Math.min(window.devicePixelRatio || 1, 2.5);
@@ -1280,28 +1138,30 @@ let drawPts = [], drawObj = null;
 let keyObj = null, cake = null;
 const PULL_MAX = 108;
 const hammer = {
-  home:{x:200, y:556}, x:200, y:556, ang:0,
+  home:{x:200, y:510}, x:200, y:510, ang:0,
   vx:0, vy:0, power:0, aim:{x:0,y:-1}, state:'idle', t:0
 };
 
 function buildLevel(i){
   lvIndex = clamp(i, 0, LEVELS.length-1);
   lv = LEVELS[lvIndex];
+  activePointer=null;
   objects = lv.make();
-  keyObj = lv.key ? {x:lv.key.x, y:lv.key.y, vx:0, vy:0, ang:0, av:0, dead:false, free:false, rest:true} : null;
+  keyObj = lv.key ? {x:lv.key.x, y:lv.key.y, vx:0, vy:0, ang:0, av:0, dead:false, free:false, rest:true, damage:0, reason:"", radius:lv.kind==="key"?9:15, shield:0, stable:0} : null;
   cake = lv.cake ? {x:lv.cake.x, y:lv.cake.y, vx:0, vy:0, r:lv.cake.r, rest:true, fell:false} : null;
   hitsUsed = 0; maxPower = 0; resultShown = false; settleT = 0;
   drawPts = []; drawObj = null;
   particles = []; shake = 0; flash = 0; freeze = 0;
-  hammer.home.x = 200; hammer.home.y = 556;
+  hammer.home.x = 200; hammer.home.y = 510;
   hammer.state = 'idle'; hammer.x = hammer.home.x; hammer.y = hammer.home.y;
   hammer.vx = hammer.vy = 0; hammer.power = 0; hammer.ang = 0;
+  hammer.aim={x:0,y:-1};hammer.t=0;
   sheet.classList.remove('show');
   setState('ready');
   paintHud();
 }
 function paintHud(){
-  elMat.textContent = objects.length > 1 ? 'Cam + Seramik' : objects[0].mat.label;
+  elMat.textContent = lv.layers ? 'Taş → Cam' : objects[0].mat.label;
   elObjective.textContent = lv.objective;
   elTip.textContent = lv.hint;
   elTip.classList.remove('gone');
@@ -1310,6 +1170,7 @@ function paintHud(){
   showBrief();
 }
 function paintHits(){
+  elHits.setAttribute('aria-label',(lv.maxHits-hitsUsed)+' vuruş kaldı');
   elHits.innerHTML = '';
   for(let i=0;i<lv.maxHits;i++){
     const d = document.createElement('div');
@@ -1329,7 +1190,7 @@ function showBrief(){
   briefTimer = setTimeout(()=>{
     elBrief.classList.remove('show');
     elBrief.classList.add('gone');
-  }, 2300);
+  }, 8500);
 }
 function setState(s){ state = s; }
 
@@ -1342,6 +1203,7 @@ function toWorld(e){
    A world point must be pulled back into that space before any fracture maths. */
 function hitTest(wp){
   for(const o of objects){
+    if(o.open)continue;
     for(const pc of o.pieces){
       const lp = toLocal(pc, wp);
       for(const si of pc.shards) if(pointInPoly(lp, o.shards[si])) return {o, pc, lp};
@@ -1359,39 +1221,41 @@ function toLocal(p, wp){
   const c = Math.cos(-p.ang), s = Math.sin(-p.ang);
   return {x: (dx*c - dy*s)/p.scl + p.cx, y: (dx*s + dy*c)/p.scl + p.cy};
 }
+let activePointer=null, dragStart=null;
 function onDown(e){
-  if(state !== 'ready' && state !== 'aiming') return;
-  const p = toWorld(e);
-  e.preventDefault();
-  try{ cv.setPointerCapture(e.pointerId); }catch(err){}
-  audio.unlock();
-  elTip.classList.add('gone');
-  if(dist(p, hammer.home) < 86 || p.y > TABLE_Y + 34){
-    hammer.state = 'aiming';
-    setState('aiming');
-    aimTo(p);
-    return;
-  }
-  const o = objAt(p);
-  if(o){ drawObj = o; drawPts = [p]; setState('drawing'); }
+ if(state!=='ready'||activePointer!==null||e.isPrimary===false)return;
+ const p=toWorld(e);e.preventDefault();audio.unlock();
+ if(dist(p,hammer.home)>Math.max(48,24/scale)){
+   if(p.y<480){hammer.home.x=clamp(p.x,85,315);hammer.x=hammer.home.x;elTip.textContent='Konum seçildi. Şimdi çekici geri çek ve bırak.';}
+   return;
+ }
+ activePointer=e.pointerId;dragStart=p;
+ try{cv.setPointerCapture(e.pointerId);}catch{}
+ hammer.state='aiming';setState('aiming');hammer.power=0;
+ elBrief.classList.remove('show');elBrief.classList.add('gone');
 }
 function onMove(e){
-  if(state === 'aiming'){ e.preventDefault(); aimTo(toWorld(e)); return; }
-  if(state !== 'drawing') return;
-  e.preventDefault();
-  const p = toWorld(e);
-  if(!pointInPoly(p, drawObj.poly)){ finishWeak(); return; }
-  if(dist(p, drawPts[drawPts.length-1]) > 5) drawPts.push(p);
+ if(e.pointerId!==activePointer||state!=='aiming')return;
+ e.preventDefault();const p=toWorld(e);
+ aimTo({x:hammer.home.x+p.x-dragStart.x,y:hammer.home.y+p.y-dragStart.y});
 }
-function onUp(){
-  if(state === 'aiming'){ release(); return; }
-  if(state === 'drawing') finishWeak();
+function onUp(e){
+ if(e.pointerId!==activePointer)return;
+ activePointer=null;dragStart=null;
+ if(state==='aiming')release();
 }
+function cancelAim(e){
+ if(e && e.pointerId!=null && activePointer!==e.pointerId)return;
+ activePointer=null;dragStart=null;
+ if(state==='aiming'){hammer.state='idle';hammer.x=hammer.home.x;hammer.y=hammer.home.y;hammer.power=0;setState('ready');elTip.textContent=lv.hint;}
+}
+
 function aimTo(p){
   const pull = sub(hammer.home, p);
   const L = Math.hypot(pull.x, pull.y);
   const cl = Math.min(L, PULL_MAX);
   hammer.power = cl / PULL_MAX;
+  elTip.textContent=hammer.power<.25?"Hafif · Çatlat":hammer.power<.65?"Ölçülü · Dikkatli aç":hammer.power<.85?"Güçlü · Taş için uygun":"Çok sert · İçindekine zarar verebilir!";
   hammer.aim = L > 1 ? norm(pull) : {x:0,y:-1};
   hammer.x = hammer.home.x - hammer.aim.x*cl*0.55;
   hammer.y = hammer.home.y - hammer.aim.y*cl*0.55;
@@ -1458,26 +1322,8 @@ function flyHammer(dt){
     setState('settling'); settleT = 0;
   }
 }
-function chainCheck(){
-  for(const src of objects){
-    for(const p of src.pieces){
-      const sp = Math.hypot(p.vx, p.vy);
-      if(sp < 150) continue;
-      const c = {x:p.cx+p.ox, y:p.cy+p.oy};
-      for(const dst of objects){
-        if(dst === src || dst.chainLock > 0) continue;
-        if(dist(c, dst.centerCache) > dst.radCache + p.rad) continue;
-        const h = hitTest(c);
-        if(!h || h.o !== dst) continue;
-        const dirW = norm({x:p.vx, y:p.vy});
-        const power = clamp(sp/760, 0, 1) * clamp(Math.sqrt(p.area)/22, 0.35, 1.1);
-        strike(dst, h.lp, rot(dirW, -h.pc.ang), c, dirW, clamp(power, 0, 1), 'chain');
-        dst.chainLock = 0.18;
-        p.vx *= -0.28; p.vy *= -0.28;
-      }
-    }
-  }
-}
+// Layers are isolated: an outer shard cannot auto-complete the inner puzzle.
+function chainCheck(){}
 
 /* ===================== physics ===================== */
 const GRAV = 1150;
@@ -1491,7 +1337,10 @@ function stepPieces(dt){
       p.ox += p.vx*dt; p.oy += p.vy*dt;
       p.ang += p.av*dt;
       p.scl += (1-p.scl)*Math.min(1, dt*9);
-      const foot = p.cy + p.oy + p.low;
+      let bottom=-Infinity;
+      const sin=Math.sin(p.ang),cos=Math.cos(p.ang);
+      for(const si of p.shards)for(const v of o.shards[si])bottom=Math.max(bottom,((v.x-p.cx)*sin+(v.y-p.cy)*cos)*p.scl);
+      const foot = p.cy + p.oy + bottom;
       if(foot > TABLE_Y){
         const cx = p.cx + p.ox;
         if(cx > TABLE_X0 && cx < TABLE_X1){
@@ -1509,62 +1358,58 @@ function stepPieces(dt){
     }
   }
 }
-function stepProp(dt){
-  if(keyObj && !keyObj.rest){
-    keyObj.vy += GRAV*0.85*dt;
-    keyObj.x += keyObj.vx*dt; keyObj.y += keyObj.vy*dt;
-    keyObj.ang += keyObj.av*dt;
-    if(keyObj.y > TABLE_Y - 6 && keyObj.x > TABLE_X0 && keyObj.x < TABLE_X1){
-      keyObj.y = TABLE_Y - 6;
-      if(keyObj.vy > 60){ keyObj.vy = -keyObj.vy*0.24; keyObj.vx *= 0.6; }
-      else { keyObj.vy = 0; keyObj.vx *= Math.pow(0.02, dt); keyObj.av *= 0.8;
-             if(Math.abs(keyObj.vx) < 8){ keyObj.rest = true; keyObj.vx = 0; keyObj.av = 0; } }
-    }
-  }
-  if(cake && !cake.rest){
-    cake.vy += GRAV*0.8*dt;
-    cake.x += cake.vx*dt; cake.y += cake.vy*dt;
-    /* the cake rides whatever plate piece is still under it, else the table */
-    let supportY = Infinity, rider = null;
-    const onTable = cake.x > TABLE_X0 && cake.x < TABLE_X1;
-    if(onTable) supportY = TABLE_Y;
-    for(const p of objects[0].pieces){
-      const px = p.cx + p.ox;
-      /* a piece only holds the cake while it is under it and still sitting level */
-      if(Math.abs(cake.x - px) > p.rad*0.5) continue;
-      if(Math.abs(p.ang) > 0.45) continue;
-      const top = p.cy + p.oy - p.high;
-      if(top < supportY && top > cake.y - cake.r){ supportY = top; rider = p; }
-    }
-    if(cake.y + cake.r >= supportY && supportY < Infinity){
-      if(cake.vy > 500 && !rider) cake.fell = true;   /* nothing left holding it: a hard drop */
-      cake.y = supportY - cake.r;
-      if(cake.vy > 70){ cake.vy = -cake.vy*0.2; cake.vx *= 0.6; }
-      else {
-        cake.vy = rider ? rider.vy : 0;
-        cake.vx *= Math.pow(0.01, dt);
-        if(Math.abs(cake.vx) < 8 && (!rider || rider.rest)){ cake.rest = true; cake.vx = 0; }
-      }
-    }
-    if(cake.y > H + 60) cake.fell = true;             /* went over the table edge */
-  }
+function hurt(amount,reason){
+ if(!keyObj||keyObj.dead)return;
+ keyObj.damage+=amount;keyObj.warning=.45;
+ elTip.textContent='Dikkat! Daha kısa çek.';
+ if(keyObj.damage>=1){keyObj.dead=true;keyObj.reason=reason;pushDust(keyObj.x,keyObj.y,'#d77a62',6);}
+}
+function rescueImpact(o,pt,dir,power){
+ o.releaseImpulse={x:dir.x*power*(lvIndex===2?400:145),y:dir.y*power*65};
+ if(o.spec.mat==='stone')return; // The closed inner capsule protects its contents.
+ const center=Math.abs(pt.x-keyObj.x)<32;
+ if(lvIndex===3 && pt.x>180 && power>.32){hurt(1,'Kalın destek devrildi. Soldaki yeşil tahtayı aç.');return;}
+ const threshold=lvIndex===0?.94:.70;
+ if(center&&power>threshold)hurt(1,'Sert vuruş doğrudan içindekine ulaştı. Kenara daha kısa bir vuruş yap.');
+ else if(center&&power>.53&&lvIndex!==0)hurt(.35,'Üst üste sert darbeler hasar verdi. Kenardan daha nazik vur.');
 }
 function releaseProps(){
-  /* props ride the piece they were sitting on */
-  if(keyObj && !keyObj.free){
-    const o = objects[0];
-    if(o.pieces.length > 1){
-      keyObj.free = true; keyObj.rest = false;
-      const near = nearestPiece(o, keyObj);
-      if(near){ keyObj.vx = near.vx*0.5; keyObj.vy = near.vy*0.5 - 20; keyObj.av = (Math.random()-0.5)*3; }
-    }
-  }
-  if(cake && cake.rest && objects[0].pieces.length > 1){
-    cake.rest = false;
-    const near = nearestPiece(objects[0], cake);
-    if(near){ cake.vx = near.vx*0.55; cake.vy = near.vy*0.55; }
-  }
+ if(keyObj.free || !objects.every(o=>o.open))return;
+ // Stone opens first; build the protected capsule only after the debris settles.
+ if(lv.layers && objects.length===1)return;
+ keyObj.free=true;keyObj.rest=false;keyObj.shield=.18;
+ const impulse=objects[objects.length-1].releaseImpulse||{x:0,y:0};
+ keyObj.vx=impulse.x;keyObj.vy=impulse.y;keyObj.av=impulse.x*.012;
+ elTip.textContent='Serbest! Güvenli inişi bekle…';
 }
+function stepProp(dt){
+ const k=keyObj;if(!k)return;
+ if(state==='result')return;
+ k.warning=Math.max(0,(k.warning||0)-dt);k.shield=Math.max(0,k.shield-dt);
+ if(k.free&&!k.rest){
+  k.vy+=GRAV*.85*dt;k.x+=k.vx*dt;k.y+=k.vy*dt;k.ang+=k.av*dt;
+  if(k.y+k.radius>=TABLE_Y && k.x>TABLE_X0 && k.x<TABLE_X1){
+   k.y=TABLE_Y-k.radius;
+   if(k.x-k.radius<lv.safe.x0 || k.x+k.radius>lv.safe.x1){hurt(1,'Minderin dışına düştü. Daha düz ve daha kısa bir vuruş dene.');}
+   if(k.vy>70){k.vy=-k.vy*.18;k.vx*=lvIndex===2?.9:.65;}
+   else{k.vy=0;k.vx*=Math.pow(lvIndex===2?.22:.008,dt);k.av*=Math.pow(.01,dt);if(Math.abs(k.vx)<5){k.rest=true;k.vx=k.av=0;}}
+  }
+  if(k.y>H||k.x<0||k.x>W)hurt(1,'Masadan savruldu. Gücü azaltıp içeri doğru nişan al.');
+ }
+ // Broad phase followed by polygon contact; each shard can damage once.
+ if(k.free&&!k.dead&&k.shield===0)for(const o of objects)for(const p of o.pieces){
+  if(p.rescueContact||p.rest||!o.open)continue;
+  if(dist({x:p.cx+p.ox,y:p.cy+p.oy},k)>p.rad+k.radius)continue;
+  const lp=toLocal(p,k);
+  if(!p.shards.some(si=>pointInPoly(lp,o.shards[si])||o.shards[si].some((a,i,poly)=>distPtSeg(lp,a,poly[(i+1)%poly.length])<k.radius)))continue;
+  p.rescueContact=true;
+  const speed=Math.hypot(p.vx-k.vx,p.vy-k.vy),mass=clamp(p.area/2200,.15,2);
+  const force=speed*mass*(o.spec.mat==='stone'?1.5:o.spec.mat==='glass'?1.15:.65);
+  if(force>(lvIndex===0?1200:460))hurt(force>850?1:.3,'Ağır parçalar çarptı. Kenardan daha az güçle aç.');
+  k.vx+=p.vx*.025;k.av+=p.vx*.001;k.rest=false;
+ }
+}
+
 function nearestPiece(o, pt){
   let best = null, bd = Infinity;
   for(const p of o.pieces){
@@ -1614,25 +1459,24 @@ function everythingSettled(){
   if(cake && !cake.rest && !cake.fell && cake.y < H) return false;
   return true;
 }
-function levelResolved(){
-  const R = measures();
-  if(lv.maxHits === 1) return true;
-  if(lv.name === 'Tam 3 Parça') return R.majors(objects[0]) >= 3;
-  if(objects.length > 1) return objects.every(o=>o.pieces.length > 1);
-  return objects[0].pieces.length > 1 || (cake && cake.fell) || (keyObj && keyObj.dead);
-}
+function levelResolved(){return keyObj.dead || (keyObj.free&&keyObj.rest);}
 function afterSettle(){
-  if(resultShown) return;
-  const done = levelResolved() || hitsUsed >= lv.maxHits;
-  if(done) evaluate();
-  else { hammer.state = 'idle'; hammer.x = hammer.home.x; hammer.y = hammer.home.y; hammer.power = 0; setState('ready'); }
+ if(resultShown)return;
+ if(lv.layers&&objects.length===1&&objects[0].open&&!keyObj.dead){
+   objects.push(shell('glass',977,true));elMat.textContent='Cam';elObjective.textContent='Şimdi nazikçe aç.';elTip.textContent='Taş açıldı. İç cam için kısa çek.';
+ }
+ if(levelResolved()||hitsUsed>=lv.maxHits){evaluate();return;}
+ if(keyObj.free){if(settleT>5){evaluate();}return;}
+ hammer.state='idle';hammer.x=hammer.home.x;hammer.y=hammer.home.y;hammer.power=0;setState('ready');
 }
+
 function evaluate(){
   resultShown = true;
   const res = lv.judge(measures());
   elVtitle.textContent = res.title;
   elVtitle.className = res.ok ? 'good' : 'bad';
-  elVpts.textContent = res.score + ' puan';
+  elVpts.textContent = res.ok ? '✦'.repeat(res.score) + ' · Özenli kurtarma' : 'Her deneme yeni bir ipucu';
+  if(res.ok){keyObj.celebrate=.8;pushDust(keyObj.x,keyObj.y,'#f6d57e',12);}
   elVmsg.textContent = res.msg;
   const last = lvIndex === LEVELS.length-1;
   btnNext.textContent = res.ok ? (last ? 'Baştan Başla' : 'Sonraki Bölüm') : 'Tekrar Dene';
@@ -1646,14 +1490,13 @@ function evaluate(){
 let lastOk = false;
 
 /* ===================== loop ===================== */
-let last = performance.now();
+let last=performance.now(), accumulator=0;
 function frame(now){
-  const dt = Math.min(0.032, (now-last)/1000);
-  last = now;
-  update(dt);
-  render();
-  requestAnimationFrame(frame);
+ accumulator+=Math.min(.1,(now-last)/1000);last=now;
+ while(accumulator>=1/120){update(1/120);accumulator-=1/120;}
+ render();requestAnimationFrame(frame);
 }
+
 function update(dt){
   if(freeze > 0){ freeze -= dt; dt = 0; }
 
@@ -1711,9 +1554,10 @@ function render(){
   ctx.scale(scale, scale);
 
   drawScene();
+  drawWorkshopDetails();
   objects.forEach(drawContactShadows);
   objects.forEach(drawObject);
-  if(keyObj && !keyObj.dead) drawKey();
+  if(keyObj) drawRescue();
   if(cake && !cake.fell) drawCake();
   drawParticles();
   drawAim();
@@ -1728,7 +1572,7 @@ function render(){
 function drawScene(){
   const g = ctx.createLinearGradient(0,0,0,TABLE_Y);
   g.addColorStop(0, theme.wallA); g.addColorStop(1, theme.wallB);
-  ctx.fillStyle = g; ctx.fillRect(0,0,W,TABLE_Y);
+  ctx.fillStyle = g; ctx.fillRect(-offX/scale,-offY/scale,cssW/scale,TABLE_Y+offY/scale);
 
   /* warm pool of light behind the objects */
   const lg = ctx.createRadialGradient(200, TABLE_Y-140, 20, 200, TABLE_Y-120, 250);
@@ -1792,6 +1636,8 @@ function drawObject(o){
   const mat = o.mat;
   o.pieces.forEach(p=>{
     ctx.save();
+    if(o.spec.mat==='glass')ctx.globalAlpha=.76;
+    if(o.spec.mat==='ice')ctx.globalAlpha=.88;
     ctx.translate(p.cx + p.ox, p.cy + p.oy);
     ctx.rotate(p.ang);
     ctx.scale(p.scl, p.scl);
@@ -1827,16 +1673,15 @@ function drawObject(o){
     ctx.restore();
   });
   /* scored weak lines, drawn while the object is still whole */
-  if(o.weakLines.length && !o.struck){
+  if(o.weakLines.length && !o.open){
     ctx.save();
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     o.weakLines.forEach(line=>{
       ctx.beginPath();
       ctx.moveTo(line[0].x, line[0].y);
       for(let i=1;i<line.length;i++) ctx.lineTo(line[i].x, line[i].y);
-      ctx.lineWidth = 4.5; ctx.strokeStyle = 'rgba(226,98,44,.2)'; ctx.stroke();
-      ctx.setLineDash([7,5]);
-      ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(180,70,26,.8)'; ctx.stroke();
+      ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,248,225,.6)'; ctx.stroke();
+      ctx.lineWidth = 1.3; ctx.strokeStyle = 'rgba(80,60,43,.7)'; ctx.stroke();
       ctx.setLineDash([]);
     });
     ctx.restore();
@@ -1851,6 +1696,44 @@ function drawObject(o){
     ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(180,70,26,.85)'; ctx.stroke();
     ctx.restore();
   }
+}
+function drawWorkshopDetails(){
+ ctx.save();
+ // Quiet workshop shelf and a little plant, kept away from the puzzle.
+ ctx.fillStyle='#bb916b55';ctx.fillRect(30,169,91,5);ctx.fillRect(292,169,78,5);
+ ctx.strokeStyle='#6f8867';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(60,157);ctx.quadraticCurveTo(55,126,74,104);ctx.stroke();
+ ctx.fillStyle='#8fa07c';for(const [x,y,a] of [[63,127,-.8],[54,142,.7],[73,109,-.7]]){ctx.beginPath();ctx.ellipse(x,y,6,13,a,0,TAU);ctx.fill();}
+ ctx.fillStyle='#c88e70';ctx.beginPath();ctx.roundRect(44,149,31,20,5);ctx.fill();
+ ctx.fillStyle='#d6bf99';ctx.beginPath();ctx.roundRect(319,140,28,29,6);ctx.fill();ctx.strokeStyle='#986d48';ctx.lineWidth=4;ctx.beginPath();ctx.arc(350,153,8,-1.5,1.5);ctx.stroke();
+ if(lvIndex===2){ctx.fillStyle='#b7aa9755';ctx.fillRect(108,414,10,52);ctx.fillRect(282,414,10,52);}
+ // Stitched soft landing mat. Its edges are the actual success bounds.
+ const z=lv.safe;ctx.fillStyle='#76977b';ctx.beginPath();ctx.roundRect(z.x0,TABLE_Y-3,z.x1-z.x0,15,7);ctx.fill();
+ ctx.strokeStyle='#dbe5c4';ctx.lineWidth=1;ctx.setLineDash([4,5]);ctx.beginPath();ctx.moveTo(z.x0+9,TABLE_Y+4);ctx.lineTo(z.x1-9,TABLE_Y+4);ctx.stroke();ctx.setLineDash([]);
+ ctx.font='10px Figtree, sans-serif';ctx.textAlign='center';ctx.fillStyle='#fbefda';ctx.fillText('GÜVENLİ ALAN',200,TABLE_Y+37);
+ ctx.fillStyle='#fff4df22';ctx.beginPath();ctx.arc(hammer.home.x,hammer.home.y,31,0,TAU);ctx.fill();
+ ctx.restore();
+}
+function drawRescue(){
+ const k=keyObj;
+ ctx.save();ctx.translate(k.x,k.y);ctx.rotate(k.ang);
+ if(k.celebrate>0){k.celebrate=Math.max(0,k.celebrate-1/60);ctx.translate(0,-Math.sin(k.celebrate/.8*Math.PI)*9);}
+ if(k.warning>0)ctx.translate(Math.sin(k.warning*65)*3,0);
+ ctx.globalAlpha=k.dead?.55:1;
+ ctx.shadowColor='#62472c44';ctx.shadowBlur=8;ctx.shadowOffsetY=3;
+ if(lv.kind==='gem'){
+  const g=ctx.createLinearGradient(-15,-17,15,15);g.addColorStop(0,'#ddc9f5');g.addColorStop(.5,'#9c7bc5');g.addColorStop(1,'#665798');ctx.fillStyle=g;
+  ctx.beginPath();ctx.moveTo(-16,-6);ctx.lineTo(-8,-17);ctx.lineTo(8,-17);ctx.lineTo(16,-6);ctx.lineTo(0,17);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#efe2ff';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-16,-6);ctx.lineTo(16,-6);ctx.moveTo(-8,-17);ctx.lineTo(0,17);ctx.lineTo(8,-17);ctx.stroke();
+ }else if(lv.kind==='toy'||lv.kind==='creature'){
+  ctx.fillStyle=lv.kind==='toy'?'#daa66d':'#9caf85';
+  for(const x of [-11,11]){ctx.beginPath();ctx.ellipse(x,-15,6,lv.kind==='toy'?6:13,x<0?-.2:.2,0,TAU);ctx.fill();}
+  ctx.beginPath();ctx.ellipse(0,0,19,18,0,0,TAU);ctx.fill();ctx.shadowBlur=0;
+  ctx.fillStyle='#fff1d8';ctx.beginPath();ctx.ellipse(0,7,11,7,0,0,TAU);ctx.fill();
+  ctx.fillStyle='#4a4434';for(const x of [-7,7]){ctx.beginPath();ctx.arc(x,-2,2,0,TAU);ctx.fill();}
+  ctx.strokeStyle='#4a4434';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,k.free?5:11,4,k.free?0:Math.PI,k.free?Math.PI:TAU);ctx.stroke();
+ }else{ctx.restore();drawKey();return;}
+ ctx.restore();
+ if(k.free&&!k.dead){ctx.fillStyle='#ffefb7';for(let i=0;i<3;i++){const a=performance.now()/650+i*TAU/3;ctx.fillRect(k.x+Math.cos(a)*27,k.y+Math.sin(a)*23,3,3);}}
 }
 function drawKey(){
   const k = lv.key;
@@ -1968,7 +1851,9 @@ function hexA(hex, a){
 cv.addEventListener('pointerdown', onDown, {passive:false});
 cv.addEventListener('pointermove', onMove, {passive:false});
 window.addEventListener('pointerup', onUp);
-window.addEventListener('pointercancel', onUp);
+window.addEventListener('pointercancel', cancelAim);
+window.addEventListener('blur',cancelAim);
+cv.addEventListener('lostpointercapture',cancelAim);
 stage.addEventListener('touchmove', e=>e.preventDefault(), {passive:false});
 document.addEventListener('gesturestart', e=>e.preventDefault());
 
@@ -2016,9 +1901,9 @@ window.__BIR = {
   get info(){
     const R = measures();
     return {
-      state, hitsUsed, maxPower: +maxPower.toFixed(2), resultShown,
+      layer:objects.length, rescue:keyObj?{...keyObj}:null, particles:particles.length, tool:{state:hammer.state,power:hammer.power,x:hammer.x,y:hammer.y}, state, hitsUsed, maxPower: +maxPower.toFixed(2), resultShown,
       objs: objects.map(o=>({
-        mat:o.mat.label, shards:o.shards.length, walls:o.walls.length,
+        open:!!o.open, mat:o.mat.label, shards:o.shards.length, walls:o.walls.length,
         broken:o.walls.filter(w=>w.broken).length, weak:o.walls.filter(w=>w.weak).length,
         pieces:o.pieces.length, majors:R.majors(o),
         areas:o.pieces.map(p=>Math.round(p.area/o.totalArea*100)).sort((a,b)=>b-a).slice(0,5)
@@ -2045,3 +1930,5 @@ if(window.claude && window.claude.hot){
 }
 })();
 </script>
+
+</body></html>
